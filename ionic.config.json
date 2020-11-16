@@ -1,0 +1,7 @@
+{
+  "name": "elektromerTp1",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
