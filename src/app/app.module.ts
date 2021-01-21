@@ -8,6 +8,12 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule }    from '@angular/common/http';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
+import { ModalPageModule } from './pages/modal/modal.module';  
+import { MatTableModule } from '@angular/material/table';
+
 
 @NgModule({
   declarations: [AppComponent],
@@ -15,12 +21,16 @@ import { AppRoutingModule } from './app-routing.module';
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
-    AppRoutingModule
-  ],
+    AppRoutingModule,
+    HttpClientModule,
+    ModalPageModule,
+    MatTableModule
+    ],
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    NativeStorage
   ],
   bootstrap: [AppComponent]
 })

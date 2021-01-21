@@ -117,3 +117,20 @@ ion-note {
 ion-item.selected {
   --color: var(--ion-color-primary);
 }
+
+// Desktop
+
+ion-header .toolbar {
+  margin: auto;
+ }
+ 
+ @media (min-width: map-get($grid-breakpoints, lg)) {
+  ion-navbar.toolbar,
+  ion-header .toolbar[fixed],
+  ion-footer .toolbar[fixed],
+  ion-tabs .tabbar {
+    margin: 0;
+    padding-right: calc((100% - #{map-get($grid-max-widths, lg)}) / 2);
+    padding-left: calc((100% - #{map-get($grid-max-widths, lg)}) / 2);
+  }
+ }

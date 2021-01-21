@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Pridať elektromer</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form #form="ngForm" (ngSubmit)="addElectromer(form)" method="post">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+    <ion-item>
+        <ion-label position="floating">Nazov</ion-label>
+        <ion-input ngModel name="name"></ion-input>
+    </ion-item>
+  </ion-col>
+
+  <ion-col>
+    <ion-item>
+      <ion-label position="floating">Poloha</ion-label>
+      <ion-input type="email" ngModel name="email"></ion-input>
+    </ion-item>
+  </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+    <ion-item>
+      <ion-label position="floating">Ip</ion-label>
+      <ion-input type="password" ngModel name="password"></ion-input>
+    </ion-item>
+  </ion-col>
+      
+  <ion-col>
+    <ion-item>
+      <ion-label position="floating">Port</ion-label>
+      <ion-input type="password" ngModel name="password_confirmation"></ion-input>
+    </ion-item>
+
+  </ion-col>
+    </ion-row>
+  </ion-grid>
+    <ion-button type="submit" expand="full" color="primary">Potvrdiť</ion-button>
+  </form>
+</ion-content>
