@@ -14,6 +14,7 @@ export class AuthService {
   isLoggedIn = false
   token:any
   role: any
+  isAdmin: false
 
   constructor(
     private http: HttpClient,
@@ -74,7 +75,6 @@ export class AuthService {
       })
     )
   }
-
   isUserAdmin(){
     const headers = new HttpHeaders({
       'Authorization': this.token["token_type"]+" "+this.token["access_token"]
@@ -87,7 +87,6 @@ export class AuthService {
       })
     )
   }
-
   getToken() {
     return this.storage.getItem('token').then(
       data => {

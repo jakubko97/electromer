@@ -6,14 +6,14 @@ import { AuthService } from './services/auth.service';
 import { AlertService } from './services/alert.service';
 import { User } from 'src/app/services/user';
 
-// import {
-//   Router,
-//   Event as RouterEvent,
-//   NavigationStart,
-//   NavigationEnd,
-//   NavigationCancel,
-//   NavigationError
-// } from '@angular/router'
+ import {
+   Router,
+   Event as RouterEvent,
+   NavigationStart,
+   NavigationEnd,
+   NavigationCancel,
+   NavigationError
+  } from '@angular/router'
 
 @Component({
   selector: 'app-root',
@@ -21,7 +21,7 @@ import { User } from 'src/app/services/user';
 })
 export class AppComponent implements OnInit {
 
- appPages: any
+ public appPages: any
  public showOverlay = true
  user: User
  apiResult = {
@@ -36,34 +36,33 @@ export class AppComponent implements OnInit {
   private statusBar: StatusBar,
   private authService: AuthService,
   private navCtrl: NavController,
-  private alertService: AlertService
-  // private router: Router
+  private alertService: AlertService,
+  private router: Router
 ) {
   this.initializeApp()
 
-  // router.events.subscribe((event: RouterEvent) => {
-  //   this.navigationInterceptor(event)
-  // })
+  router.events.subscribe((event: RouterEvent) => {
+    this.navigationInterceptor(event)
+  })
 }
 
-
 // Shows and hides the loading spinner during RouterEvent changes
-// navigationInterceptor(event: RouterEvent): void {
-//   if (event instanceof NavigationStart) {
-//     this.showOverlay = true;
-//   }
-//   if (event instanceof NavigationEnd) {
-//     this.showOverlay = false;
-//   }
+navigationInterceptor(event: RouterEvent): void {
+  if (event instanceof NavigationStart) {
+    this.showOverlay = true;
+  }
+  if (event instanceof NavigationEnd) {
+    this.showOverlay = false;
+  }
 
-//   // Set loading state to false in both of the below events to hide the spinner in case a request fails
-//   if (event instanceof NavigationCancel) {
-//     this.showOverlay = false;
-//   }
-//   if (event instanceof NavigationError) {
-//     this.showOverlay = false;
-//   }
-// }
+  // Set loading state to false in both of the below events to hide the spinner in case a request fails
+  if (event instanceof NavigationCancel) {
+    this.showOverlay = false;
+  }
+  if (event instanceof NavigationError) {
+    this.showOverlay = false;
+  }
+}
 
 initializeApp() {
   this.platform.ready().then(() => {
@@ -75,8 +74,7 @@ initializeApp() {
 }
 
 setPages(){
-  console.log(this.user.is_admin==1)
-  if(this.user.is_admin==1){
+  if(this.user.is_admin == 1){
     this.appPages = [
       {
         title: 'Admin',
@@ -96,7 +94,7 @@ setPages(){
       {
         title: 'Podpora',
         url: '/support',
-        icon: 'support'
+        icon: 'settings'
       },
     ];
   }
@@ -115,18 +113,18 @@ setPages(){
        {
          title: 'Podpora',
          url: '/support',
-         icon: 'support'
+         icon: 'settings'
        },
      ];
    }
 }
  ngOnInit() {
-
 }
 ionViewWillEnter(){
   this.authService.user().subscribe(
     user => {
       this.user = user;
+      this.setPages()
     },
     error => {
       this.alertService.presentToast(error);

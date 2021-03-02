@@ -51,6 +51,17 @@ export class LoginPage implements OnInit {
     return await registerModal.present();
   }
 
+  isUserAdmin(){
+    this.authService.isUserAdmin().subscribe(
+      data => {
+        if(data.is_admin==1){
+          this.navCtrl.navigateRoot('/admin');
+        } else {
+          this.navCtrl.navigateRoot('/dashboard');
+        }
+      }
+    )
+  }
   login(form: NgForm) {
     this.apiResult.error = null
     this.apiResult.loading = true
@@ -66,13 +77,7 @@ export class LoginPage implements OnInit {
       () => {
         this.apiResult.loading = false
         this.dismissLogin();
-        if(this.authService.isUserAdmin()){
-          this.navCtrl.navigateRoot('/admin');
-
-        }
-        else {
-          this.navCtrl.navigateRoot('/dashboard');
-        }
+        this.isUserAdmin()
       }
     );
   }
