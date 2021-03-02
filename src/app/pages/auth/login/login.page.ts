@@ -10,9 +10,18 @@ import { AlertService } from 'src/app/services/alert.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
+
 export class LoginPage implements OnInit {
-  
+
   role: any
+  apiResult = {
+    loading: false,
+    error: '',
+    info: ''
+  }
+  public icon: 'glyphicon glyphicon-eye-open'
+  public inputTypePw: String = 'password'
+  isPassword: Boolean = false
 
   constructor(
     private modalController: ModalController,
@@ -22,6 +31,10 @@ export class LoginPage implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  public showPassword(pw: Boolean){
+    this.isPassword = pw
   }
 
   // Dismiss Login Modal
@@ -39,20 +52,26 @@ export class LoginPage implements OnInit {
   }
 
   login(form: NgForm) {
+    this.apiResult.error = null
+    this.apiResult.loading = true
     this.authService.login(form.value.email, form.value.password).subscribe(
       data => {
         this.alertService.presentToast("Logged In");
       },
       error => {
-        console.log(error);
+        this.apiResult.error = "Login failed. Please check your credentials."
+        this.alertService.presentToast(this.apiResult.error);
+        this.apiResult.loading = false
       },
       () => {
+        this.apiResult.loading = false
         this.dismissLogin();
-        if(this.authService.isUser()){
-          this.navCtrl.navigateRoot('/dashboard');
-        }
-        else if(this.authService.isAdmin()){
+        if(this.authService.isUserAdmin()){
           this.navCtrl.navigateRoot('/admin');
+
+        }
+        else {
+          this.navCtrl.navigateRoot('/dashboard');
         }
       }
     );

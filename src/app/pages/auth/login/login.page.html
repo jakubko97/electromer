@@ -8,17 +8,34 @@
   <form #form="ngForm" (ngSubmit)="login(form)" method="post">
     <ion-item>
       <ion-label position="floating">Email</ion-label>
-      <ion-input ngModel type="email" name="email"></ion-input>
+      <ion-input #email="ngModel" id="email" required ngModel type="email" name="email"></ion-input>
     </ion-item>
-  
+
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input ngModel type="password" name="password"></ion-input>
+      <ion-input #password="ngModel" id="password" required ngModel type="password" name="password">
+      </ion-input>
+
     </ion-item>
-  
+    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+      <p class="error" *ngIf="email.errors.required">
+        Email is required.
+      </p>
+    </div>
+    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
+      <p class="error" *ngIf="password.errors.required">
+        Password is required.
+      </p>
+    </div>
+
+
     <p text-right>Forgot Password?</p>
-  
-    <ion-button type="submit" expand="full" color="primary">Login</ion-button>
+
+    <ion-button type="submit" expand="full" color="primary">
+       <ion-spinner *ngIf="apiResult.loading">
+       </ion-spinner>
+       <ion-label *ngIf="!apiResult.loading">Login</ion-label>
+        </ion-button>
   </form>
   <p text-center>Don't have a account?</p>
   <ion-button expand="full" color="danger" (click)="registerModal()">Register</ion-button>

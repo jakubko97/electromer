@@ -7,12 +7,16 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
+        <div class="my-overlay" *ngIf="showOverlay">
+          <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </div>
         <ion-list>
-          <ion-menu-toggle auto-hide="false" *ngFor="let p of getAppPages()">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
               <ion-icon slot="start" [name]="p.icon"></ion-icon>
               <ion-label>
                 {{p.title}}
+
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
@@ -21,6 +25,8 @@
             <ion-label>
               Logout
             </ion-label>
+            <ion-spinner *ngIf="apiResult.loading">
+            </ion-spinner>
           </ion-item>
         </ion-list>
       </ion-content>

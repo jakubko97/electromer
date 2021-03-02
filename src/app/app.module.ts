@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule }    from '@angular/common/http';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
-import { ModalPageModule } from './pages/modal/modal.module';  
+import { ModalPageModule } from './pages/modal/modal.module';
 import { MatTableModule } from '@angular/material/table';
 
 
@@ -24,7 +24,7 @@ import { MatTableModule } from '@angular/material/table';
     AppRoutingModule,
     HttpClientModule,
     ModalPageModule,
-    MatTableModule
+    MatTableModule,
     ],
   providers: [
     StatusBar,

@@ -36,6 +36,10 @@ export class UsersPage implements OnInit {
     );
   }
 
+  public openModal(currentUser: User){
+    this.showModal(currentUser)
+  }
+
   async showModal(currentUser: User) {  
     const modal = await this.modalCtrl.create({  
       component: ModalPage ,

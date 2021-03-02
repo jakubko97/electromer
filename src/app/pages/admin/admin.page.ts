@@ -4,23 +4,22 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/services/user';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.page.html',
-  styleUrls: ['./dashboard.page.scss'],
+  selector: 'app-admin',
+  templateUrl: './admin.page.html',
+  styleUrls: ['./admin.page.scss'],
 })
-export class DashboardPage implements OnInit {
+export class AdminPage implements OnInit {
 
-  user: User;
+  user: User
 
-  constructor(private menu: MenuController, private authService: AuthService) { 
+  constructor(private menu: MenuController, private authService: AuthService) {
     this.menu.enable(true);
   }
 
   ngOnInit() {
-    
   }
 
-  ionViewWillEnter() {
+    ionViewWillEnter() {
     this.authService.user().subscribe(
       user => {
         this.user = user;

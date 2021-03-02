@@ -1,8 +1,15 @@
 <ion-header>  
   <ion-toolbar>  
-    <ion-title>{{ user['name'] }}</ion-title>  
-    <ion-button color="danger" style='float: left;' (click)='dismiss()'>Close</ion-button>
-    <ion-button color="primary" style='float: right;' (click)='save()'>Confirm</ion-button>
+    <ion-grid>
+      <ion-row>
+        <ion-col>    <ion-button color="danger" style='float: left;' (click)='dismiss()'>Close</ion-button>
+        </ion-col>
+        <ion-col>    <ion-title>{{ user['name'] }}</ion-title>  
+        </ion-col>
+        <ion-col>    <ion-button color="primary" style='float: right;' (click)='save()'>Confirm</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>  
 </ion-header>  
   

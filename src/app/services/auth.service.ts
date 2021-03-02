@@ -11,10 +11,10 @@ import { Electromer } from './electromer';
 })
 
 export class AuthService {
-  isLoggedIn = false;
-  token:any;
+  isLoggedIn = false
+  token:any
   role: any
-  
+
   constructor(
     private http: HttpClient,
     private storage: NativeStorage,
@@ -22,11 +22,6 @@ export class AuthService {
   ) { }
 
   login(email: String, password: String) {
-    if((email === 'admin@tp1.sk') && (password === 'aaaaaa')){
-      this.role = 0
-    }else{
-      this.role = 1
-    }
     return this.http.post(this.env.API_URL + 'auth/login',
       {email: email, password: password}
     ).pipe(
@@ -46,7 +41,7 @@ export class AuthService {
   }
 
   register(name: String, email: String, password: String, password_confirmation: String) {
-    
+
     return this.http.post(this.env.API_URL + 'auth/signup ',
       {name: name, email: email, password: password, password_confirmation : password_confirmation}
     )
@@ -72,11 +67,23 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': this.token["token_type"]+" "+this.token["access_token"]
     });
-
     return this.http.get<User>(this.env.API_URL + 'auth/user', { headers: headers })
     .pipe(
       tap(user => {
         return user;
+      })
+    )
+  }
+
+  isUserAdmin(){
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"]+" "+this.token["access_token"]
+    });
+
+    return this.http.get<User>(this.env.API_URL + 'auth/user', { headers: headers })
+    .pipe(
+      tap(user => {
+        return user.is_admin==1;
       })
     )
   }
@@ -100,7 +107,7 @@ export class AuthService {
   }
 
   addElectromer(user_id: String, electromer_id: String) {
-   
+
     return this.http.post(this.env.API_URL + 'add/electromer/user',
       {id: user_id, electromer_id: electromer_id}
     )
@@ -128,17 +135,5 @@ export class AuthService {
         return users;
       })
     )
-  }
-
-  isAdmin(){
-    return this.role == 0
-  }
-
-  isUser(){
-    return this.role == 1
-  }
-
-  getRole(){
-    return this.role
   }
 }

@@ -12,6 +12,12 @@ import { AlertService } from 'src/app/services/alert.service';
 })
 export class RegisterPage implements OnInit {
 
+  apiResult = {
+    loading: false,
+    error: '',
+    info: ''
+  }
+
   constructor(private modalController: ModalController,
     private authService: AuthService,
     private navCtrl: NavController,
@@ -20,6 +26,8 @@ export class RegisterPage implements OnInit {
 
   ngOnInit() {
   }
+
+
 
   // Dismiss Register Modal
   dismissRegister() {
@@ -35,27 +43,27 @@ export class RegisterPage implements OnInit {
     return await loginModal.present();
   }
 
+  matchPassword(form : NgForm){
+    return form.value.password == form.value.password_confirmation
+  }
+
   register(form: NgForm) {
+    this.apiResult.error = null
+    this.apiResult.loading = true
     this.authService.register(form.value.name, form.value.email, form.value.password, form.value.password_confirmation).subscribe(
       data => {
-        this.authService.login(form.value.email, form.value.password).subscribe(
-          data => {
-          },
-          error => {
-            console.log(error);
-          },
-          () => {
-            this.dismissRegister();
-            this.navCtrl.navigateRoot('/dashboard');
-          }
-        );
         this.alertService.presentToast(data['message']);
       },
       error => {
-        console.log(error);
+        this.apiResult.error = "Register failed. Please check your credentials."
+        this.apiResult.loading = false
+        this.alertService.presentToast(this.apiResult.error);
+
       },
       () => {
-        
+        this.apiResult.loading = false
+        this.dismissRegister();
+        this.navCtrl.navigateRoot('/dashboard');
       }
     );
   }
