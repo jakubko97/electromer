@@ -1,34 +1,40 @@
-import { Component, OnInit } from '@angular/core';  
-import { ModalController, NavParams} from '@ionic/angular';  
-import { User } from 'src/app/services/user';
-import { AuthService } from 'src/app/services/auth.service';
-import { Electromer } from 'src/app/services/electromer';
+import { Component, OnInit } from '@angular/core';
+import { ModalController, NavParams} from '@ionic/angular';
+import { User } from '../../models/user';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { Electromer } from 'src/app/models/electromer';
+import { ElectromerService } from 'src/app/services/electromer/electromer.service';
+@Component({
+  selector: 'app-modal',
+  templateUrl: './modal.page.html',
+  styleUrls: ['./modal.page.scss'],
+})
+export class ModalPage implements OnInit {
 
-@Component({  
-  selector: 'app-modal',  
-  templateUrl: './modal.page.html',  
-  styleUrls: ['./modal.page.scss'],  
-})  
-export class ModalPage implements OnInit {  
-  
   allElectromers: any;
 
   listElectromers: Array<Electromer>
 
-  constructor(public modalCtrl: ModalController,private authService: AuthService,public navParams: NavParams) {}  
+  constructor(
+    public modalCtrl: ModalController,
+    private authService: AuthService,
+    public navParams: NavParams,
+    private electromerService: ElectromerService
+
+    ) {}
 
   user: User = this.navParams.get('user');
- 
-  ngOnInit() {  
+
+  ngOnInit() {
     this.getElectromers()
     this.initItems()
-  }  
-  dismiss() {  
-    this.modalCtrl.dismiss();  
-  }  
+  }
+  dismiss() {
+    this.modalCtrl.dismiss();
+  }
 
   save(){
-    this.modalCtrl.dismiss();  
+    this.modalCtrl.dismiss();
   }
 
   public check(item: Electromer): Boolean{
@@ -60,13 +66,12 @@ export class ModalPage implements OnInit {
         }
   ]
   }
-  
   public getElectromers(){
-    return this.authService.getAllElectromers() 
+    return this.electromerService.getAll()
       .subscribe(electromers => {
         console.log(electromers)
        this.allElectromers = electromers as Electromer
        return electromers
   })
   }
-}  
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/services/user';
+import { UserService } from 'src/app/services/user/user.service';
+import { User } from '../../models/user';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
 import { createChart } from 'lightweight-charts';
@@ -18,19 +18,19 @@ export class DashboardPage implements OnInit {
   val: any
   public mySelect: any
 
-  constructor(private menu: MenuController, private authService: AuthService) { 
+  constructor(private menu: MenuController, private userService: UserService) {
     this.menu.enable(true);
   }
 
   ionViewWillEnter() {
-    this.authService.user().subscribe(
+    this.userService.user().subscribe(
       user => {
         this.user = user;
       }
     );
   }
 
- 
+
 
   public barChartOptions: ChartOptions = {
     responsive: true,
@@ -46,7 +46,7 @@ export class DashboardPage implements OnInit {
   ];
 
   public chartClicked(e: any): void {
-  
+
     if (e.active.length > 0) {
     const chart = e.active[0]._chart;
     const activePoints = chart.getElementAtEvent(e.event);
@@ -61,7 +61,7 @@ export class DashboardPage implements OnInit {
      }
     }
 
-   changeChart(){ 
+   changeChart(){
     if(this.mySelect == "daily"){
      this.val = false
     }else{
@@ -70,7 +70,7 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
-   
+
       const domElement = document.getElementById("chart");
       const chart = createChart(domElement, { width: 1100, height: 500 });
       const lineSeries = chart.addAreaSeries({
@@ -86,27 +86,27 @@ export class DashboardPage implements OnInit {
           bottom: 0.3,
         },
       });
-  
+
       var extraSeries = chart.addAreaSeries({
         topColor: 'rgba(255, 192, 0, 0.7)',
         bottomColor: 'rgba(255, 192, 0, 0.3)',
         lineColor: 'rgba(255, 192, 0, 1)',
         lineWidth: 2,
       });
-  
+
       var extraSeries2 = chart.addAreaSeries({
         topColor: 'rgba(51, 255, 51, 0.7)',
         bottomColor: 'rgba(51, 255, 51, 0.3)',
         lineColor: 'rgba(51, 255, 51, 1)',
         lineWidth: 2,
       });
-  
+
       chart.subscribeClick(param => {
-        if (param.time) 
+        if (param.time)
         console.log(param.seriesPrices.get(lineSeries))
         console.log(param.seriesPrices.get(extraSeries2))
         })
-        
+
       lineSeries.setData([
         { time: '2018-10-19', value: 219.31 },
         { time: '2018-10-22', value: 220.65 },
@@ -259,7 +259,7 @@ export class DashboardPage implements OnInit {
         { time: '2019-05-24', value: 178.97 },
         { time: '2019-05-28', value: 179.07 },
       ]);
-      
+
       extraSeries2.setData([
         { time: '2018-10-19', value: 44 },
         { time: '2018-10-22', value: 43.14 },
@@ -568,7 +568,7 @@ export class DashboardPage implements OnInit {
   }
 
   showChart(){
-    
+
   }
 
 }
