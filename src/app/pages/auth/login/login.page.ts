@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
 import { RegisterPage } from '../register/register.page';
 import { NgForm } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
-import { AlertService } from 'src/app/services/alert.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
+import { UserService } from 'src/app/services/user/user.service';
+import { AlertService } from 'src/app/services/alert/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +28,8 @@ export class LoginPage implements OnInit {
     private modalController: ModalController,
     private authService: AuthService,
     private navCtrl: NavController,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -52,7 +54,7 @@ export class LoginPage implements OnInit {
   }
 
   isUserAdmin(){
-    this.authService.isUserAdmin().subscribe(
+    this.userService.isUserAdmin().subscribe(
       data => {
         if(data.is_admin==1){
           this.navCtrl.navigateRoot('/admin');
