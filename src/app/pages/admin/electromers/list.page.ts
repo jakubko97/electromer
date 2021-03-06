@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { User } from '../../models/user';
+import { User } from '../../../models/user';
 import { MenuController } from '@ionic/angular';
 import { Electromer } from 'src/app/models/electromer';
 import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
 import { NgForm } from '@angular/forms';
-import { UserService} from 'src/app/services/user/user.service';
-import { ElectromerService } from 'src/app/services/electromer/electromer.service';
 
 @Component({
   selector: 'app-list',
@@ -21,10 +19,8 @@ export class ListPage implements OnInit {
 
   constructor(
     private menu: MenuController,
-    private authService: AuthService,
     public modalCtrl: ModalController,
-    private userService: UserService,
-    private electromerService: ElectromerService
+    private authService: AuthService,
     ) {
     this.menu.enable(true);
   }
@@ -41,7 +37,7 @@ export class ListPage implements OnInit {
   }
 
   ionViewWillEnter() {
-    this.userService.user().subscribe(
+    this.authService.getUser().subscribe(
       user => {
         this.user = user;
       }
@@ -53,7 +49,7 @@ export class ListPage implements OnInit {
   }
 
   public getElectromers() {
-    return this.electromerService.getAll()
+    return this.authService.getAllElectromers()
       .subscribe(electromers => {
         console.log(electromers)
         this.allElectromers = electromers as Electromer

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { RegisterPage } from '../register/register.page';
 import { NgForm } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { UserService } from 'src/app/services/user/user.service';
 import { AlertService } from 'src/app/services/alert/alert.service';
 
 @Component({
@@ -29,7 +27,6 @@ export class LoginPage implements OnInit {
     private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
-    private userService: UserService
   ) { }
 
   ngOnInit() {
@@ -45,16 +42,16 @@ export class LoginPage implements OnInit {
   }
 
   // On Register button tap, dismiss login modal and open register modal
-  async registerModal() {
-    this.dismissLogin();
-    const registerModal = await this.modalController.create({
-      component: RegisterPage
-    });
-    return await registerModal.present();
-  }
+  // async registerModal() {
+  //   this.dismissLogin();
+  //   const registerModal = await this.modalController.create({
+  //     component: RegisterPage
+  //   });
+  //   return await registerModal.present();
+  // }
 
   isUserAdmin(){
-    this.userService.isUserAdmin().subscribe(
+    this.authService.isUserAdmin().subscribe(
       data => {
         if(data.is_admin==1){
           this.navCtrl.navigateRoot('/admin');

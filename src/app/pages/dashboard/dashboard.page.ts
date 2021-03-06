@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { UserService } from 'src/app/services/user/user.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from '../../models/user';
 import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
 import { Label } from 'ng2-charts';
@@ -18,19 +18,21 @@ export class DashboardPage implements OnInit {
   val: any
   public mySelect: any
 
-  constructor(private menu: MenuController, private userService: UserService) {
+  constructor(
+    private menu: MenuController,
+    private authService: AuthService
+    ) {
     this.menu.enable(true);
   }
 
   ionViewWillEnter() {
-    this.userService.user().subscribe(
-      user => {
-        this.user = user;
-      }
-    );
+    // this.userService.getUser().subscribe(
+    //   user => {
+    //     this.user = user;
+
+    //   }
+    // );
   }
-
-
 
   public barChartOptions: ChartOptions = {
     responsive: true,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavController } from '@ionic/angular';
-import { LoginPage } from '../login/login.page';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { NgForm } from '@angular/forms';
 import { AlertService } from 'src/app/services/alert/alert.service';
@@ -35,13 +34,13 @@ export class RegisterPage implements OnInit {
   }
 
   // On Login button tap, dismiss Register modal and open login Modal
-  async loginModal() {
-    this.dismissRegister();
-    const loginModal = await this.modalController.create({
-      component: LoginPage,
-    });
-    return await loginModal.present();
-  }
+  // async loginModal() {
+  //   this.dismissRegister();
+  //   const loginModal = await this.modalController.create({
+  //     component: LoginPage,
+  //   });
+  //   return await loginModal.present();
+  // }
 
   matchPassword(form : NgForm){
     return form.value.password == form.value.password_confirmation

@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Platform, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { AuthService } from './services/auth/auth.service';
 import { AlertService } from './services/alert/alert.service';
 import { User } from 'src/app/models/user';
-import { UserService } from 'src/app/services/user/user.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 import {
   Router,
@@ -15,6 +14,7 @@ import {
   NavigationCancel,
   NavigationError
 } from '@angular/router'
+import { Error } from '@material-ui/icons';
 
 @Component({
   selector: 'app-root',
@@ -35,11 +35,11 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private authService: AuthService,
     private navCtrl: NavController,
     private alertService: AlertService,
     private router: Router,
-    private userService: UserService
+    private authService: AuthService,
+
   ) {
     this.initializeApp()
 
@@ -71,13 +71,28 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       // Commenting splashScreen Hide, so it won't hide splashScreen before auth check
       // this.splashScreen.hide();
-      this.authService.getToken();
+      this.authService.getToken().then(
+        data => {
+          this.authService.getUser().subscribe(
+            user => {
+              this.user = user
+              this.setPages()
+            },
+            error => {
+              console.log(error)
+            }
+          )
+        },
+        error => {
+          console.log(error)
+        }
+      )
+
     });
   }
 
   setPages() {
-    // console.log(this.user)
-    if (this.user.is_admin == 1) {
+    if (this.authService.user.is_admin == 1) {
       this.appPages = [
         {
           title: 'Admin',
@@ -85,17 +100,17 @@ export class AppComponent implements OnInit {
           icon: 'home'
         },
         {
-          title: 'Použivatelia',
+          title: 'Users',
           url: '/users',
           icon: 'home'
         },
         {
-          title: 'Pridať elektromer',
+          title: 'Electromers',
           url: '/list',
           icon: 'list'
         },
         {
-          title: 'Podpora',
+          title: 'Support',
           url: '/support',
           icon: 'settings'
         },
@@ -109,12 +124,12 @@ export class AppComponent implements OnInit {
           icon: 'home'
         },
         {
-          title: 'Elektromery',
+          title: 'Electromers',
           url: '/user/elektromer',
           icon: 'list'
         },
         {
-          title: 'Podpora',
+          title: 'Support',
           url: '/support',
           icon: 'settings'
         },
@@ -122,19 +137,9 @@ export class AppComponent implements OnInit {
     }
   }
   ngOnInit() {
-
   }
+
   ionViewWillEnter() {
-    this.userService.user().subscribe(
-      user => {
-        this.user = user;
-      },
-      error => {
-        this.alertService.presentToast(error);
-      },
-      () => {
-      }
-    );
   }
   // When Logout Button is pressed
   logout() {
