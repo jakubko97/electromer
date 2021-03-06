@@ -1,0 +1,44 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>    <ion-button color="danger" style='float: left;' (click)='dismiss()'>Close</ion-button>
+        </ion-col>
+        <ion-col>    <ion-title>{{ user['name'] }}</ion-title>
+        </ion-col>
+        <ion-col>    <ion-button color="primary" style='float: right;' (click)='save()'>Confirm</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="ion-padding">
+    <input type="text" style="padding:8px;margin:15px auto;width:30%;" placeholder="Type to filter the name column..."
+      (keyup)="updateFilter($event)" />
+    <!-- Theme classes dark, material, bootstrap -->
+    <ngx-datatable #table class="material" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
+      [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+
+      <ngx-datatable-column name="Id" prop="ip" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Name" prop="name" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="IP" prop="ip" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Port" prop="port" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Type" prop="type" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Akcie" prop="user">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-button (click)="update(row)">
+            Add
+            <ion-icon name="arrow-redo"></ion-icon>
+          </ion-button>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
+</ion-content>

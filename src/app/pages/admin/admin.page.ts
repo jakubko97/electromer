@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { UserService } from 'src/app/services/user/user.service';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from '../../models/user';
 
 @Component({
@@ -12,7 +12,9 @@ export class AdminPage implements OnInit {
 
   user: User
 
-  constructor(private menu: MenuController, private userService: UserService) {
+  constructor(
+    private menu: MenuController,
+    private authService: AuthService) {
     this.menu.enable(true);
   }
 
@@ -20,10 +22,10 @@ export class AdminPage implements OnInit {
   }
 
     ionViewWillEnter() {
-    this.userService.user().subscribe(
-      user => {
-        this.user = user;
-      }
-    );
+    // this.authService.getUser().subscribe(
+    //   user => {
+    //     this.user = user;
+    //   }
+    // );
   }
 }

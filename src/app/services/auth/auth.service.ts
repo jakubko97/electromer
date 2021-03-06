@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { EnvService } from '../env/env.service';
-
+import { User } from '../../models/user';
+import { Electromer } from '../../models/electromer';
 @Injectable({
   providedIn: 'root'
 })
@@ -11,8 +12,8 @@ import { EnvService } from '../env/env.service';
 export class AuthService {
   isLoggedIn = false
   token: any
-  role: any
-  isAdmin: false
+  user: User
+  isAdmin: any
 
   constructor(
     private http: HttpClient,
@@ -77,5 +78,60 @@ export class AuthService {
         this.isLoggedIn = false;
       }
     );
+  }
+
+  getUser() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.get<User>(this.env.API_URL + 'auth/user', { headers: headers })
+      .pipe(
+        tap(user => {
+          this.user = user
+          return user;
+        })
+      )
+  }
+  isUserAdmin() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.get<User>(this.env.API_URL + 'auth/user', { headers: headers })
+      .pipe(
+        tap(user => {
+          this.isAdmin = user.is_admin == 1 ? true : false
+          return this.isAdmin;
+        })
+      )
+  }
+  getAll() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.get(this.env.API_URL + 'api/users', { headers: headers })
+      .pipe(
+        tap(users => {
+          return users;
+        })
+      )
+  }
+  getAllElectromers() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.get<Electromer>(this.env.API_URL + 'api/electromers', { headers: headers })
+      .pipe(
+        tap(electromers => {
+          return electromers;
+        })
+      )
+  }
+  addElectromer(user_id: String, electromer_id: String) {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.post(this.env.API_URL + 'add/electromer/user',
+      { id: user_id, electromer_id: electromer_id }
+    )
   }
 }
