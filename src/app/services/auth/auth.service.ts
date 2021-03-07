@@ -119,19 +119,34 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': this.token["token_type"] + " " + this.token["access_token"]
     });
-    return this.http.get<Electromer>(this.env.API_URL + 'api/electromers', { headers: headers })
+    return this.http.get(this.env.API_URL + 'api/electromers', { headers: headers })
       .pipe(
         tap(electromers => {
+          console.log(electromers)
           return electromers;
         })
       )
   }
-  addElectromer(user_id: String, electromer_id: String) {
+  assignElectromerToUser(user_id: String, electromer_id: String) {
     const headers = new HttpHeaders({
       'Authorization': this.token["token_type"] + " " + this.token["access_token"]
     });
     return this.http.post(this.env.API_URL + 'add/electromer/user',
-      { id: user_id, electromer_id: electromer_id }
+      { id: user_id, electromer_id: electromer_id, headers: headers }
+    )
+  }
+  addElectromer(electromer: any) {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/save', electromer, {headers: headers})
+  }
+  getDataInRange(electromer_id: number, date_from: Date, date_to: Date) {
+    const headers = new HttpHeaders({
+      'Authorization': this.token["token_type"] + " " + this.token["access_token"]
+    });
+    return this.http.post(this.env.API_URL + 'add/electromer',
+      { electromer_id: electromer_id, date_from: date_from, date_to: date_to , headers: headers }
     )
   }
 }

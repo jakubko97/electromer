@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          Add a new Electromer
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <form #form="ngForm" (ngSubmit)="addElectromer(form)">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+    <ion-item>
+        <ion-label position="floating">name</ion-label>
+        <ion-input #name="ngModel" id="name" required ngModel name="name"></ion-input>
+    </ion-item>
+  </ion-col>
+
+  <ion-col>
+    <ion-item>
+      <ion-label position="floating">db_table</ion-label>
+      <ion-input #db_table="ngModel" id="db_table" required ngModel name="db_table"></ion-input>
+    </ion-item>
+  </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+    <ion-item>
+      <ion-label position="floating">delta</ion-label>
+      <ion-input #delta="ngModel" id="delta" required ngModel name="delta"></ion-input>
+    </ion-item>
+  </ion-col>
+
+  <ion-col>
+    <ion-item>
+      <ion-label position="floating">type</ion-label>
+      <ion-input #type="ngModel" id="type" required ngModel name="type"></ion-input>
+    </ion-item>
+  </ion-col>
+    </ion-row>
+    <ion-row *ngIf="apiResult.error">
+      <ion-col>
+          <ion-label position="floating" color="danger">{{ apiResult.error }}</ion-label>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+    <ion-button type="submit" expand="full" color="primary">
+      <ion-spinner *ngIf="apiResult.loading">
+      </ion-spinner>
+      <ion-label *ngIf="!apiResult.loading">Confirm</ion-label>
+    </ion-button>
+  </form>
+</ion-content>

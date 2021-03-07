@@ -21,22 +21,19 @@
     <ngx-datatable #table class="material" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
-      <ngx-datatable-column name="Id" prop="ip" width="80">
+      <ngx-datatable-column name="Id" prop="id" width="80">
       </ngx-datatable-column>
       <ngx-datatable-column name="Name" prop="name" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="IP" prop="ip" width="80">
+      <ngx-datatable-column name="db_table" prop="db_table" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Port" prop="port" width="80">
+      <ngx-datatable-column name="delta" prop="delta" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Type" prop="type" width="80">
+      <ngx-datatable-column name="type" prop="type" width="80">
       </ngx-datatable-column>
       <ngx-datatable-column name="Akcie" prop="user">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-button (click)="update(row)">
-            Add
-            <ion-icon name="arrow-redo"></ion-icon>
-          </ion-button>
+          <ion-checkbox color="primary" checked slot="start"></ion-checkbox>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
