@@ -125,7 +125,7 @@ export class AppComponent implements OnInit {
         },
         {
           title: 'Electromers',
-          url: '/user/elektromer',
+          url: '/list',
           icon: 'list'
         },
         {

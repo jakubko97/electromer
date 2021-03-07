@@ -1,7 +1,7 @@
 export class Electromer {
     id: number;
     name: string;
-    ip: string;
-    port: string;
+    db_table: string;
+    delta: number;
     type: string;
 }

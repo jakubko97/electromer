@@ -14,6 +14,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { ModalPageModule } from './pages/admin/modal/modal.module';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent],
@@ -24,7 +25,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     AppRoutingModule,
     HttpClientModule,
     ModalPageModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    FormsModule, ReactiveFormsModule
     ],
   providers: [
     StatusBar,
