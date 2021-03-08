@@ -26,7 +26,7 @@ export class ListPage implements OnInit {
     private menu: MenuController,
     public modalCtrl: ModalController,
     private authService: AuthService,
-    ) {
+  ) {
     this.menu.enable(true);
   }
 
@@ -61,7 +61,7 @@ export class ListPage implements OnInit {
     // this.table.offset = 0;
   }
 
-  edit(electromer: Electromer){
+  edit(electromer: Electromer) {
 
   }
   public getElectromers() {
@@ -79,6 +79,6 @@ export class ListPage implements OnInit {
         () => {
           this.apiResult.loading = false
         }
-        )
+      )
   }
 }

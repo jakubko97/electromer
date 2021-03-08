@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChartsModule } from 'ng2-charts';
@@ -16,6 +16,7 @@ import { DashboardPage } from './dashboard.page';
     DashboardPageRoutingModule,
     ChartsModule
   ],
-  declarations: [DashboardPage]
+  declarations: [DashboardPage],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class DashboardPageModule {}

@@ -92,7 +92,7 @@ export class AppComponent implements OnInit {
   }
 
   setPages() {
-    if (this.authService.user.is_admin == 1) {
+    if (this.user.is_admin == 1) {
       this.appPages = [
         {
           title: 'Admin',
@@ -146,6 +146,7 @@ export class AppComponent implements OnInit {
     this.apiResult.loading = true
     this.authService.logout().subscribe(
       data => {
+        this.user = null
         this.alertService.presentToast(data['message']);
         this.apiResult.loading = false
       },

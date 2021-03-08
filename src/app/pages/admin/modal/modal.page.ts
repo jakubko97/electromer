@@ -36,8 +36,20 @@ export class ModalPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  update(electromer: Electromer){
+  update(electromer_id){
+    this.apiResult.error = null
+    this.apiResult.loading = true
+    this.authService.assignElectromerToUser(electromer_id, this.user.id).subscribe(
+      data => {
+        this.apiResult.loading = false
+      },
+      error => {
+        this.apiResult.error = error
+        this.apiResult.loading = false
+      }
+    )
   }
+
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     // filter our data
