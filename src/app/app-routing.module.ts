@@ -21,7 +21,7 @@ const routes: Routes = [
   },
   { path: 'modal', loadChildren: () => import('src/app/pages/admin/modal/modal.module').then(m => m.ModalPageModule), canActivate: [AuthGuard] },
   {
-    path: 'settings', loadChildren: () => import('./pages/profile/settings/settings.module').then( m => m.SettingsPageModule), canActivate: [AuthGuard],
+    path: 'settings', loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsPageModule), canActivate: [AuthGuard],
   },
 
 ];
