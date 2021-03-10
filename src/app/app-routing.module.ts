@@ -16,9 +16,14 @@ const routes: Routes = [
   { path: 'dashboard', loadChildren: () => import('src/app/pages/dashboard/dashboard.module').then(m => m.DashboardPageModule),canActivate: [AuthGuard]},
   { path: 'admin', loadChildren: () => import('src/app/pages/admin/admin.module').then(m => m.AdminPageModule), canActivate: [AdminGuard]},
   { path: 'list', loadChildren: () => import('src/app/pages/admin/electromers/list.module').then(m => m.ListPageModule), canActivate: [AdminGuard] },
-  { path: 'users', loadChildren: () => import('src/app/pages/admin/users/users.module').then(m => m.UsersPageModule), canActivate: [AdminGuard] },
+  {
+    path: 'users', loadChildren: () => import('src/app/pages/admin/users/users.module').then(m => m.UsersPageModule), canActivate: [AdminGuard]
+  },
   { path: 'modal', loadChildren: () => import('src/app/pages/admin/modal/modal.module').then(m => m.ModalPageModule), canActivate: [AuthGuard] },
-  { path: 'support', loadChildren: () => import('src/app/pages/support/support.module').then(m => m.SupportPageModule), canActivate: [AuthGuard] },
+  {
+    path: 'settings', loadChildren: () => import('./pages/profile/settings/settings.module').then( m => m.SettingsPageModule), canActivate: [AuthGuard],
+  },
+
 ];
 
 @NgModule({

@@ -18,7 +18,8 @@ import { Error } from '@material-ui/icons';
 
 @Component({
   selector: 'app-root',
-  templateUrl: 'app.component.html'
+  templateUrl: 'app.component.html',
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
 
@@ -95,14 +96,14 @@ export class AppComponent implements OnInit {
     if (this.user.is_admin == 1) {
       this.appPages = [
         {
-          title: 'Admin',
-          url: '/admin',
+          title: 'Dashboard',
+          url: '/dashboard',
           icon: 'home'
         },
         {
           title: 'Users',
           url: '/users',
-          icon: 'home'
+          icon: 'people'
         },
         {
           title: 'Electromers',
@@ -110,9 +111,14 @@ export class AppComponent implements OnInit {
           icon: 'list'
         },
         {
-          title: 'Support',
-          url: '/support',
-          icon: 'settings'
+          title: 'Profile',
+          children: [
+            {
+              title: 'Settings',
+              url: '/settings',
+              icon: 'settings',
+            }
+          ]
         },
       ];
     }
@@ -129,9 +135,14 @@ export class AppComponent implements OnInit {
           icon: 'list'
         },
         {
-          title: 'Support',
-          url: '/support',
-          icon: 'settings'
+          title: 'Profile',
+          children: [
+            {
+              title: 'Settings',
+              url: '/settings',
+              icon: 'settings',
+            }
+          ]
         },
       ];
     }
