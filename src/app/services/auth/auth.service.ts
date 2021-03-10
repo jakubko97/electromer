@@ -122,7 +122,6 @@ export class AuthService {
     return this.http.get(this.env.API_URL + 'api/electromers', { headers: headers })
       .pipe(
         tap(electromers => {
-          console.log(electromers)
           return electromers;
         })
       )

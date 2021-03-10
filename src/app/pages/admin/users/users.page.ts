@@ -12,6 +12,7 @@ import { DatatableComponent } from '@swimlane/ngx-datatable/lib/components/datat
 
   styleUrls: ['./users.page.scss'],
 })
+
 export class UsersPage implements OnInit {
 
   user: User;
@@ -72,6 +73,7 @@ export class UsersPage implements OnInit {
   ngOnInit() {
   }
 
+
   public getUsers() {
     this.apiResult.loading = true
     return this.userService.getAll()
@@ -79,6 +81,10 @@ export class UsersPage implements OnInit {
         this.users = users as User
         this.temp = users
         this.apiResult.loading = false
+        // var index = users.indexOf("red");
+        // if (index >= 0) {
+        //   users.splice( index, 1 );
+        // }
       },
         error => {
           this.apiResult.error = error
