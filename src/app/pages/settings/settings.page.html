@@ -1,9 +1,56 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>Settings</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>Electromer</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-
-</ion-content>
+<ion-content fullscreen="true" slot="fixed">
+    <ion-card>
+      <ion-card-header>
+        <ion-avatar class="ion-margin-start">
+          <img src="../../../assets/icon/user.svg">
+        </ion-avatar>
+      </ion-card-header>
+      <ion-card-content>
+        <div class="user-meta ion-text-center">
+          <h3 class="name"> {{ user.name }}</h3>
+          <h5 class="email">
+            <ion-label>
+              {{ user.email }}
+            </ion-label>
+          </h5>
+          <ion-grid class="ion-justify-content-center">
+            <ion-row>
+              <ion-col text-right class="ion-align-items-end">
+                <h6 class="count-electromers">
+                  Electromers
+                </h6>
+              </ion-col>
+              <ion-col *ngIf="isUserAdmin" class="ion-justify-content-start">
+                <h6 class="count-users">
+                  Users
+                </h6>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col text-right class="ion-align-items-end">
+                <ion-chip>
+                  <ion-label *ngIf="electromers!=null">
+                    {{ electromers.length }}
+                  </ion-label>
+                </ion-chip>
+              </ion-col>
+              <ion-col *ngIf="isUserAdmin" class="ion-justify-content-start">
+                <ion-chip>
+                  <ion-label *ngIf="users!=null">
+                    {{ users.length }}
+                  </ion-label>
+                </ion-chip>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </div>
+        <!-- <ion-button expand="full" color="primary">http://rogerfederer.com</ion-button> -->
+      </ion-card-content>
+    </ion-card>
+  </ion-content>

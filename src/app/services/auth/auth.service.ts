@@ -57,6 +57,8 @@ export class AuthService {
         tap(data => {
           this.storage.remove("token");
           this.isLoggedIn = false;
+          this.user = null
+          this.isAdmin = false
           delete this.token;
           return data;
         })

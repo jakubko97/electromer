@@ -111,7 +111,7 @@ export class AppComponent implements OnInit {
           icon: 'list'
         },
         {
-          title: 'Profile',
+          title: this.user.email,
           children: [
             {
               title: 'Settings',
@@ -135,7 +135,7 @@ export class AppComponent implements OnInit {
           icon: 'list'
         },
         {
-          title: 'Profile',
+          title: this.user.email,
           children: [
             {
               title: 'Settings',
