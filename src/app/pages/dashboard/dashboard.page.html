@@ -7,83 +7,88 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
-  <div *ngIf="user != undefined">
-      Welcome {{ user.name  }}
+<ion-content fullscreen>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-subtitle><div *ngIf="user != undefined">
+        Welcome, {{ user.name }}
+      </div></ion-card-subtitle>
+      <ion-card-title>
+        Select custom date
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-item>
+              <ion-label>Electromer </ion-label>
+              <ion-select [(ngModel)]="electromer" [compareWith]="compareFn">
+                <ion-select-option [value]="e" *ngFor="let e of electromers">{{e.name}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label>From </ion-label>
+              <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="from_date"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <ion-label>To </ion-label>
+              <ion-datetime displayFormat="D/M/YYYY" pickerFormat="D/M/YYYY" [(ngModel)]="to_date"></ion-datetime>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-button (click)="getData()">
+              <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
+              <ion-label *ngIf="!apiResult.loading">Confirm</ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="apiResult.error">
+          <ion-col>
+            <ion-label color="danger">{{apiResult.error}} </ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+    <ion-card-header>
+      <ion-card-title>
+        Quick select
+      </ion-card-title>
+      <ion-card-subtitle>
+        in recent days
+      </ion-card-subtitle>
+    </ion-card-header>
+
+      <!-- Label only -->
+      <ion-segment value="favorite" (ionChange)="quickSelect($event)">
+        <ion-segment-button value="last_day">
+          <ion-label>last day</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="last_three">
+          <ion-label>last 3 days</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="last_seven">
+          <ion-label>last 7 days</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="last_ten">
+          <ion-label>last 10 days</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+  </ion-card>
+  <div class="chart elevation">
+    <div *ngIf="graphLoading">
+      <ion-progress-bar type="indeterminate">
+      </ion-progress-bar>
+      <ion-label class="info-render text-center">
+        Rendering graph...
+      </ion-label>
+    </div>
+
+    <div id="chartContainer" style="height: 500px; width: 100%; margin-left:auto;margin-right:auto;"></div>
   </div>
-
-  <!-- <div class="info elevation">
-    <h1>Najvyššie nameraná spotreba energie:
-    </h1>
-    <h1>Najnižšie nameraná spotreba energie:
-    </h1>
-  </div> -->
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-item>
-        <ion-label>Electromer </ion-label>
-        <ion-select [(ngModel)]="electromer" [compareWith]="compareFn">
-          <ion-select-option [value]="e" *ngFor="let e of electromers">{{e.name}}</ion-select-option>
-        </ion-select>
-      </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-        <ion-label>From </ion-label>
-        <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="from_date"></ion-datetime>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-item>
-        <ion-label>To </ion-label>
-        <ion-datetime displayFormat="D/M/YYYY" pickerFormat="D/M/YYYY" [(ngModel)]="to_date" ></ion-datetime>
-        </ion-item>
-      </ion-col>
-      <ion-col>
-        <ion-button (click)="getData()">
-          <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
-          <ion-label *ngIf="!apiResult.loading">Confirm</ion-label>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-    <ion-row *ngIf="apiResult.error" >
-      <ion-col>
-        <ion-label color="danger">{{apiResult.error}} </ion-label>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-<div class="chart elevation">
-  <div *ngIf="graphLoading" >
-  <ion-progress-bar type="indeterminate">
-  </ion-progress-bar>
-  <ion-label class="info-render text-center">
-    Rendering graph...
-  </ion-label>
-</div>
-
-  <div id="chartContainer" style="height: 500px; width: 100%; margin-left:auto;margin-right:auto;"></div>
-  <!-- <ion-item>
-    <ion-label>Zvoliť zobrazenie dát</ion-label>
-    <ion-select [(ngModel)]="mySelect" placeholder="Select One" (ngModelChange)="changeChart()">
-      <ion-select-option value="daily">Denná spotreba</ion-select-option>
-      <ion-select-option value="yearly">Ročná spotreba</ion-select-option>
-    </ion-select>
-  </ion-item> -->
-</div>
-  <!-- <div [hidden]="val" class="chart elevation" id='chart'></div>
-  <div [hidden]="!val" class="chart elevation" style="display: block;">
-    <canvas
-      baseChart
-      [datasets]="barChartData"
-      [labels]="barChartLabels"
-      [options]="barChartOptions"
-      [plugins]="barChartPlugins"
-     [legend]="barChartLegend"
-      [chartType]="barChartType"
-      (chartClick)="chartClicked($event)">
-  </canvas>
-
-</div> -->
 </ion-content>
