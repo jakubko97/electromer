@@ -48,6 +48,17 @@ export class ListPage implements OnInit {
       }
     );
   }
+
+  cleanElectromersData(){
+    var clean_array = []
+    for (let data of Object.entries(this.electromers)) { //data -> mapa 0 key, 1 value
+      if(data[1] != null){
+        clean_array.push(data[1])
+      }
+    }
+    return clean_array
+    ;
+  }
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     // filter our data
@@ -70,6 +81,7 @@ export class ListPage implements OnInit {
       .subscribe(
         electromers => {
           this.electromers = electromers as Electromer
+          this.electromers = this.cleanElectromersData()
           this.temp = this.electromers
           return electromers
         },

@@ -21,3 +21,27 @@
     height: 500px;
   }
 }
+
+ion-card {
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.title-card {
+  z-index: 1;
+  padding: 14px;
+  margin-left: 8%;
+  margin-right: 8%;
+  max-width: calc(100% - 32px);
+  position: relative;
+  align-content: center;
+  text-align: center;
+  color: white;
+  background-color: rgba(6, 56, 255, 0.693);
+}
+
+.main-card {
+  margin-top: -28px;
+  padding-top: 15px;
+  z-index: 0;
+}

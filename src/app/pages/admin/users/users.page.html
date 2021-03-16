@@ -1,32 +1,44 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Users management</ion-title>
+    <ion-title>Electromer</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <div class="ion-padding">
-    <input type="text" style="padding:8px;margin:15px auto;width:30%;" placeholder="Type to filter the name column..."
-      (keyup)="updateFilter($event)" />
-    <!-- Theme classes dark, material, bootstrap -->
-    <ngx-datatable #table class="material" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'"
-      [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
-      <ngx-datatable-column name="Name" prop="name" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Email" prop="email" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Akcie" prop="user">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-button (click)="viewElectromers(row)">
-            Modify
-            <ion-icon name="arrow-redo"></ion-icon>
-          </ion-button>
-        </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
-  </div>
+  <ion-card class="title-card">
+    <ion-card-title style="word-break: break-word" class="text-h6 font-weight-light d-flex" color="white">
+        Users Management
+    </ion-card-title>
+  </ion-card>
+  <ion-card class="main-card">
+    <ion-card-content>
+      <div class="ion-padding">
+        <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
+        <!-- Theme classes dark, material, bootstrap -->
+        <ngx-datatable #table class="material" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'"
+          [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50"
+          style="elevation: 0;"
+          >
+
+          <ngx-datatable-column name="Name" prop="name" width="80">
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Email" prop="email" width="80">
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Akcie" prop="user">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <ion-button (click)="viewElectromers(row)">
+                Modify
+                <ion-icon name="arrow-redo"></ion-icon>
+              </ion-button>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
 
 </ion-content>

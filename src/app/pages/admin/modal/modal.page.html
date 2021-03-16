@@ -15,8 +15,7 @@
 
 <ion-content>
   <div class="ion-padding">
-    <input type="text" style="padding:8px;margin:15px auto;width:30%;" placeholder="Type to filter the name column..."
-      (keyup)="updateFilter($event)" />
+    <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
     <!-- Theme classes dark, material, bootstrap -->
     <ngx-datatable #table class="material" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">

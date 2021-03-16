@@ -1,7 +1,11 @@
-ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+ion-menu {
+  --background: url("../assets/drawer.jpg");
+  width: 80px;
 }
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, color(white)));
 
+}
 ion-menu.md ion-content {
   --padding-start: 8px;
   --padding-end: 8px;
@@ -119,14 +123,15 @@ ion-item.selected {
 
 // Desktop
 
-ion-header .toolbar {
+ion-header ion-toolbar {
   margin: auto;
- }
+  height: 100px;
+}
 
 .active {
   --ion-text-color: var(--ion-color-primary);
   ion-icon {
-      --ion-text-color-rgb: var(--ion-color-primary);
+    --ion-text-color-rgb: var(--ion-color-primary);
   }
 }
 
@@ -137,4 +142,29 @@ ion-header .toolbar {
 .sub-item {
   padding-left: 20px;
   font-size: medium;
+}
+
+.menu {
+  padding-left: 15px;
+  padding-bottom: 15px;
+
+  .sub-title {
+    font-size: 90%;
+    color: #949ea6;
+    text-transform: uppercase;
+    margin: 0 auto;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+
+.transparent {
+  background: transparent;
+}
+
+.bg-image{
+  background-repeat: no-repeat;
+
 }
