@@ -45,3 +45,13 @@ ion-card {
   padding-top: 15px;
   z-index: 0;
 }
+
+ion-searchbar {
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+/* Works - pass "my-custom-class" in cssClass to increase specificity */
+.my-custom-class .action-sheet-group {
+  background: #e5e5e5;
+}

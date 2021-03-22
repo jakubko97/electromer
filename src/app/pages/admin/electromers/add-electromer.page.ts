@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Electromer } from 'src/app/models/electromer';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { NgForm } from '@angular/forms';
+import { AlertService } from 'src/app/services/alert/alert.service';
 
 @Component({
   selector: 'app-add-electromer',
@@ -11,6 +10,19 @@ import { NgForm } from '@angular/forms';
   styleUrls: ['./add-electromer.page.scss'],
 })
 export class AddElectromerPage implements OnInit {
+
+  electromerForm: FormGroup;
+  isAddMode: boolean;
+  id: string;
+
+  constructor(
+    public modalCtrl: ModalController,
+    public authService: AuthService,
+    public navParams: NavParams,
+    public formBuilder: FormBuilder,
+    public alertService: AlertService
+  ) {
+  }
 
   electromer = {
     id: null,
@@ -26,48 +38,70 @@ export class AddElectromerPage implements OnInit {
     info: ''
   }
 
-  constructor(
-    public modalCtrl: ModalController,
-    public authService: AuthService,
-    public navParams: NavParams,
-    public formBuilder: FormBuilder
-  ) {
-  }
-  electromerEdit: Electromer = this.navParams.get('electromer');
+  electromerEdit: any
 
   ngOnInit() {
-    // this.electromer = this.formBuilder.group({
-    //   name: ['', [Validators.required, Validators.minLength(2)]],
-    //   db_table: ['', [Validators.required]],
-    //   delta: [null],
-    //   type: ['', [Validators.required]]
-    // })
+    this.electromerEdit = this.navParams.get('electromer');
+
+    this.isAddMode = !this.electromerEdit;
+    if (!this.isAddMode) {
+      this.electromerForm = this.formBuilder.group({
+        name: [this.electromerEdit.name, Validators.required],
+        db_table: [this.electromerEdit.db_table, Validators.required],
+        delta: [this.electromerEdit.delta, Validators.required],
+        type: [this.electromerEdit.type, [Validators.required]],
+      });
+    }else{
+      this.electromerForm = this.formBuilder.group({
+        name: ['', Validators.required],
+        db_table: ['', Validators.required],
+        delta: ['', Validators.required],
+        type: ['', [Validators.required]],
+      });
+    }
+
+    //   if (!this.isAddMode) {
+    //     this.authService.getElectromerById(this.id).subscribe(
+    //       data => {
+    //         this.electromerForm.patchValue(data)
+    //       }
+    //       );
+    // }
   }
 
-  addElectromer(form: NgForm) {
-    this.apiResult.loading = true
-    this.electromer.name = form.value.name
-    this.electromer.db_table = form.value.db_table
-    this.electromer.delta = form.value.delta
-    this.electromer.type = form.value.type
+  // convenience getter for easy access to form fields
+  get f() { return this.electromerForm.controls; }
 
-    if(!form.invalid){
-      this.authService.addElectromer(this.electromer).subscribe(
-        data => {
-          this.apiResult.loading = false
-          this.modalCtrl.dismiss();
-        },
-        error => {
-          console.log(error)
-          this.apiResult.error = 'An unexpected error occurred.'
-          this.apiResult.loading = false
-        }
-      )
-    }else{
+  addElectromer() { //form NgForm
+    this.apiResult.loading = true
+    this.electromer.name = this.electromerForm.value.name
+    this.electromer.db_table = this.electromerForm.value.db_table
+    this.electromer.delta = this.electromerForm.value.delta
+    this.electromer.type = this.electromerForm.value.type
+
+    if (!this.electromerForm.invalid) {
+      if (this.isAddMode) {
+        this.createElectromer();
+      }
+    } else {
       this.apiResult.error = 'Saving electromer failed. Please check input data.'
       this.apiResult.loading = false
     }
+  }
 
+  private createElectromer() {
+    this.authService.addElectromer(this.electromer).subscribe(
+      data => {
+        this.apiResult.loading = false
+        this.modalCtrl.dismiss();
+        this.alertService.presentToast('Electromer '+ this.electromerForm.value.name +' was successfully added.');
+      },
+      error => {
+        console.log(error)
+        this.apiResult.error = 'An unexpected error occurred.'
+        this.apiResult.loading = false
+      }
+    )
   }
   dismiss() {
     this.modalCtrl.dismiss();

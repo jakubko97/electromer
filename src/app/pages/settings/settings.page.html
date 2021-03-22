@@ -1,6 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <ion-title>Electromer</ion-title>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -22,14 +25,19 @@
           <ion-grid class="ion-justify-content-center">
             <ion-row>
               <ion-col text-right class="ion-align-items-end">
-                <h6 class="count-electromers">
+                <h5 class="count-title">
                   Electromers
-                </h6>
+                </h5>
               </ion-col>
-              <ion-col *ngIf="isUserAdmin" class="ion-justify-content-start">
-                <h6 class="count-users">
+              <ion-col *ngIf="isUserAdmin || user.is_superadmin" class="ion-justify-content-start">
+                <h5 class="count-title">
                   Users
-                </h6>
+                </h5>
+              </ion-col>
+              <ion-col *ngIf="user.is_superadmin" class="ion-justify-content-start">
+                <h5 class="count-title">
+                  Admins
+                </h5>
               </ion-col>
             </ion-row>
             <ion-row>
@@ -40,10 +48,17 @@
                   </ion-label>
                 </ion-chip>
               </ion-col>
-              <ion-col *ngIf="isUserAdmin" class="ion-justify-content-start">
+              <ion-col *ngIf="isUserAdmin || user.is_superadmin" class="ion-justify-content-start">
                 <ion-chip>
                   <ion-label *ngIf="users!=null">
                     {{ users.length }}
+                  </ion-label>
+                </ion-chip>
+              </ion-col>
+              <ion-col *ngIf="user.is_superadmin" class="ion-justify-content-start">
+                <ion-chip>
+                  <ion-label *ngIf="admins!=null">
+                    {{ admins.length }}
                   </ion-label>
                 </ion-chip>
               </ion-col>

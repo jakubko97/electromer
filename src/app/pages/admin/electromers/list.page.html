@@ -1,22 +1,23 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button>S</ion-menu-button>
+      <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Electromer</ion-title>
+    <ion-title>Electromers</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-  <div class="ion-padding">
     <ion-grid>
       <ion-row>
-        <ion-col size="10">
+        <ion-col class="ion-justify-content-start" size="9">
           <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
         </ion-col>
-        <ion-col size="2">
-          <ion-button (click)="showModal()">
-            <ion-icon size="large" name="add-circle"></ion-icon>
-          </ion-button>
+        <ion-col class="ion-justify-content-end" size="3">
+          <ion-fab>
+            <ion-fab-button (click)="showModal()">
+              <ion-icon name="add"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -34,13 +35,12 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Akcie" prop="akcie">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-button (click)="edit(row)">
-            Edit
-            <ion-icon name="arrow-redo"></ion-icon>
-          </ion-button>
+        <ion-fab vertical="center" slot="fixed">
+        <ion-fab-button (click)="editElectromer(row)" size="small" color="light">
+          <ion-icon name="pencil-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
-  </div>
-
 </ion-content>

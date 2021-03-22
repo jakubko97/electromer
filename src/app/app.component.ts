@@ -93,7 +93,8 @@ export class AppComponent implements OnInit {
   }
 
   setPages() {
-    if (this.user.is_admin == 1) {
+    this.user = this.authService.user
+    if (this.user.is_admin == 1 || this.user.is_superadmin) {
       this.appPages = [
         {
           title: 'Dashboard',

@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button autoHide></ion-menu-button>
     </ion-buttons>
-    <ion-title>Electromer</ion-title>
+    <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -38,14 +38,18 @@
           <ion-col>
             <ion-item>
               <ion-label>To </ion-label>
-              <ion-datetime displayFormat="D/M/YYYY" pickerFormat="D/M/YYYY" [(ngModel)]="to_date"></ion-datetime>
+              <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="to_date"></ion-datetime>
             </ion-item>
           </ion-col>
           <ion-col>
-            <ion-button (click)="getData()">
-              <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
-              <ion-label *ngIf="!apiResult.loading">Confirm</ion-label>
-            </ion-button>
+            <ion-fab>
+              <ion-fab-button (click)="getData()">
+                <ion-icon large *ngIf="!apiResult.loading" name="checkmark-outline"></ion-icon>
+                <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
+              </ion-fab-button>
+            </ion-fab>
+
+
           </ion-col>
         </ion-row>
         <ion-row *ngIf="apiResult.error">
