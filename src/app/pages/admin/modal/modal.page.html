@@ -1,44 +1,68 @@
 <ion-header>
   <ion-toolbar>
     <ion-grid>
-      <ion-row>
-        <ion-col>    <ion-button color="danger" style='float: left;' (click)='dismiss()'>Close</ion-button>
-        </ion-col>
-        <ion-col>    <ion-title>{{ user['name'] }}</ion-title>
-        </ion-col>
-        <ion-col>    <ion-button color="primary" style='float: right;' (click)='save()'>Confirm</ion-button>
+      <ion-row class="ion-text-center">
+        <ion-col>
+          <ion-title *ngIf="mode == 0" >Assigning electromers to {{ user.name }}</ion-title>
+          <ion-title *ngIf="mode == 1">Assigning users to {{ user.name }}</ion-title>
         </ion-col>
       </ion-row>
     </ion-grid>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="ion-padding">
+<ion-content padding>
     <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
     <!-- Theme classes dark, material, bootstrap -->
-    <ngx-datatable #table class="material" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
+    <ngx-datatable #table class="material" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
-
-      <ngx-datatable-column name="Id" prop="id" width="80">
+      <ngx-datatable-column *ngIf="mode == 0" name="Id" prop="id" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Name" prop="name" width="80">
+      <ngx-datatable-column *ngIf="mode == 0" name="Name" prop="name" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="db_table" prop="db_table" width="80">
+      <ngx-datatable-column *ngIf="mode == 0" name="db_table" prop="db_table" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="delta" prop="delta" width="80">
+      <ngx-datatable-column *ngIf="mode == 0" name="delta" prop="delta" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="type" prop="type" width="80">
+      <ngx-datatable-column *ngIf="mode == 0" name="type" prop="type" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Akcie" prop="id">
+      <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <!-- <ion-checkbox color="primary" onchange="update(value)" slot="start"></ion-checkbox> -->
-          <ion-button color="primary" style='float: right;' (click)="update(value)">
-            <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
-            <ion-label *ngIf="!apiResult.loading">Assign</ion-label>
-          </ion-button>
+          <ion-toggle (click)="assigningElectromerAlert(row)" disabled="false"></ion-toggle>
+        </ng-template>
+      </ngx-datatable-column>
+
+      <ngx-datatable-column *ngIf="mode == 1" name="Name" prop="name" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column *ngIf="mode == 1" name="Email" prop="email" width="80">
+      </ngx-datatable-column>
+       <ngx-datatable-column *ngIf="mode == 1" name="Role" prop="is_admin" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-label *ngIf="value == 1">
+            Admin
+          </ion-label>
+          <ion-label *ngIf="value == 0">
+            User
+          </ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-toggle (click)="assignUserToAdmin(row)" disabled="false"></ion-toggle>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
-  </div>
 </ion-content>
+
+<ion-footer>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-button color="danger" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button color="primary" style='float: right;' (click)='save()'>Save</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

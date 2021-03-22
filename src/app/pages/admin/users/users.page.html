@@ -3,42 +3,66 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Electromer</ion-title>
+    <ion-title>Users</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-
-  <ion-card class="title-card">
-    <ion-card-title style="word-break: break-word" class="text-h6 font-weight-light d-flex" color="white">
-        Users Management
-    </ion-card-title>
-  </ion-card>
-  <ion-card class="main-card">
-    <ion-card-content>
-      <div class="ion-padding">
-        <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
+        <ion-searchbar (ionChange)="getItems($event)" (keyup)="updateFilter($event)">
+        </ion-searchbar>
+        <ion-chip outline color="primary">
+          <ion-icon name="pin"></ion-icon>
+          <ion-label>Admin</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+        <ion-chip outline color="secondary">
+          <ion-icon name="wine"></ion-icon>
+          <ion-label>User</ion-label>
+          <ion-icon name="close-circle"></ion-icon>
+        </ion-chip>
+        <!-- <ion-list *ngIf="isItemAvailable">
+          <ion-item *ngFor="let item of items">{{ item }}</ion-item>
+        </ion-list> -->
         <!-- Theme classes dark, material, bootstrap -->
         <ngx-datatable #table class="material" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'"
           [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50"
           style="elevation: 0;"
           >
-
           <ngx-datatable-column name="Name" prop="name" width="80">
           </ngx-datatable-column>
           <ngx-datatable-column name="Email" prop="email" width="80">
           </ngx-datatable-column>
-          <ngx-datatable-column name="Akcie" prop="user">
+          <ngx-datatable-column name="Role" prop="is_admin" width="80">
             <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <ion-button (click)="viewElectromers(row)">
-                Modify
-                <ion-icon name="arrow-redo"></ion-icon>
-              </ion-button>
+              <ion-label *ngIf="value == 1">
+                Admin
+              </ion-label>
+              <ion-label *ngIf="value == 0">
+                User
+              </ion-label>
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column name="Akcie">
+            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+              <ion-fab vertical="center" slot="fixed">
+              <ion-fab-button (click)="presentActionSheet(row)" size="small">
+                <ion-icon name="open-outline"></ion-icon>
+              </ion-fab-button>
+            </ion-fab>
+              <ion-fab-list side="end">
+                <ion-fab-button *ngIf="row.is_admin == 1" size="small" color="light" (click)="viewElectromers(row)">
+                  <ion-icon name="color-wand-outline"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="user.is_superadmin && row.is_admin != 1" size="small" color="light" (click)="putRightsAlert(row)">
+                  <ion-icon name="key-outline"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="user" size="small" color="light" (click)="editUser(row)">
+                  <ion-icon name="pencil-outline"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-button *ngIf="user.is_superadmin && row.is_admin == 1" size="small" color="light" (click)="assignUserToAdminModal(row)">
+                  <ion-icon name="person-add-outline"></ion-icon>
+                </ion-fab-button>
+              </ion-fab-list>
             </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>
-      </div>
-    </ion-card-content>
-  </ion-card>
-
-
 </ion-content>

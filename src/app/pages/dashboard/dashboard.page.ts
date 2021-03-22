@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from '../../models/user';
-import { Electromer } from 'src/app/models/electromer';
-import * as $ from '../../../assets/jquery-1.11.1.min';
 import * as CanvasJS from '../../../assets/canvasjs.stock.min';
+import { AppComponent } from 'src/app/app.component';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -33,7 +33,8 @@ export class DashboardPage implements OnInit {
 
   constructor(
     private menu: MenuController,
-    private authService: AuthService
+    private authService: AuthService,
+    private app: AppComponent
   ) {
     this.menu.enable(true);
   }
@@ -131,8 +132,7 @@ export class DashboardPage implements OnInit {
           dataPoints: this.dataPoints3
         }],
         slider: {
-          minimum: new Date("2019-03-02"),
-          maximum: new Date("2021-03-08")
+
         }
       }
     });
@@ -164,7 +164,7 @@ export class DashboardPage implements OnInit {
           if (this.electromer == null) { //init data default na posledne 7 dni
             el_id = this.electromers[0].id
             var ourDate = new Date();
-            var pastDate = ourDate.getDate() - 3;
+            var pastDate = ourDate.getDate() - 1; //default po nacitani
             ourDate.setDate(pastDate);
             this.from_date = ourDate
             this.to_date = new Date()
@@ -211,18 +211,21 @@ export class DashboardPage implements OnInit {
     ourDate.setDate(pastDate);
     this.from_date = ourDate
     this.to_date = new Date()
+    this.dataPoints1 = [];
+    this.dataPoints2 = [];
+    this.dataPoints3 = [];
     this.initGraph()
   }
 
-  cleanElectromersData(){
+  cleanElectromersData() {
     var clean_array = []
     for (let data of Object.entries(this.electromers)) { //data -> mapa 0 key, 1 value
-      if(data[1] != null){
+      if (data[1] != null) {
         clean_array.push(data[1])
       }
     }
     return clean_array
-    ;
+      ;
   }
 
   parseDataInChart() {

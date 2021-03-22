@@ -3,7 +3,8 @@ ion-card {
 
     ion-card-header {
         height: 220px; // 20vh;
-        background: radial-gradient(#e66465, #9198e5);
+        // background: radial-gradient(#e66465, #9198e5);
+        background: #fff;
 
         ion-avatar {
             width: 160px; //40vw
@@ -47,4 +48,8 @@ ion-chip {
         text-transform: uppercase;
         margin: 0 auto;
     }
+}
+
+.count-title {
+    font-size: 24px;
 }

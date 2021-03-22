@@ -53,11 +53,7 @@ export class LoginPage implements OnInit {
   isUserAdmin(){
     this.authService.isUserAdmin().subscribe(
       data => {
-        if(data.is_admin==1){
-          this.navCtrl.navigateRoot('/admin');
-        } else {
           this.navCtrl.navigateRoot('/dashboard');
-        }
       }
     )
   }

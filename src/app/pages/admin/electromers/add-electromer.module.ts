@@ -8,9 +8,9 @@ import { AddElectromerPage } from './add-electromer.page';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     IonicModule,
     AddElectromerPageRoutingModule,
+    FormsModule,
     ReactiveFormsModule
   ],
   declarations: []

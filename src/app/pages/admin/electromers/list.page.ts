@@ -59,6 +59,7 @@ export class ListPage implements OnInit {
     return clean_array
     ;
   }
+
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     // filter our data
@@ -72,7 +73,14 @@ export class ListPage implements OnInit {
     // this.table.offset = 0;
   }
 
-  edit(electromer: Electromer) {
+  async editElectromer(electromer: Electromer) {
+      const modal = await this.modalCtrl.create({
+        component: AddElectromerPage,
+        componentProps: {
+          electromer: electromer
+        },
+      });
+      return await modal.present();
 
   }
   public getElectromers() {
