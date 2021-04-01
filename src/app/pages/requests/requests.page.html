@@ -7,8 +7,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
   <div *ngIf="user.is_admin == 0">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Create a new request
+        </ion-card-title>
+        </ion-card-header>
+      <ion-card-content>
   <form [formGroup]="requestForm">
     <ion-grid>
       <ion-row>
@@ -18,9 +25,6 @@
             <ion-input formControlName="subject"  id="name" required name="name"></ion-input>
           </ion-item>
         </ion-col>
-      </ion-row>
-
-      <ion-row>
         <ion-col>
           <ion-item>
             <ion-label>Type</ion-label>
@@ -33,7 +37,6 @@
           </ion-item>
         </ion-col>
       </ion-row>
-
       <ion-row>
         <ion-col>
           <ion-item>
@@ -51,7 +54,7 @@
 
       <ion-row>
         <ion-col>
-          <ion-button color="primary" style='float: right;' (click)='submit()'>
+          <ion-button expand="block" color="primary" style='float: left;' (click)='submit()'>
             <ion-label *ngIf="!apiResult.loading">Submit</ion-label>
             <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
           </ion-button>
@@ -59,21 +62,47 @@
       </ion-row>
     </ion-grid>
   </form>
+</ion-card-content>
+</ion-card>
 </div>
 
-<div *ngIf="user.is_admin == 1">
-  <ngx-datatable #table class="material" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'"
-  [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      Requests history
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+      <ngx-datatable #table class="material" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'"
+      [sortType]="'multi'" [loadingIndicator]="requestsLoading" [headerHeight]="50" [footerHeight]="50">
 
-  <ngx-datatable-column name="Subject" prop="subject" width="80">
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Type" prop="type" width="80">
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Body" prop="body" width="80">
-  </ngx-datatable-column>
-  <ngx-datatable-column name="Akcie" width="80">
-  </ngx-datatable-column>
-</ngx-datatable>
-</div>
+      <ngx-datatable-column name="Subject" prop="subject" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Type" prop="type" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Body" prop="body" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Status" prop="status" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div *ngIf="user.is_admin == 1" >
+            <ion-label color="primary" *ngIf="value == 1">•NEW•</ion-label>
+          </div>
+          <div *ngIf="user.is_admin == 0" >
+            <ion-label color="primary" *ngIf="value == 1">In process</ion-label>
+          </div>      </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [frozenRight] = "true" slot="end" name="Akcie" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-fab *ngIf="user.is_admin == 1"  vertical="center" slot="fixed">
+          <ion-fab-button (click)="presentModalRequest(row)" size="small" color="light">
+            <ion-icon name="open-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+          </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ion-card-content>
+</ion-card>
+
 
 </ion-content>

@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: RequestsPage
+  },
+  {
+    path: 'preview',
+    loadChildren: () => import('./preview/preview.module').then( m => m.PreviewPageModule)
   }
 ];
 

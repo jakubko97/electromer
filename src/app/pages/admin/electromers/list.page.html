@@ -9,18 +9,20 @@
 <ion-content padding>
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-justify-content-start" size="9">
+        <ion-col class="ion-justify-content-start" size="4">
           <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
         </ion-col>
-        <ion-col class="ion-justify-content-end" size="3">
+        <ion-col *ngIf="user.is_superadmin == 1"  class="ion-justify-content-end" size="1">
           <ion-fab>
-            <ion-fab-button (click)="showModal()">
+            <ion-fab-button size="small" (click)="showModal()">
               <ion-icon name="add"></ion-icon>
             </ion-fab-button>
           </ion-fab>
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <div class="ion-padding">
     <!-- Theme classes dark, material, bootstrap -->
     <ngx-datatable #table class="material" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
@@ -33,7 +35,7 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" prop="type" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Akcie" prop="akcie">
+      <ngx-datatable-column *ngIf="user.is_superadmin == 1"  name="Akcie" prop="akcie">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
         <ion-fab vertical="center" slot="fixed">
         <ion-fab-button (click)="editElectromer(row)" size="small" color="light">
@@ -43,4 +45,5 @@
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
+    </div>
 </ion-content>

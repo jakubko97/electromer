@@ -7,21 +7,16 @@
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="4">
         <ion-searchbar (ionChange)="getItems($event)" (keyup)="updateFilter($event)">
         </ion-searchbar>
-        <ion-chip outline color="primary">
-          <ion-icon name="pin"></ion-icon>
-          <ion-label>Admin</ion-label>
-          <ion-icon name="close-circle"></ion-icon>
-        </ion-chip>
-        <ion-chip outline color="secondary">
-          <ion-icon name="wine"></ion-icon>
-          <ion-label>User</ion-label>
-          <ion-icon name="close-circle"></ion-icon>
-        </ion-chip>
-        <!-- <ion-list *ngIf="isItemAvailable">
-          <ion-item *ngFor="let item of items">{{ item }}</ion-item>
-        </ion-list> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="ion-padding">
         <!-- Theme classes dark, material, bootstrap -->
         <ngx-datatable #table class="material" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'"
           [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50"
@@ -48,7 +43,7 @@
                 <ion-icon name="open-outline"></ion-icon>
               </ion-fab-button>
             </ion-fab>
-              <ion-fab-list side="end">
+              <!-- <ion-fab-list side="end">
                 <ion-fab-button *ngIf="row.is_admin == 1" size="small" color="light" (click)="viewElectromers(row)">
                   <ion-icon name="color-wand-outline"></ion-icon>
                 </ion-fab-button>
@@ -61,8 +56,9 @@
                 <ion-fab-button *ngIf="user.is_superadmin && row.is_admin == 1" size="small" color="light" (click)="assignUserToAdminModal(row)">
                   <ion-icon name="person-add-outline"></ion-icon>
                 </ion-fab-button>
-              </ion-fab-list>
+              </ion-fab-list> -->
             </ng-template>
           </ngx-datatable-column>
         </ngx-datatable>
+        </div>
 </ion-content>

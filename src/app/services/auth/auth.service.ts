@@ -221,4 +221,10 @@ export class AuthService {
     });
     return this.http.post(this.env.API_URL + 'api/add/request', request, { headers: headers })
   }
+  processRequest(request: Request) {
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/request/status', request, { headers: headers })
+  }
 }

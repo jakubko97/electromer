@@ -19,6 +19,16 @@ export class SettingsPage implements OnInit {
   isUserAdmin: Boolean
   users: any
 
+  apiResult = {
+    loading: false,
+    error: '',
+    info: '',
+  };
+
+  electromersLoading = false;
+  usersLoading = false;
+  adminsLoading = false;
+
   ngOnInit() {
     this.user = this.authService.user
     this.isUserAdmin = this.user.is_admin == 1 ? true :  false
@@ -26,15 +36,6 @@ export class SettingsPage implements OnInit {
     this.getUsers()
     this.getAdmins()
   }
-
-  getElectromers(){
-    this.authService.getAllElectromers().subscribe(
-      data => {
-        this.electromers = JSON.parse(JSON.stringify(data))
-      }
-    )
-  }
-
   cleanElectromersData(){
     var clean_array = []
     for (let data of Object.entries(this.electromers)) { //data -> mapa 0 key, 1 value
@@ -47,16 +48,37 @@ export class SettingsPage implements OnInit {
   }
 
   getUsers(){
+    this.usersLoading = true;
     this.authService.getAll().subscribe(
       data => {
         this.users = JSON.parse(JSON.stringify(data))
+        this.usersLoading = false;
+      },
+      error => {
       }
     )
   }
+
+  getElectromers(){
+    this.electromersLoading = true;
+    this.authService.getAllElectromers().subscribe(
+      data => {
+        this.electromers = JSON.parse(JSON.stringify(data))
+        this.electromersLoading = false;
+      },
+      error => {
+      }
+    )
+  }
+
   getAdmins(){
+    this.adminsLoading = true;
     this.authService.getAdmins().subscribe(
       data => {
         this.admins = JSON.parse(JSON.stringify(data))
+        this.adminsLoading = false;
+      },
+      error => {
       }
     )
   }

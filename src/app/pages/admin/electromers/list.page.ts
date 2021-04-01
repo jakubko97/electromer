@@ -31,6 +31,7 @@ export class ListPage implements OnInit {
   }
 
   ngOnInit() {
+    this.user = this.authService.user
     this.getElectromers()
   }
 
