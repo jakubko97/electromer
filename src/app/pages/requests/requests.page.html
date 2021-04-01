@@ -1,0 +1,108 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Requests</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <div *ngIf="user.is_admin == 0">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>
+          Create a new request
+        </ion-card-title>
+        </ion-card-header>
+      <ion-card-content>
+  <form [formGroup]="requestForm">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Subject</ion-label>
+            <ion-input formControlName="subject"  id="name" required name="name"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col>
+          <ion-item>
+            <ion-label>Type</ion-label>
+            <ion-select formControlName="type">
+              <ion-select-option value="brown">Brown</ion-select-option>
+              <ion-select-option value="blonde">Blonde</ion-select-option>
+              <ion-select-option value="black">Black</ion-select-option>
+              <ion-select-option value="red">Red</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="floating">Body</ion-label>
+            <ion-textarea autoGrow="true" placeholder="Enter more information here..." formControlName="body" id="delta" required name="delta"></ion-textarea>
+          </ion-item>
+        </ion-col>
+
+      </ion-row>
+      <ion-row *ngIf="apiResult.error">
+        <ion-col>
+          <ion-label position="floating" color="danger">{{ apiResult.error }}</ion-label>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+          <ion-button expand="block" color="primary" style='float: left;' (click)='submit()'>
+            <ion-label *ngIf="!apiResult.loading">Submit</ion-label>
+            <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-card-content>
+</ion-card>
+</div>
+
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>
+      Requests history
+    </ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+      <ngx-datatable #table class="material" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'"
+      [sortType]="'multi'" [loadingIndicator]="requestsLoading" [headerHeight]="50" [footerHeight]="50">
+
+      <ngx-datatable-column name="Subject" prop="subject" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Type" prop="type" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Body" prop="body" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Status" prop="status" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div *ngIf="user.is_admin == 1" >
+            <ion-label color="primary" *ngIf="value == 1">•NEW•</ion-label>
+          </div>
+          <div *ngIf="user.is_admin == 0" >
+            <ion-label color="primary" *ngIf="value == 1">In process</ion-label>
+          </div>      </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column [frozenRight] = "true" slot="end" name="Akcie" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-fab *ngIf="user.is_admin == 1"  vertical="center" slot="fixed">
+          <ion-fab-button (click)="presentModalRequest(row)" size="small" color="light">
+            <ion-icon name="open-outline"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+          </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </ion-card-content>
+</ion-card>
+
+
+</ion-content>

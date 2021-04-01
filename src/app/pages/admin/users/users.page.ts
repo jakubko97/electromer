@@ -138,16 +138,16 @@ export class UsersPage implements OnInit {
   }
 
   async presentActionSheet(user) {
-    var buttons = []
-    if((this.user.is_admin == 1 || this.user.is_superadmin)){
+    const buttons = [];
+    if((this.user.is_admin === 1 || this.user.is_superadmin)){
 
-      if(user.is_admin == 1){
+      if(user.is_admin === 1 || this.user.is_admin === 1){
         buttons.push(
           {
             text: 'Assign electromer',
             icon: 'color-wand-outline',
             handler: () => {
-              this.viewElectromers(user)
+              this.viewElectromers(user);
             }
           })
       }
@@ -156,11 +156,11 @@ export class UsersPage implements OnInit {
           text: 'Edit user',
           icon: 'pencil',
           handler: () => {
-            this.editUser(user)
+            this.editUser(user);
           }
         })
     }
-    if(this.user.is_superadmin == 1 && user.is_admin == 1){
+    if(this.user.is_superadmin === 1 && user.is_admin === 1){
       buttons.push(
         // {
         //   text: 'Put admin rights',
@@ -173,18 +173,18 @@ export class UsersPage implements OnInit {
           text: 'Assign user',
           icon: 'person-add-outline',
           handler: () => {
-            this.assignUserToAdminModal(user)
+            this.assignUserToAdminModal(user);
           }
         }
       )
     }
-    if(user.is_admin == 0 && this.user.is_superadmin == 1){
+    if(user.is_admin === 0 && this.user.is_superadmin === 1){
       buttons.push(
         {
           text: 'Put admin rights',
           icon: 'key-outline',
           handler: () => {
-            this.putRightsAlert(user)
+            this.putRightsAlert(user);
           }
         }
       )
@@ -209,10 +209,10 @@ export class UsersPage implements OnInit {
   putAdminRights(user){
     this.authService.assignAdminRights(user.id).subscribe(
     data => {
-      console.log(data)
+      console.log(data);
     },
     error => {
-      console.log(error)
+      console.log(error);
     })
   }
 
@@ -224,19 +224,19 @@ export class UsersPage implements OnInit {
     this.apiResult.loading = true
     return this.userService.getAll()
       .subscribe(users => {
-        this.users = users
+        this.users = users;
         this.users = this.users.filter(function( obj: User ) {
           return obj.email !== email;
       });
-        this.temp = this.users
-        this.apiResult.loading = false
+        this.temp = this.users;
+        this.apiResult.loading = false;
         // var index = users.indexOf("red");
         // if (index >= 0) {
         //   users.splice( index, 1 );
         // }
       },
         error => {
-          this.apiResult.error = error
+          this.apiResult.error = error;
         }
       )
   }

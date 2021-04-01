@@ -118,6 +118,11 @@ export class AppComponent implements OnInit {
               title: 'Settings',
               url: '/settings',
               icon: 'settings',
+            },
+            {
+              title: 'Requests',
+              url: '/requests',
+              icon: 'document-text-outline',
             }
           ]
         },
@@ -142,6 +147,11 @@ export class AppComponent implements OnInit {
               title: 'Settings',
               url: '/settings',
               icon: 'settings',
+            },
+            {
+              title: 'Requests',
+              url: '/requests',
+              icon: 'document-text-outline',
             }
           ]
         },
@@ -155,16 +165,16 @@ export class AppComponent implements OnInit {
   }
   // When Logout Button is pressed
   logout() {
-    this.apiResult.loading = true
+    this.apiResult.loading = true;
     this.authService.logout().subscribe(
       data => {
-        this.user = null
+        this.user = null;
         this.alertService.presentToast(data['message']);
-        this.apiResult.loading = false
+        this.apiResult.loading = false;
       },
       error => {
         this.alertService.presentToast(error);
-        this.apiResult.loading = false
+        this.apiResult.loading = false;
       },
       () => {
         this.navCtrl.navigateRoot('/landing');

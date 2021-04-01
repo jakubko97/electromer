@@ -4,7 +4,7 @@ ion-card {
     ion-card-header {
         height: 220px; // 20vh;
         // background: radial-gradient(#e66465, #9198e5);
-        background: #fff;
+        background: lightgray;
 
         ion-avatar {
             width: 160px; //40vw
@@ -19,6 +19,14 @@ ion-card {
                 bottom: calc(-1*(80px + 4px)); // -42px;
                 border: 3px solid #fff;
                 background-color: #fff;
+            }
+
+            ion-skeleton-text{
+                border-radius: 50%;
+                position: absolute;
+                border: 3px solid #fff;
+                background-color: #fff;
+                bottom: calc(-1*(80px + 4px)); // -42px;
             }
         }
     }
@@ -40,16 +48,45 @@ ion-chip {
         font-size: 24px;
         font-weight: 600;
         color: #303940;
+
+        ion-skeleton-text{
+            margin: 0 auto;
+            padding: 4px;
+        }
     }
 
     .email {
-        font-size: 90%;
+        font-size: 16px;
         color: #949ea6;
-        text-transform: uppercase;
-        margin: 0 auto;
+        margin-top: 6px;
+
+        ion-skeleton-text{
+            margin: 0 auto;
+            padding: 1px;
+        }
     }
+
+    .skeleton-numbers{
+
+        margin-top: 12px;
+
+        ion-skeleton-text{
+            margin: 0 auto;
+            padding: 6px;
+            width: 20%;
+        }
+    }
+
 }
 
 .count-title {
     font-size: 24px;
+}
+
+#data {
+    display: none;
+}
+
+#skeleton {
+    display: block;
 }

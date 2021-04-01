@@ -247,7 +247,7 @@ export class DashboardPage implements OnInit {
   }
 
   ngOnInit() {
-    this.initGraph()
+    // this.initGraph()
     this.user = this.authService.user
   }
 

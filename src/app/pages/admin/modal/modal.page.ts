@@ -13,11 +13,11 @@ import { AlertService } from '../../../services/alert/alert.service';
 })
 export class ModalPage implements OnInit {
 
-  data: any
+  data: any;
   // electromers: any;
   temp: any;
-  user: User
-  mode: any
+  user: User;
+  mode: any;
   apiResult = {
     loading: false,
     error: '',
