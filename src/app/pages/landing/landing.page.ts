@@ -25,7 +25,6 @@ export class LandingPage implements OnInit {
     });
   }
   ngOnInit() {
-
   }
   async register() {
     const registerModal = await this.modalController.create({

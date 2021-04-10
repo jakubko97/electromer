@@ -11,7 +11,13 @@
     "emulate:before": "watch",
     "deploy:before": "build",
     "build:before": "build",
-    "run:before": "watch"
+    "run:before": "watch",
+    "web-serve": "ionic cordova run browser --livereload --debug",
+    "web-deploy": "ionic cordova build browser --prod --release",
+    "android-debug": "ionic cordova run android --livereload --debug",
+    "android-deploy": "ionic cordova run android --prod --release",
+    "ios-debug": "ionic cordova run ios --livereload --consolelogs --buildFlag='-UseModernBuildSystem=0'  --external --no-native-run",
+    "ios-deploy": "ionic cordova run ios --prod --release"
   },
   "private": true,
   "dependencies": {
@@ -35,7 +41,6 @@
     "@swimlane/ngx-datatable": "^19.0.0",
     "chart.js": "^2.9.4",
     "cordova-browser": "6.0.0",
-    "cordova-ios": "6.2.0",
     "cordova-plugin-nativestorage": "^2.3.2",
     "lightweight-charts": "^3.2.0",
     "material-table": "^1.69.2",
@@ -56,6 +61,7 @@
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "^12.11.1",
     "codelyzer": "^6.0.0",
+    "cordova-ios": "^6.2.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-ionic-keyboard": "^2.2.0",
     "cordova-plugin-ionic-webview": "^4.2.1",
