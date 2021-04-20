@@ -44,7 +44,16 @@
             <ion-textarea autoGrow="true" placeholder="Enter more information here..." formControlName="body" id="delta" required name="delta"></ion-textarea>
           </ion-item>
         </ion-col>
-
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button expand="full">
+            <ion-icon lazy="true" slot="start" name="file"></ion-icon>
+            <!-- <ion-label slot="end">Upload File</ion-label> -->
+            <input type="file" (change)="handleFileInput($event.target.files)" id="file-input"
+              accept="pdf">
+          </ion-button>
+        </ion-col>
       </ion-row>
       <ion-row *ngIf="apiResult.error">
         <ion-col>
@@ -73,31 +82,61 @@
     </ion-card-title>
   </ion-card-header>
   <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-justify-content-start" size="4">
+          <ion-searchbar value="{{searchValue}}" (keyup)="updateFilter($event)"></ion-searchbar>
+          <ion-chip (click)="searchByKey('In Progress')" color="primary">
+            <ion-label>In Progress</ion-label>
+          </ion-chip>
+          <ion-chip (click)="searchByKey('Accepted')" color="primary">
+            <ion-label>Accepted</ion-label>
+          </ion-chip>
+          <ion-chip (click)="searchByKey('Rejected')" color="primary">
+            <ion-label>Rejected</ion-label>
+          </ion-chip>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
       <ngx-datatable #table class="material" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="requestsLoading" [headerHeight]="50" [footerHeight]="50">
 
+      <ngx-datatable-column name="User" prop="user_id" width="80">
+      </ngx-datatable-column>
       <ngx-datatable-column name="Subject" prop="subject" width="80">
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" prop="type" width="80">
       </ngx-datatable-column>
       <ngx-datatable-column name="Body" prop="body" width="80">
       </ngx-datatable-column>
+      <ngx-datatable-column name="Created" prop="created_at" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Last modified" prop="updated_at" width="80">
+      </ngx-datatable-column>
       <ngx-datatable-column name="Status" prop="status" width="80">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <div *ngIf="user.is_admin == 1" >
-            <ion-label color="primary" *ngIf="value == 1">•NEW•</ion-label>
+          <div>
+            <ion-label color="{{row.color}}">
+              {{ row.name }}
+            </ion-label>
           </div>
-          <div *ngIf="user.is_admin == 0" >
-            <ion-label color="primary" *ngIf="value == 1">In process</ion-label>
-          </div>      </ng-template>
+             </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column [frozenRight] = "true" slot="end" name="Akcie" width="80">
+      <ngx-datatable-column [frozenRight] = "true" slot="end" name="Actions" width="80">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-fab *ngIf="user.is_admin == 1"  vertical="center" slot="fixed">
-          <ion-fab-button (click)="presentModalRequest(row)" size="small" color="light">
-            <ion-icon name="open-outline"></ion-icon>
-          </ion-fab-button>
-        </ion-fab>
+          <div *ngIf="user.is_admin == 1" vertical="center" slot="fixed">
+          <ion-button fill="outline" color="primary" (click)="presentModalRequest(row)">
+            Details
+          </ion-button>
+        </div>
+          </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="File" prop="status" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div *ngIf="row.file_id != null">
+            <ion-icon (click)="doDownload(row.file_id)" color="primary" size="large" name="cloud-download-outline"></ion-icon>
+            <!-- <ion-spinner *ngIf="isDownloading"></ion-spinner> -->
+          </div>
           </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>

@@ -43,7 +43,7 @@
           </ion-col>
           <ion-col>
             <ion-fab>
-              <ion-fab-button (click)="getData()">
+              <ion-fab-button size="small" (click)="getData()">
                 <ion-icon large *ngIf="!apiResult.loading" name="checkmark-outline"></ion-icon>
                 <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
               </ion-fab-button>
