@@ -5,6 +5,7 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { EnvService } from '../env/env.service';
 import { User } from '../../models/user';
 import { Request } from '../../models/request';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -129,13 +130,13 @@ export class AuthService {
   }
   assignUserToAdmin(user_id, admin_id) {
     var payload = {
-      user_id: user_id,
+      id: user_id,
       admin_id: admin_id
     }
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/add/user/admin', payload, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/users', payload, { headers: headers })
       .pipe(
         tap(admins => {
           return admins;
@@ -143,10 +144,14 @@ export class AuthService {
       )
   }
   assignAdminRights(user_id) {
+    var payload = {
+      id: user_id,
+      is_admin: 1
+    }
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.get(this.env.API_URL + 'api/add/admin/' + user_id, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/users', payload ,{ headers: headers })
       .pipe(
         tap(response => {
           return response;
@@ -157,7 +162,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/edit/user', user, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/users', user, { headers: headers })
       .pipe(
         tap(response => {
           return response;
@@ -179,24 +184,24 @@ export class AuthService {
     var payload = {
       user_id: user_id,
       electromer_id: electromer_id
-    }
+    };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/add/electromer/user', payload, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/electromer/user', payload, { headers: headers })
   }
   addElectromer(electromer: any) {
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/electromer/save', electromer, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/electromers', electromer, { headers: headers })
   }
   getDataInRange(electromer_id: number, date_from: Date, date_to: Date) {
     const payload = {
       electromer_id: electromer_id,
       date_from: date_from,
       date_to: date_to
-    }
+    };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
@@ -215,16 +220,19 @@ export class AuthService {
     });
     return this.http.get(this.env.API_URL + 'api/requests', { headers: headers })
   }
-  createRequest(request: Request) {
+  postRequest(request: any) {
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/add/request', request, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/requests', request, { headers: headers })
   }
-  processRequest(request: Request) {
+  downloadFile(fileId) {
+    const payload = {
+      id: fileId,
+    };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/request/status', request, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/file/download', payload, { headers: headers, responseType: 'blob' })
   }
 }
