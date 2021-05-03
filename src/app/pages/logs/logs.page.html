@@ -1,0 +1,42 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-toggle auto-hide="false" menu="main-menu">
+          <ion-button (click)="toggleMenu()">
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+          </ion-button>
+      </ion-menu-toggle>
+  </ion-buttons>
+    <ion-title>Logs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-justify-content-start" size="4">
+        <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="ion-padding">
+  <!-- Theme classes dark, material, bootstrap -->
+  <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="logs" [rowHeight]="50" [columnMode]="'force'"
+    [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+
+    <ngx-datatable-column name="Name" prop="name" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Db_table" prop="db_table" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Delta" prop="delta" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Type" prop="type" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="Akcie" prop="akcie">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+  </div>
+</ion-content>

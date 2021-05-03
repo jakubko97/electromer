@@ -23,6 +23,7 @@ export class ModalPage implements OnInit {
     error: '',
     info: ''
   }
+  theme: any;
   constructor(
     public modalCtrl: ModalController,
     private authService: AuthService,
@@ -31,7 +32,11 @@ export class ModalPage implements OnInit {
     public alertService: AlertService
   ) { }
 
+  isThemeDark(){
+    return document.body.getAttribute('color-theme') === 'dark'
+  }
   ngOnInit() {
+    this.theme = this.isThemeDark() ? "dark" : "material";
     this.user = this.navParams.get('user');
     this.mode = this.navParams.get('mode');
 
@@ -53,7 +58,6 @@ export class ModalPage implements OnInit {
   assignUserToAdmin(user) {
     this.authService.assignUserToAdmin(user.id, this.user.id).subscribe(
       data => {
-        console.log(data)
         this.alertService.presentToast('User '+ user.name + ' was succesfully assigned to ' + this.user.name)
       },
       error => {

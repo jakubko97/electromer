@@ -14,7 +14,7 @@
 <ion-content padding>
     <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
     <!-- Theme classes dark, material, bootstrap -->
-    <ngx-datatable #table class="material" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'"
+    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'"
       [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
       <ngx-datatable-column *ngIf="mode == 0" name="Id" prop="id" width="80">
       </ngx-datatable-column>

@@ -27,6 +27,15 @@ ion-card {
   overflow: hidden;
 }
 
+html,
+ion-content {
+	--ion-background-color: #d1d1d1;
+}
+
+ion-card, ion-searchbar {
+	--ion-background-color: #ffffff;
+}
+
 .title-card {
   z-index: 1;
   padding: 14px;

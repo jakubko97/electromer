@@ -5,6 +5,7 @@ import { MenuController } from '@ionic/angular';
 import { Electromer } from 'src/app/models/electromer';
 import { ModalController } from '@ionic/angular';
 import { AddElectromerPage } from './add-electromer.page';
+import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
 
 @Component({
   selector: 'app-list',
@@ -21,6 +22,7 @@ export class ListPage implements OnInit {
     info: ''
   }
   user: User;
+  theme: any;
 
   constructor(
     private menu: MenuController,
@@ -31,8 +33,13 @@ export class ListPage implements OnInit {
   }
 
   ngOnInit() {
+    this.theme = this.isThemeDark() ? "dark" : "material";
     this.user = this.authService.user
     this.getElectromers()
+  }
+
+  isThemeDark(){
+    return document.body.getAttribute('color-theme') === 'dark'
   }
 
   async showModal() {
@@ -60,7 +67,11 @@ export class ListPage implements OnInit {
     return clean_array
     ;
   }
-
+  toggleMenu(){
+    const splitPane = document.querySelector('ion-split-pane')
+    if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
+        splitPane.classList.toggle('split-pane-visible')
+}
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     // filter our data

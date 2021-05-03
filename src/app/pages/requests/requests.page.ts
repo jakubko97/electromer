@@ -12,6 +12,7 @@ import { AlertController } from '@ionic/angular';
 import { ModalController, NavParams } from '@ionic/angular';
 import { PreviewPage } from './preview/preview.page';
 import { AlertService } from '../../services/alert/alert.service';
+import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
 
 @Component({
   selector: 'app-requests',
@@ -49,10 +50,16 @@ export class RequestsPage implements OnInit {
     error: '',
     info: '',
   };
+  theme: any;
 
 fileToUpload: File = null;
 
+isThemeDark(){
+  return document.body.getAttribute('color-theme') === 'dark'
+}
+
   ngOnInit() {
+    this.theme = this.isThemeDark() ? "dark" : "material";
     this.user = this.authService.user;
     this.getRequests();
 
@@ -62,7 +69,11 @@ fileToUpload: File = null;
       body: ['', Validators.required],
     });
   }
-
+  toggleMenu(){
+    const splitPane = document.querySelector('ion-split-pane')
+    if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
+        splitPane.classList.toggle('split-pane-visible')
+}
   submit() {
     //form NgForm
     if (this.requestForm.valid) {
@@ -115,9 +126,12 @@ this.searchValue = key;
 this.updateFilter(key);
 }
 
+formateDate(date){
+  return new Date(date);
+}
+
 updateFilter(event) {
   let val = null;
-  console.log(event)
   if (event.target){
     val = event.target.value.toLowerCase();
   } else{

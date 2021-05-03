@@ -1,6 +1,6 @@
 import { AdminGuard } from './guard/admin.guard';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 import { AuthGuard } from './guard/auth.guard';
 
 const routes: Routes = [
@@ -78,10 +78,18 @@ const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+  {
+    path: 'logs',
+    loadChildren: () => import('./pages/logs/logs.module').then( m => m.LogsPageModule),
+    canActivate: [AuthGuard],
+  },
 ];
 
+
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
+  imports: [
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}

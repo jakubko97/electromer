@@ -12,15 +12,15 @@ import { AlertService } from 'src/app/services/alert/alert.service';
 
 export class LoginPage implements OnInit {
 
-  role: any
+  role: any;
   apiResult = {
     loading: false,
     error: '',
     info: ''
   }
-  public icon: 'glyphicon glyphicon-eye-open'
-  public inputTypePw: String = 'password'
-  isPassword: Boolean = false
+  public icon: 'glyphicon glyphicon-eye-open';
+  public inputTypePw: String = 'password';
+  isPassword: Boolean = false;
 
   constructor(
     private modalController: ModalController,
@@ -33,7 +33,7 @@ export class LoginPage implements OnInit {
   }
 
   public showPassword(pw: Boolean){
-    this.isPassword = pw
+    this.isPassword = pw;
   }
 
   // Dismiss Login Modal
@@ -50,19 +50,14 @@ export class LoginPage implements OnInit {
   //   return await registerModal.present();
   // }
 
-  isUserAdmin(){
-    this.authService.isUserAdmin().subscribe(
-      data => {
-          this.navCtrl.navigateRoot('/dashboard');
-      }
-    )
-  }
+
   login(form: NgForm) {
     this.apiResult.error = null
     this.apiResult.loading = true
     this.authService.login(form.value.email, form.value.password).subscribe(
       data => {
         this.alertService.presentToast("Logged In");
+        this.navCtrl.navigateRoot('/dashboard');
       },
       error => {
         this.apiResult.error = "Login failed. Please check your credentials."
@@ -72,7 +67,6 @@ export class LoginPage implements OnInit {
       () => {
         this.apiResult.loading = false
         this.dismissLogin();
-        this.isUserAdmin()
       }
     );
   }

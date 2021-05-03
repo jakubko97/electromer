@@ -53,6 +53,15 @@ export class AppComponent implements OnInit {
   navigationInterceptor(event: RouterEvent): void {
     if (event instanceof NavigationStart) {
       this.showOverlay = true;
+      if(event.url === '/dashboard'){
+            this.authService.getUser().subscribe(
+              user => {
+                this.user = user;
+                this.setPages()
+              },
+              error => {
+              });
+          }
     }
     if (event instanceof NavigationEnd) {
       this.showOverlay = false;
@@ -72,29 +81,13 @@ export class AppComponent implements OnInit {
       this.statusBar.styleDefault();
       // Commenting splashScreen Hide, so it won't hide splashScreen before auth check
       // this.splashScreen.hide();
-      this.authService.getToken().then(
-        data => {
-          this.authService.getUser().subscribe(
-            user => {
-              this.user = user
-              this.setPages()
-            },
-            error => {
-              console.log(error)
-            }
-          )
-        },
-        error => {
-          console.log(error)
-        }
-      )
 
     });
   }
 
   setPages() {
-    this.user = this.authService.user
-    if (this.user.is_admin == 1 || this.user.is_superadmin) {
+    this.user = this.authService.user;
+    if (this.user.is_admin === 1) {
       this.appPages = [
         {
           title: 'Dashboard',
@@ -110,6 +103,45 @@ export class AppComponent implements OnInit {
           title: 'Electromers',
           url: '/list',
           icon: 'list'
+        },
+        {
+          title: this.user.email,
+          children: [
+            {
+              title: 'Settings',
+              url: '/settings',
+              icon: 'settings',
+            },
+            {
+              title: 'Requests',
+              url: '/requests',
+              icon: 'document-text-outline',
+            }
+          ]
+        },
+      ];
+    }
+    else if(this.user.is_superadmin){
+      this.appPages = [
+        {
+          title: 'Dashboard',
+          url: '/dashboard',
+          icon: 'home'
+        },
+        {
+          title: 'Users',
+          url: '/users',
+          icon: 'people'
+        },
+        {
+          title: 'Electromers',
+          url: '/list',
+          icon: 'list'
+        },
+        {
+          title: 'Logs',
+          url: '/logs',
+          icon: 'notifications-outline'
         },
         {
           title: this.user.email,
