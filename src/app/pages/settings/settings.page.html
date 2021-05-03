@@ -1,8 +1,12 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
+      <ion-menu-toggle auto-hide="false" menu="main-menu">
+          <ion-button (click)="toggleMenu()">
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+          </ion-button>
+      </ion-menu-toggle>
+  </ion-buttons>
     <ion-title>Settings</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -122,4 +126,8 @@
         </div>
       </ion-card-content>
     </ion-card>
+    <ion-item color="none" lines="none">
+      <ion-label>Dark/Light mode</ion-label>
+      <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}" slot="end"></ion-toggle>
+    </ion-item>
   </ion-content>

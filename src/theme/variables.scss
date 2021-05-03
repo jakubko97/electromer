@@ -3,6 +3,8 @@
 
 /** Ionic CSS Variables **/
 :root {
+   /* These examples use the same color: lightsteelblue. */
+    // --ion-background-color: #fdfdfd;
   /** primary **/
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
@@ -74,15 +76,20 @@
   --ion-color-light-contrast-rgb: 0, 0, 0;
   --ion-color-light-shade: #d7d8da;
   --ion-color-light-tint: #f5f6f9;
+
+  ion-searchbar, ion-card{
+    --ion-background-color: #ffffff;
+  }
+
 }
 
-@media (prefers-color-scheme: dark) {
+// @media (prefers-color-scheme: dark) {
   /*
    * Dark Colors
    * -------------------------------------------
    */
-
-  body {
+  body[color-theme="dark"] {
+    --ion-background-color: #ffffff43;
     --ion-color-primary: #428cff;
     --ion-color-primary-rgb: 66,140,255;
     --ion-color-primary-contrast: #ffffff;
@@ -145,6 +152,10 @@
     --ion-color-light-contrast-rgb: 255,255,255;
     --ion-color-light-shade: #1e2023;
     --ion-color-light-tint: #383a3e;
+
+    ion-searchbar, ion-card{
+      --ion-background-color: #222428;
+    }
   }
 
   /*
@@ -152,7 +163,7 @@
    * -------------------------------------------
    */
 
-  .ios body {
+  .ios body[color-theme="dark"] {
     --ion-background-color: #000000;
     --ion-background-color-rgb: 0,0,0;
 
@@ -192,7 +203,7 @@
    * -------------------------------------------
    */
 
-  .md body {
+  .md body[color-theme="dark"] {
     --ion-background-color: #121212;
     --ion-background-color-rgb: 18,18,18;
 
@@ -229,4 +240,4 @@
 
     --ion-card-background: #1e1e1e;
   }
-}
+// }

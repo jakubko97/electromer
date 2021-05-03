@@ -128,10 +128,10 @@ export class AuthService {
         })
       )
   }
-  assignUserToAdmin(user_id, admin_id) {
-    var payload = {
-      id: user_id,
-      admin_id: admin_id
+  assignUserToAdmin(userId, adminIdd) {
+    const payload = {
+      id: userId,
+      admin_id: adminIdd
     }
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
@@ -144,7 +144,7 @@ export class AuthService {
       )
   }
   assignAdminRights(user_id) {
-    var payload = {
+    const payload = {
       id: user_id,
       is_admin: 1
     }
@@ -180,10 +180,10 @@ export class AuthService {
         })
       )
   }
-  assignElectromerToUser(user_id: number, electromer_id: number) {
+  assignElectromerToUser(userId: number, electromerId: number) {
     var payload = {
-      user_id: user_id,
-      electromer_id: electromer_id
+      user_id: userId,
+      electromer_id: electromerId
     };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
@@ -196,11 +196,11 @@ export class AuthService {
     });
     return this.http.post(this.env.API_URL + 'api/electromers', electromer, { headers: headers })
   }
-  getDataInRange(electromer_id: number, date_from: Date, date_to: Date) {
+  getDataInRange(id: number, from: Date, to: Date) {
     const payload = {
-      electromer_id: electromer_id,
-      date_from: date_from,
-      date_to: date_to
+      electromer_id: id,
+      date_from: from,
+      date_to: to
     };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
@@ -208,11 +208,14 @@ export class AuthService {
     return this.http.post(this.env.API_URL + 'api/electromer/data', payload, { headers: headers }
     )
   }
-  getElectromerById(electromer_id) {
+  getElectromerById(id) {
+    const payload = {
+      electromer_id: id
+    };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/electromer/', electromer_id, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/electromer/', payload, { headers: headers })
   }
   getAllRequests() {
     const headers = new HttpHeaders({
@@ -234,5 +237,14 @@ export class AuthService {
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
     return this.http.post(this.env.API_URL + 'api/file/download', payload, { headers: headers, responseType: 'blob' })
+  }
+  getDailyAverageLastWeek(id) {
+    const payload = {
+      electromer_id: id,
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/week/data', payload, { headers: headers })
   }
 }

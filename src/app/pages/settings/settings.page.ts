@@ -1,6 +1,7 @@
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from './../../models/user';
 import { Component, OnInit } from '@angular/core';
+import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
 
 @Component({
   selector: 'app-settings',
@@ -35,6 +36,33 @@ export class SettingsPage implements OnInit {
     this.getElectromers()
     this.getUsers()
     this.getAdmins()
+  }
+  toggleMenu(){
+    const splitPane = document.querySelector('ion-split-pane')
+    if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
+        splitPane.classList.toggle('split-pane-visible')
+}
+
+isThemeDark(){
+  return document.body.getAttribute('color-theme') === 'dark'
+}
+  onClick(event){
+    let systemDark = window.matchMedia('(prefers-color-scheme: dark)');
+    systemDark.addListener(this.colorTest);
+    if(event.detail.checked){
+      document.body.setAttribute('color-theme', 'dark');
+    }
+    else{
+      document.body.setAttribute('color-theme', 'light');
+    }
+  }
+
+   colorTest(systemInitiatedDark) {
+    if (systemInitiatedDark.matches) {
+      document.body.setAttribute('color-theme', 'dark');
+    } else {
+      document.body.setAttribute('color-theme', 'light');
+    }
   }
   cleanElectromersData(){
     var clean_array = []

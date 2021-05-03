@@ -4,7 +4,11 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from '../../models/user';
 import * as CanvasJS from '../../../assets/canvasjs.stock.min';
 import { AppComponent } from 'src/app/app.component';
-
+import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
+import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
+import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
+import { LoadingController } from '@ionic/angular';
+import { timer } from 'rxjs';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -13,28 +17,40 @@ import { AppComponent } from 'src/app/app.component';
 export class DashboardPage implements OnInit {
 
   user: User;
-  val: any
-  mySelect: any
-  electromer: any
-  from_date: any
-  to_date: any
+  val: any;
+  mySelect: any;
+  electromer: any;
+  from_date: any;
+  to_date: any;
   electromers: any;
   selectedDataInRange: any = {}
   dataPoints1 = [];
   dataPoints2 = [];
   dataPoints3 = [];
-  chart: any
+  mainChartData1 = [];
+  mainChartData2 = [];
+  mainChartLabels = [];
+  chart: any;
   apiResult = {
     loading: false,
     error: '',
     info: ''
   }
-  graphLoading = false
+  dailyAverageUsage: any;
+  graphLoading = false;
 
+  customPopoverOptions: any = {
+    header: 'Electromers',
+    subHeader: 'Select data from electromer',
+    message: 'Select and confirm to show data'
+  };
+
+  loading: any;
   constructor(
     private menu: MenuController,
     private authService: AuthService,
-    private app: AppComponent
+    private app: AppComponent,
+    public loadingController: LoadingController
   ) {
     this.menu.enable(true);
   }
@@ -46,6 +62,11 @@ export class DashboardPage implements OnInit {
     return e1 && e2 ? e1.id === e2.id : e1 === e2;
   }
 
+  toggleMenu(){
+      const splitPane = document.querySelector('ion-split-pane')
+      if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
+          splitPane.classList.toggle('split-pane-visible')
+  }
   addSymbols(e) {
     var suffixes = ["", "K"];
     var order = Math.max(Math.floor(Math.log(e.value) / Math.log(1000)), 0);
@@ -55,11 +76,17 @@ export class DashboardPage implements OnInit {
     return CanvasJS.formatNumber(e.value / Math.pow(1000, order)) + suffix;
   }
 
+  isThemeDark(){
+    return document.body.getAttribute('color-theme') === 'dark'
+  }
   initGraph() {
     let dpsLength = 0;
+
     this.chart = new CanvasJS.StockChart("chartContainer", {
-      theme: "light2",
+      theme: this.isThemeDark() ? "dark2" : "light1", // "light1", "light2", "dark2"
       exportEnabled: true,
+      animationEnabled: true,
+      animationDuration: 800,
       title: {
         text: "Electromer graph"
       },
@@ -112,7 +139,7 @@ export class DashboardPage implements OnInit {
           }
         },
         axisY: {
-          prefix: "$",
+          prefix: "kW",
           tickLength: 0,
           title: "Volume",
           labelFormatter: this.addSymbols
@@ -151,10 +178,14 @@ export class DashboardPage implements OnInit {
     this.initGraph()
   }
 
-  getElectromers() {
+  async getElectromers() {
     //Get today's date using the JavaScript Date object.
 
-    this.apiResult.loading = true
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await loading.present();
     return this.authService.getAllElectromers()
       .subscribe(
         electromers => {
@@ -166,11 +197,13 @@ export class DashboardPage implements OnInit {
             var ourDate = new Date();
             var pastDate = ourDate.getDate() - 1; //default po nacitani
             ourDate.setDate(pastDate);
-            this.from_date = ourDate
-            this.to_date = new Date()
+            this.from_date = ourDate.toISOString();
+            this.to_date = new Date().toISOString();
           } else {
-            el_id = this.electromer.id
+            el_id = this.electromer.id;
           }
+          this.getDailyAverageLastWeek(el_id);
+
           this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
             data => {
               this.selectedDataInRange = JSON.parse(JSON.stringify(data));
@@ -184,8 +217,8 @@ export class DashboardPage implements OnInit {
         error => {
           this.apiResult.error = error
         },
-        () => {
-          this.apiResult.loading = false
+        async () => {
+          await loading.dismiss();
         }
       )
   }
@@ -194,26 +227,31 @@ export class DashboardPage implements OnInit {
     switch (value.detail.value) {
       case "last_day": this.selectRecentDays(1)
         break;
-      case "last_three": this.selectRecentDays(3)
+      case "last_week": this.selectRecentDays(7)
         break;
-      case "last_seven": this.selectRecentDays(7)
-        break;
-      case "last_ten": this.selectRecentDays(10)
+      case "last_month": this.selectRecentDays(30)
         break;
       case 'default': ''
         break;
     }
   }
 
+  formatDate(date){
+    return new Date(date).toISOString();
+  }
+
   selectRecentDays(lastDays) {
     var ourDate = new Date();
     var pastDate = ourDate.getDate() - lastDays;
     ourDate.setDate(pastDate);
-    this.from_date = ourDate
-    this.to_date = new Date()
+    this.from_date = ourDate.toISOString();
+    this.to_date = new Date().toISOString();
     this.dataPoints1 = [];
     this.dataPoints2 = [];
     this.dataPoints3 = [];
+    this.mainChartData1 = [];
+    this.mainChartData2 = [];
+    this.mainChartLabels = [];
     this.initGraph()
   }
 
@@ -229,26 +267,457 @@ export class DashboardPage implements OnInit {
   }
 
   parseDataInChart() {
+    let sumDelta = 0;
+    let length = Object.entries(this.selectedDataInRange).length;
     for (let data of Object.entries(this.selectedDataInRange)) { //data -> mapa 0 key, 1 value
-      var time = data[1]['time']
-      this.dataPoints1.push({ x: new Date(time), y: [Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta'])] })
+      var time = data[1]['time'];
+      this.dataPoints1.push({ x: new Date(time), y: [Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta'])] });
       this.dataPoints2.push({ x: new Date(time), y: data[1]['delta'] })
       this.dataPoints3.push({ x: new Date(time), y: data[1]['delta'] })
+      this.mainChartData1.push(data[1]['delta'] );
+      this.mainChartLabels.push(new Date(time))
+      sumDelta += data[1]['delta'];
+
+  }
+    for(let i = 0; i < length; i++){
+      this.mainChartData2.push(sumDelta / length);
     }
     this.chart.render()
-    this.graphLoading = false
-  }
+    this.graphLoading = false;
+}
+
   changeChart() {
     if (this.mySelect == "daily") {
-      this.val = false
+      this.val = false;
     } else {
-      this.val = true
+      this.val = true;
     }
   }
 
-  ngOnInit() {
-    this.initGraph()
-    this.user = this.authService.user
+  getDailyAverageLastWeek(el_id){
+    this.authService.getDailyAverageLastWeek(el_id).subscribe(
+      data => {
+        this.barChart1Data[0].data = [];
+        this.barChart1Labels = [];
+        this.barChart1Data[1].data = [];
+        let avg = 0;
+        for (let d of Object.entries(data)) {
+          if (d[0].charAt(0) !== '0'){
+            const delta = d[1].delta;
+            let time = d[0];
+            time = time.replace(/["']/g, '');
+            this.barChart1Data[0].data.push(delta);
+            const dateObj = new Date('2021-' + time);
+            const weekday = dateObj.toLocaleString('default', { weekday: 'short' });
+            this.barChart1Labels.push(weekday);
+            avg += delta;
+          }
+        }
+        avg = avg / 7;
+        this.dailyAverageUsage = avg.toFixed(2);
+        for (let i = 0; i <= 7; i++){
+          this.barChart1Data[1].data.push(avg);
+        }
+      },
+      error => {
+
+      }
+    )
+  }
+  async ngOnInit() {
+    await this.initGraph();
+    this.user = this.authService.user;
+    // for (let i = 0; i <= this.mainChartElements; i++) {
+    //   this.mainChartData2.push(this.random(60, 125));
+    //   this.mainChartData3.push(65);
+    // }
+
+
+  }
+
+  radioModel: string = 'Month';
+
+  // lineChart1
+  public lineChart1Data: Array<any> = [
+    {
+      data: [65, 59, 84, 84, 51, 55, 40],
+      label: 'Series A'
+    }
+  ];
+  public lineChart1Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChart1Options: any = {
+    tooltips: {
+      enabled: true,
+      custom: CustomTooltips
+    },
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        gridLines: {
+          color: 'transparent',
+          zeroLineColor: 'transparent'
+        },
+        ticks: {
+          fontSize: 2,
+          fontColor: 'transparent',
+        }
+
+      }],
+      yAxes: [{
+        display: false,
+        ticks: {
+          display: false,
+          min: 40 - 5,
+          max: 84 + 5,
+        }
+      }],
+    },
+    elements: {
+      line: {
+        borderWidth: 1
+      },
+      point: {
+        radius: 4,
+        hitRadius: 10,
+        hoverRadius: 4,
+      },
+    },
+    legend: {
+      display: false
+    }
+  };
+  public lineChart1Colours: Array<any> = [
+    {
+      backgroundColor: getStyle('--ion-color-primary'),
+      borderColor: 'rgba(255,255,255,.55)'
+    }
+  ];
+  public lineChart1Legend = false;
+  public lineChart1Type = 'line';
+
+  // lineChart2
+  public lineChart2Data: Array<any> = [
+    {
+      data: [1, 18, 9, 17, 34, 22, 11],
+      label: 'Series A'
+    }
+  ];
+  public lineChart2Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChart2Options: any = {
+    tooltips: {
+      enabled: true,
+      custom: CustomTooltips
+    },
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        gridLines: {
+          color: 'transparent',
+          zeroLineColor: 'transparent'
+        },
+        ticks: {
+          fontSize: 2,
+          fontColor: 'transparent',
+        }
+
+      }],
+      yAxes: [{
+        display: false,
+        ticks: {
+          display: false,
+          min: 1 - 5,
+          max: 34 + 5,
+        }
+      }],
+    },
+    elements: {
+      line: {
+        tension: 0.00001,
+        borderWidth: 1
+      },
+      point: {
+        radius: 4,
+        hitRadius: 10,
+        hoverRadius: 4,
+      },
+    },
+    legend: {
+      display: false
+    }
+  };
+  public lineChart2Colours: Array<any> = [
+    { // grey
+      backgroundColor: getStyle('--ion-color-primary'),
+      borderColor: 'rgba(255,255,255,.55)'
+    }
+  ];
+  public lineChart2Legend = false;
+  public lineChart2Type = 'line';
+
+
+  // lineChart3
+  public lineChart3Data: Array<any> = [
+    {
+      data: [78, 81, 80, 45, 34, 12, 40],
+      label: 'Series A'
+    }
+  ];
+  public lineChart3Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public lineChart3Options: any = {
+    tooltips: {
+      enabled: true,
+      custom: CustomTooltips
+    },
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        display: false
+      }],
+      yAxes: [{
+        display: false
+      }]
+    },
+    elements: {
+      line: {
+        borderWidth: 2
+      },
+      point: {
+        radius: 0,
+        hitRadius: 10,
+        hoverRadius: 4,
+      },
+    },
+    legend: {
+      display: false
+    }
+  };
+  public lineChart3Colours: Array<any> = [
+    {
+      backgroundColor: getStyle('--ion-color-primary'),
+      borderColor: 'rgba(255,255,255,.55)'
+    }
+  ];
+  public lineChart3Legend = false;
+  public lineChart3Type = 'line';
+
+    // barChart1
+    public barChart1Data: Array<any> = [
+      {
+        data: [],
+        label: 'kW',
+        barPercentage: 0.5,
+      },
+      {
+        data: [],
+        label: 'Avg',
+        type: 'line',
+        barPercentage: 0.5,
+      },
+    ];
+  public barChart1Labels: Array<any> = []; //days
+  public barChart1Options: any = {
+    tooltips: {
+      enabled: true,
+      custom: CustomTooltips
+    },
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        display: true,
+      }],
+      yAxes: [{
+        display: false
+      }]
+    },
+    legend: {
+      display: false
+    }
+  };
+  public barChart1Colours: Array<any> = [
+    {
+      backgroundColor: getStyle('--ion-color-primary'),
+      borderColor: 'rgba(255,255,255,.55)'
+    },
+    {
+      backgroundColor: 'transparent',
+      borderColor: getStyle('--ion-color-danger'),
+      borderWidth: 1,
+    }
+  ];
+  public barChart1Legend = false;
+  public barChart1Type = 'bar';
+
+  // mainChart
+
+  public mainChartElements = Object.entries(this.selectedDataInRange).length;
+  // public mainChartData1: Array<number> = [];
+  // public mainChartData2: Array<number> = [];
+  public mainChartData3: Array<number> = [];
+
+  public mainChartData: Array<any> = [
+    {
+      data: this.mainChartData1,
+      label: 'Current'
+    },
+    {
+      data: this.mainChartData2,
+      label: 'Average'
+    },
+    {
+      data: this.mainChartData3,
+      label: 'Average'
+    }
+  ];
+  /* tslint:disable:max-line-length */
+  // public mainChartLabels: Array<any> = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Thursday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  /* tslint:enable:max-line-length */
+  public mainChartOptions: any = {
+    tooltips: {
+      enabled: true,
+      custom: CustomTooltips,
+      intersect: true,
+      mode: 'index',
+      position: 'nearest',
+      callbacks: {
+        labelColor: function(tooltipItem, chart) {
+          return { backgroundColor: chart.data.datasets[tooltipItem.datasetIndex].borderColor };
+        }
+      }
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        gridLines: {
+          drawOnChartArea: false,
+        },
+        ticks: {
+           callback: function(value: any) {
+             return value.charAt(0);
+           }
+        },
+        type: 'time',
+                time: {
+                    unit: 'month'
+                }
+      }],
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          maxTicksLimit: 5,
+          stepSize: Math.ceil(0.01 / 5),
+          max: 0.01
+        }
+      }]
+    },
+    elements: {
+      line: {
+        borderWidth: 2
+      },
+      point: {
+        radius: 0,
+        hitRadius: 10,
+        hoverRadius: 4,
+        hoverBorderWidth: 3,
+      }
+    },
+    legend: {
+      display: false
+    }
+  };
+  public mainChartColours: Array<any> = [
+    { // brandInfo
+      // backgroundColor: hexToRgba(getStyle('--info'), 10),
+      backgroundColor: getStyle('--ion-color-primary'),
+      borderColor: getStyle('--info'),
+      pointHoverBackgroundColor: '#fff'
+    },
+    { // brandSuccess
+      backgroundColor: 'transparent',
+      borderColor: getStyle('--ion-color-success'),
+      pointHoverBackgroundColor: '#fff'
+    },
+    { // brandDanger
+      backgroundColor: 'transparent',
+      borderColor: getStyle('--ion-color-danger'),
+      pointHoverBackgroundColor: '#fff',
+      borderWidth: 1,
+      borderDash: [8, 5]
+    }
+  ];
+  public mainChartLegend = true;
+  public mainChartType = 'line';
+
+  // social box charts
+
+  public brandBoxChartData1: Array<any> = [
+    {
+      data: [65, 59, 84, 84, 51, 55, 40],
+      label: 'Facebook'
+    }
+  ];
+  public brandBoxChartData2: Array<any> = [
+    {
+      data: [1, 13, 9, 17, 34, 41, 38],
+      label: 'Twitter'
+    }
+  ];
+  public brandBoxChartData3: Array<any> = [
+    {
+      data: [78, 81, 80, 45, 34, 12, 40],
+      label: 'LinkedIn'
+    }
+  ];
+  public brandBoxChartData4: Array<any> = [
+    {
+      data: [35, 23, 56, 22, 97, 23, 64],
+      label: 'Google+'
+    }
+  ];
+
+  public brandBoxChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public brandBoxChartOptions: any = {
+    tooltips: {
+      enabled: false,
+      custom: CustomTooltips
+    },
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      xAxes: [{
+        display: false,
+      }],
+      yAxes: [{
+        display: false,
+      }]
+    },
+    elements: {
+      line: {
+        borderWidth: 2
+      },
+      point: {
+        radius: 0,
+        hitRadius: 10,
+        hoverRadius: 4,
+        hoverBorderWidth: 3,
+      }
+    },
+    legend: {
+      display: false
+    }
+  };
+  public brandBoxChartColours: Array<any> = [
+    {
+      backgroundColor: 'rgba(255,255,255,.1)',
+      borderColor: 'rgba(255,255,255,.55)',
+      pointHoverBackgroundColor: '#fff'
+    }
+  ];
+  public brandBoxChartLegend = false;
+  public brandBoxChartType = 'line';
+
+  public random(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
 }

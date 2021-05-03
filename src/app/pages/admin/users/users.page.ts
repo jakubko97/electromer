@@ -6,6 +6,8 @@ import { ModalController } from '@ionic/angular';
 import { ModalPage } from '../modal/modal.page';
 import { AlertController } from '@ionic/angular';
 import { ActionSheetController } from '@ionic/angular';
+import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
+import { UserFormPage } from '../user-form/user-form.page';
 
 @Component({
   selector: 'app-users',
@@ -24,6 +26,7 @@ export class UsersPage implements OnInit {
     error: '',
     info: ''
   }
+  theme: any;
 
   isItemAvailable = false;
   items = [];
@@ -47,6 +50,31 @@ export class UsersPage implements OnInit {
     { name: 'Email', prop: 'email' },
   ];
 
+  isThemeDark(){
+    return document.body.getAttribute('color-theme') === 'dark'
+  }
+
+  ngOnInit() {
+    this.theme = this.isThemeDark() ? "dark" : "material";
+    this.user = this.authService.user
+    this.getUsers()
+  }
+  toggleMenu(){
+    const splitPane = document.querySelector('ion-split-pane')
+    if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
+        splitPane.classList.toggle('split-pane-visible')
+}
+
+async editUser(user: any) {
+  const modal = await this.modalCtrl.create({
+    component: UserFormPage,
+    componentProps: {
+      user: user
+    },
+  });
+  return await modal.present();
+
+}
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     let role = null
@@ -132,11 +160,6 @@ export class UsersPage implements OnInit {
     await alert.present();
   }
 
-  ngOnInit() {
-    this.user = this.authService.user
-    this.getUsers()
-  }
-
   async presentActionSheet(user) {
     const buttons = [];
     if((this.user.is_admin === 1 || this.user.is_superadmin)){
@@ -209,16 +232,12 @@ export class UsersPage implements OnInit {
   putAdminRights(user){
     this.authService.assignAdminRights(user.id).subscribe(
     data => {
-      console.log(data);
     },
     error => {
       console.log(error);
     })
   }
 
-  public editUser(user){
-
-  }
   public getUsers() {
     let email = this.user.email //remove myself from users array based on email
     this.apiResult.loading = true

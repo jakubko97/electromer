@@ -5,3 +5,12 @@ ion-chip:hover {
 ion-icon:hover {
     cursor: pointer;
 }
+
+html,
+ion-content {
+	--ion-background-color: #d1d1d1;
+}
+
+ion-card, ion-searchbar {
+	--ion-background-color: #ffffff;
+}

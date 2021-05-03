@@ -1,90 +1,460 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
-      <ion-menu-button autoHide></ion-menu-button>
-    </ion-buttons>
+      <ion-menu-toggle auto-hide="false" menu="main-menu">
+          <ion-button menuToggle (click)="toggleMenu()">
+              <ion-icon slot="icon-only" name="menu"></ion-icon>
+          </ion-button>
+      </ion-menu-toggle>
+  </ion-buttons>
     <ion-title>Dashboard</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content fullscreen>
-
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle><div *ngIf="user != undefined">
         Welcome, {{ user.name }}
       </div></ion-card-subtitle>
-      <ion-card-title>
-        Select custom date
-      </ion-card-title>
     </ion-card-header>
     <ion-card-content>
+    </ion-card-content>
+      <!-- Label only -->
       <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-item>
-              <ion-label>Electromer </ion-label>
-              <ion-select [(ngModel)]="electromer" [compareWith]="compareFn">
-                <ion-select-option [value]="e" *ngFor="let e of electromers">{{e.name}}</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-col>
-          <ion-col>
-            <ion-item>
-              <ion-label>From </ion-label>
-              <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="from_date"></ion-datetime>
-            </ion-item>
-          </ion-col>
-          <ion-col>
-            <ion-item>
-              <ion-label>To </ion-label>
-              <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="to_date"></ion-datetime>
-            </ion-item>
-          </ion-col>
-          <ion-col>
-            <ion-fab>
-              <ion-fab-button size="small" (click)="getData()">
-                <ion-icon large *ngIf="!apiResult.loading" name="checkmark-outline"></ion-icon>
-                <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
-              </ion-fab-button>
-            </ion-fab>
-
-
-          </ion-col>
-        </ion-row>
         <ion-row *ngIf="apiResult.error">
           <ion-col>
             <ion-label color="danger">{{apiResult.error}} </ion-label>
           </ion-col>
         </ion-row>
+        <ion-row class="ion-align-items-center">
+          <ion-col size-lg="5" size-md="5" size-sm="5" size="12">
+            <ion-list-header>
+                Data from
+                <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="from_date"></ion-datetime>
+                <ion-datetime pickerFormat="D/M/YYYY" [(ngModel)]="to_date"></ion-datetime>
+                <ion-icon style="margin-left:8px;" size="large" color="primary" (click)='getData()' name="reload-outline"></ion-icon>
+          </ion-list-header>
+            <!-- <ion-label> {{from_date | date: 'dd/MM/yyyy'}} - {{to_date | date: 'dd/MM/yyyy'}} </ion-label> -->
+          </ion-col>
+          <ion-col size-lg="2" size-md="1" size-sm="1" size="12">
+            </ion-col>
+          <ion-col text-right class="ion-align-items-end" size-lg="4" size-md="5" size-sm="5" size="12">
+            <ion-segment value="favorite" (ionChange)="quickSelect($event)">
+              <ion-segment-button value="last_day">
+                <ion-label>last day</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="last_week">
+                <ion-label>last week</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="last_month">
+                <ion-label>last month</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </ion-col>
+          <ion-col size-lg="1" size-md="1" size-sm="1" size="12">
+              <ion-select [(ngModel)]="electromer" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Select">
+                <ion-select-option [value]="e" *ngFor="let e of electromers">{{e.name}}</ion-select-option>
+              </ion-select>
+          </ion-col>
+        </ion-row>
       </ion-grid>
-    </ion-card-content>
-    <ion-card-header>
-      <ion-card-title>
-        Quick select
-      </ion-card-title>
-      <ion-card-subtitle>
-        in recent days
-      </ion-card-subtitle>
-    </ion-card-header>
 
-      <!-- Label only -->
-      <ion-segment value="favorite" (ionChange)="quickSelect($event)">
-        <ion-segment-button value="last_day">
-          <ion-label>last day</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="last_three">
-          <ion-label>last 3 days</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="last_seven">
-          <ion-label>last 7 days</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="last_ten">
-          <ion-label>last 10 days</ion-label>
-        </ion-segment-button>
-      </ion-segment>
   </ion-card>
-  <div class="chart elevation">
+    <ion-grid>
+    <ion-row>
+      <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
+       <ion-card>
+        <div class="cardTitle">
+         <ion-card-title>9.823</ion-card-title>
+         <ion-card-subtitle>Members online</ion-card-subtitle>
+        </div>
+         <ion-card-content>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas baseChart class="chart"
+            [datasets]="lineChart2Data"
+            [labels]="lineChart2Labels"
+            [options]="lineChart2Options"
+            [colors]="lineChart2Colours"
+            [legend]="lineChart2Legend"
+            [chartType]="lineChart2Type"></canvas>
+          </div>
+        </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
+        <ion-card>
+          <div class="cardTitle">
+            <ion-card-title>9.823</ion-card-title>
+            <ion-card-subtitle>Members online</ion-card-subtitle>
+           </div>
+
+          <ion-card-content>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas baseChart class="chart"
+                    [datasets]="lineChart1Data"
+                    [labels]="lineChart1Labels"
+                    [options]="lineChart1Options"
+                    [colors]="lineChart1Colours"
+                    [legend]="lineChart1Legend"
+                    [chartType]="lineChart1Type"></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+     </ion-col>
+     <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
+      <ion-card>
+        <div class="cardTitle">
+          <ion-card-title>9.823</ion-card-title>
+          <ion-card-subtitle>Members online</ion-card-subtitle>
+         </div>
+
+        <ion-card-content>
+          <div class="chart-wrapper mt-3" style="height:70px;">
+            <canvas baseChart class="chart"
+            [datasets]="lineChart3Data"
+            [labels]="lineChart3Labels"
+            [options]="lineChart3Options"
+            [colors]="lineChart3Colours"
+            [legend]="lineChart3Legend"
+            [chartType]="lineChart3Type"></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+        </ion-col>
+        <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
+          <ion-card>
+            <div class="cardTitle">
+              <ion-card-title>Weekly Highlights</ion-card-title>
+              <ion-card-subtitle>Daily average usage was {{ dailyAverageUsage }} kW over the last seven days. </ion-card-subtitle>
+             </div>
+
+            <ion-card-content>
+          <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <canvas baseChart class="chart"
+            [datasets]="barChart1Data"
+            [labels]="barChart1Labels"
+            [options]="barChart1Options"
+            [colors]="barChart1Colours"
+            [legend]="barChart1Legend"
+            [chartType]="barChart1Type"></canvas>
+          </div>
+        </ion-card-content>
+      </ion-card>
+     </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-card>
+    <ion-card-title>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+          <div class="cardTitle">
+            Traffic
+          <ion-card-subtitle>
+            November 2017
+          </ion-card-subtitle>
+        </div>
+        </ion-col>
+        <ion-col class="ion-text-end">
+          <div class="cardTitle">
+            <ion-icon size="large" name="cloud-download"></ion-icon>
+            </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </ion-card-title>
+
+      <ion-card-content>
+
+        <div class="chart-wrapper" style="height:300px;margin-top:40px;">
+          <canvas baseChart class="chart"
+          [datasets]="mainChartData"
+          [labels]="mainChartLabels"
+          [options]="mainChartOptions"
+          [colors]="mainChartColours"
+          [legend]="mainChartLegend"
+          [chartType]="mainChartType"></canvas>
+        </div>
+      </ion-card-content>
+      <ion-card-title>
+        <ion-grid class="ion-justify-content-center">
+          <ion-row>
+            <ion-col class="ion-text-center" size-lg="3" size-md="3" size-sm="3" size="12">
+            <div class="text-muted">Visits</div>
+            <strong>29.703 Users (40%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </ion-col>
+          <ion-col class="ion-text-center" size-lg="3" size-md="3" size-sm="3" size="12">
+            <div class="text-muted">Unique</div>
+            <strong>24.093 Users (20%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-info" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </ion-col>
+          <ion-col class="ion-text-center" size-lg="3" size-md="3" size-sm="3" size="12">
+            <div class="text-muted">Pageviews</div>
+            <strong>78.706 Views (60%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-warning" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </ion-col>
+          <ion-col class="ion-text-center" size-lg="3" size-md="3" size-sm="3" size="12">
+            <div class="text-muted">New Users</div>
+            <strong>22.123 Users (80%)</strong>
+            <div class="progress progress-xs mt-2">
+              <div class="progress-bar bg-danger" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </ion-col>
+          </ion-row>
+          </ion-grid>
+      </ion-card-title>
+    </ion-card>
+            <!-- <table class="table table-responsive-sm table-hover table-outline mb-0">
+              <thead class="thead-light">
+                <tr>
+                  <th class="text-center"><i class="icon-people"></i></th>
+                  <th>User</th>
+                  <th class="text-center">Country</th>
+                  <th>Usage</th>
+                  <th class="text-center">Payment Method</th>
+                  <th>Activity</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/1.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-success"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Yiorgos Avraamu</div>
+                    <div class="small text-muted">
+                      <span>New</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-us h4 mb-0" title="us" id="us"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>50%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-cc-mastercard" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>10 sec ago</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/2.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-danger"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Avram Tarasios</div>
+                    <div class="small text-muted">
+
+                      <span>Recurring</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-br h4 mb-0" title="br" id="br"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>10%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 10%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-cc-visa" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>5 minutes ago</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/3.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-warning"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Quintin Ed</div>
+                    <div class="small text-muted">
+                      <span>New</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-in h4 mb-0" title="in" id="in"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>74%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-warning" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-cc-stripe" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>1 hour ago</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/4.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-secondary"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Enéas Kwadwo</div>
+                    <div class="small text-muted">
+                      <span>New</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-fr h4 mb-0" title="fr" id="fr"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>98%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-danger" role="progressbar" style="width: 98%" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-paypal" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>Last month</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/5.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-success"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Agapetus Tadeáš</div>
+                    <div class="small text-muted">
+                      <span>New</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-es h4 mb-0" title="es" id="es"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>22%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-info" role="progressbar" style="width: 22%" aria-valuenow="22" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-google-wallet" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>Last week</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="text-center">
+                    <div class="avatar">
+                      <img src="assets/img/avatars/6.jpg" class="img-avatar" alt="admin@bootstrapmaster.com">
+                      <span class="avatar-status badge-danger"></span>
+                    </div>
+                  </td>
+                  <td>
+                    <div>Friderik Dávid</div>
+                    <div class="small text-muted">
+                      <span>New</span> | Registered: Jan 1, 2015
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="flag-icon flag-icon-pl h4 mb-0" title="pl" id="pl"></i>
+                  </td>
+                  <td>
+                    <div class="clearfix">
+                      <div class="float-left">
+                        <strong>43%</strong>
+                      </div>
+                      <div class="float-right">
+                        <small class="text-muted">Jun 11, 2015 - Jul 10, 2015</small>
+                      </div>
+                    </div>
+                    <div class="progress progress-xs">
+                      <div class="progress-bar bg-success" role="progressbar" style="width: 43%" aria-valuenow="43" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </td>
+                  <td class="text-center">
+                    <i class="fa fa-cc-amex" style="font-size:24px"></i>
+                  </td>
+                  <td>
+                    <div class="small text-muted">Last login</div>
+                    <strong>Yesterday</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table> -->
+  <div class="graph elevation">
     <div *ngIf="graphLoading">
       <ion-progress-bar type="indeterminate">
       </ion-progress-bar>
