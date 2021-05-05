@@ -126,8 +126,14 @@
         </div>
       </ion-card-content>
     </ion-card>
-    <ion-item color="none" lines="none">
-      <ion-label>Dark/Light mode</ion-label>
-      <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}" slot="end"></ion-toggle>
-    </ion-item>
+    <ion-grid class="ion-justify-content-center">
+      <ion-row>
+        <ion-col class="ion-text-center">
+          <ion-item color="none" lines="none">
+            <ion-label>Dark/Light mode</ion-label>
+            <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}"></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-content>

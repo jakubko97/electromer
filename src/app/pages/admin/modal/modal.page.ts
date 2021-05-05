@@ -33,18 +33,18 @@ export class ModalPage implements OnInit {
   ) { }
 
   isThemeDark(){
-    return document.body.getAttribute('color-theme') === 'dark'
+    return document.body.getAttribute('color-theme') === 'dark';
   }
   ngOnInit() {
-    this.theme = this.isThemeDark() ? "dark" : "material";
+    this.theme = this.isThemeDark() ? 'dark' : 'material';
     this.user = this.navParams.get('user');
     this.mode = this.navParams.get('mode');
 
-    if(this.mode == 0){
-      this.getElectromers()
+    if(this.mode === 0){
+      this.getElectromers();
     }
-    if(this.mode == 1){
-      this.getUsers()
+    if(this.mode === 1){
+      this.getUsers();
     }
   }
   dismiss() {
@@ -58,17 +58,17 @@ export class ModalPage implements OnInit {
   assignUserToAdmin(user) {
     this.authService.assignUserToAdmin(user.id, this.user.id).subscribe(
       data => {
-        this.alertService.presentToast('User '+ user.name + ' was succesfully assigned to ' + this.user.name)
+        this.alertService.presentToast('User ' + user.name + ' was succesfully assigned to ' + this.user.name);
       },
       error => {
-        console.log(error)
+        console.log(error);
       })
   }
 
-  async assigningElectromerAlert(electromer) {
+  async assignUserToAdminAlert(user) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Please, confirm assiging ' + electromer.name + ' to '+ this.user.name +'.',
+      header: 'Please, confirm assiging ' + user.name + 'to' + this.user.name,
       buttons: [
         {
           text: 'Cancel',
@@ -79,7 +79,30 @@ export class ModalPage implements OnInit {
         }, {
           text: 'Confirm',
           handler: () => {
-            this.update(electromer)
+            this.assignUserToAdmin(user);
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async assigningElectromerAlert(electromer) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Please, confirm assiging ' + electromer.name + ' to ' + this.user.name + '.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+          }
+        }, {
+          text: 'Confirm',
+          handler: () => {
+            this.update(electromer);
           }
         }
       ]
@@ -89,15 +112,15 @@ export class ModalPage implements OnInit {
   }
 
   update(electromer){
-    this.apiResult.error = null
-    this.apiResult.loading = true
+    this.apiResult.error = null;
+    this.apiResult.loading = true;
     this.authService.assignElectromerToUser(electromer.id, this.user.id).subscribe(
       data => {
-        this.apiResult.loading = false
+        this.apiResult.loading = false;
       },
       error => {
-        this.apiResult.error = error
-        this.apiResult.loading = false
+        this.apiResult.error = error;
+        this.apiResult.loading = false;
       }
     )
   }
@@ -105,13 +128,14 @@ export class ModalPage implements OnInit {
   updateFilter(event) {
     const val = event.target.value.toLowerCase();
     // filter our data
-    let temp = null
-    if(this.mode == 0){
-      temp = this.temp.filter(function (d) {
-        return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val) || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
+    let temp = null;
+    if(this.mode === 0){
+      temp = this.temp.filter(d => {
+         return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val)
+          || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
       });
     }else{
-      temp = this.temp.filter(function (d) {
+      temp = this.temp.filter(d => {
         return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val);
       });
     }
@@ -122,40 +146,36 @@ export class ModalPage implements OnInit {
     // this.table.offset = 0;
   }
 
-  public check(item: Electromer): Boolean {
-    return true
-  }
-
   public getElectromers() {
     this.apiResult.loading = true
     return this.authService.getAllElectromers()
       .subscribe(
         electromers => {
-          this.data = electromers as Electromer
-          this.temp = this.data
-          this.apiResult.loading = false
-          return electromers
+          this.data = electromers as Electromer;
+          this.temp = this.data;
+          this.apiResult.loading = false;
+          return electromers;
         },
         error => {
-          this.apiResult.error = error
-          this.apiResult.loading = false
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
         },
         () => {
-          this.apiResult.loading = false
+          this.apiResult.loading = false;
         }
         )
   }
   getUsers() {
-    this.apiResult.loading = true
+    this.apiResult.loading = true;
     return this.authService.getAll()
       .subscribe(users => {
-        this.data = users as User
-        this.temp = users
-        this.apiResult.loading = false
+        this.data = users as User;
+        this.temp = users;
+        this.apiResult.loading = false;
       },
         error => {
-          this.apiResult.error = error
-          this.apiResult.loading = false
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
         }
       )
   }

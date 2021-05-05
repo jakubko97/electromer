@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from '../../models/user';
@@ -9,12 +9,16 @@ import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { LoadingController } from '@ionic/angular';
 import { timer } from 'rxjs';
+import { BaseChartDirective } from 'ng2-charts';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
 })
+
 export class DashboardPage implements OnInit {
+
+  @ViewChild('mainChart') mainChart: BaseChartDirective;
 
   user: User;
   val: any;
@@ -78,6 +82,10 @@ export class DashboardPage implements OnInit {
 
   isThemeDark(){
     return document.body.getAttribute('color-theme') === 'dark'
+  }
+
+  getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
   }
   initGraph() {
     let dpsLength = 0;
@@ -277,8 +285,11 @@ export class DashboardPage implements OnInit {
       this.mainChartData1.push(data[1]['delta'] );
       this.mainChartLabels.push(new Date(time))
       sumDelta += data[1]['delta'];
+      // this.mainChartData3.push(this.getRandomArbitrary(0.0010, 0.0042));
 
   }
+
+
     for(let i = 0; i < length; i++){
       this.mainChartData2.push(sumDelta / length);
     }
@@ -313,10 +324,11 @@ export class DashboardPage implements OnInit {
             avg += delta;
           }
         }
-        avg = avg / 7;
+        const length = Object.entries(data).length;
+        avg = avg / length;
         this.dailyAverageUsage = avg.toFixed(2);
-        for (let i = 0; i <= 7; i++){
-          this.barChart1Data[1].data.push(avg);
+        for (let i = 0; i <= length; i++){
+          this.barChart1Data[1].data.push(this.dailyAverageUsage);
         }
       },
       error => {
@@ -327,14 +339,15 @@ export class DashboardPage implements OnInit {
   async ngOnInit() {
     await this.initGraph();
     this.user = this.authService.user;
-    // for (let i = 0; i <= this.mainChartElements; i++) {
-    //   this.mainChartData2.push(this.random(60, 125));
-    //   this.mainChartData3.push(65);
-    // }
-
 
   }
 
+  downloadMainChart(){
+    const a = document.createElement('a');
+    a.href = this.mainChart.toBase64Image();
+    a.download = 'mainChart.png';
+    a.click();
+  }
   radioModel: string = 'Month';
 
   // lineChart1
@@ -557,15 +570,18 @@ export class DashboardPage implements OnInit {
   public mainChartData: Array<any> = [
     {
       data: this.mainChartData1,
-      label: 'Current'
+      label: 'Current',
+      type: 'line'
     },
     {
       data: this.mainChartData2,
+      type: 'line',
       label: 'Average'
     },
     {
       data: this.mainChartData3,
-      label: 'Average'
+      type: 'line',
+      label: 'Random'
     }
   ];
   /* tslint:disable:max-line-length */
@@ -606,7 +622,7 @@ export class DashboardPage implements OnInit {
           beginAtZero: true,
           maxTicksLimit: 5,
           stepSize: Math.ceil(0.01 / 5),
-          max: 0.01
+          max: 0.038
         }
       }]
     },
@@ -638,11 +654,9 @@ export class DashboardPage implements OnInit {
       pointHoverBackgroundColor: '#fff'
     },
     { // brandDanger
-      backgroundColor: 'transparent',
-      borderColor: getStyle('--ion-color-danger'),
-      pointHoverBackgroundColor: '#fff',
-      borderWidth: 1,
-      borderDash: [8, 5]
+      backgroundColor: getStyle('--ion-color-danger'),
+      borderColor: getStyle('--info'),
+      pointHoverBackgroundColor: '#fff'
     }
   ];
   public mainChartLegend = true;
