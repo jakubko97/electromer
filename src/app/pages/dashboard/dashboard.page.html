@@ -64,10 +64,10 @@
     <ion-grid>
     <ion-row>
       <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
-       <ion-card>
+       <ion-card class="smallBanners">
         <div class="cardTitle">
-         <ion-card-title>9.823</ion-card-title>
-         <ion-card-subtitle>Members online</ion-card-subtitle>
+         <ion-card-title>Last 24h</ion-card-title>
+         <ion-card-subtitle>Usage of electromer</ion-card-subtitle>
         </div>
          <ion-card-content>
           <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
@@ -83,10 +83,10 @@
         </ion-card>
       </ion-col>
       <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
-        <ion-card>
+        <ion-card class="smallBanners">
           <div class="cardTitle">
-            <ion-card-title>9.823</ion-card-title>
-            <ion-card-subtitle>Members online</ion-card-subtitle>
+            <ion-card-title>Weekly trend</ion-card-title>
+            <ion-card-subtitle>Trend defines if usage is higher or lower over the last seven days.</ion-card-subtitle>
            </div>
 
           <ion-card-content>
@@ -103,7 +103,7 @@
       </ion-card>
      </ion-col>
      <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
-      <ion-card>
+      <ion-card class="smallBanners">
         <div class="cardTitle">
           <ion-card-title>9.823</ion-card-title>
           <ion-card-subtitle>Members online</ion-card-subtitle>
@@ -123,7 +123,7 @@
       </ion-card>
         </ion-col>
         <ion-col size-lg="3" size-md="3" size-sm="3" size="12">
-          <ion-card>
+          <ion-card class="smallBanners">
             <div class="cardTitle">
               <ion-card-title>Weekly Highlights</ion-card-title>
               <ion-card-subtitle>Daily average usage was {{ dailyAverageUsage }} kW over the last seven days. </ion-card-subtitle>
@@ -158,7 +158,7 @@
         </ion-col>
         <ion-col class="ion-text-end">
           <div class="cardTitle">
-            <ion-icon size="large" name="cloud-download"></ion-icon>
+            <ion-icon (click)="downloadMainChart()" size="large" name="cloud-download"></ion-icon>
             </div>
         </ion-col>
       </ion-row>
@@ -173,7 +173,7 @@
       <ion-card-content>
 
         <div class="chart-wrapper" style="height:300px;margin-top:40px;">
-          <canvas baseChart class="chart"
+          <canvas baseChart #mainChart="base-chart" class="chart"
           [datasets]="mainChartData"
           [labels]="mainChartLabels"
           [options]="mainChartOptions"

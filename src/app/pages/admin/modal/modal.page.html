@@ -48,10 +48,11 @@
       </ngx-datatable-column>
       <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-toggle (click)="assignUserToAdmin(row)" disabled="false"></ion-toggle>
+          <ion-toggle (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}"></ion-toggle>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
+     <ion-card-subtitle *ngIf="!apiResult.loading && mode === 1" class="disabledTogglerCaption">*Disabled toggler secures avoiding admin to be assigned to another admin.</ion-card-subtitle>
 </ion-content>
 
 <ion-footer>
