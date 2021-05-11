@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-logs',
@@ -14,18 +15,34 @@ export class LogsPage implements OnInit {
     loading: false,
     error: '',
     info: ''
-  }
+  };
   theme: any;
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+  ) { }
 
   isThemeDark(){
-    return document.body.getAttribute('color-theme') === 'dark'
+    return document.body.getAttribute('color-theme') === 'dark';
   }
 
+
+  initLogs(){
+    this.apiResult.loading = true;
+    this.authService.getLogs().subscribe(
+      data => {
+        this.logs = this.temp = data;
+        this.apiResult.loading = false;
+      },
+      error => {
+        this.apiResult.error = error;
+        this.apiResult.loading = false;
+      }
+    )
+  }
   ngOnInit() {
     this.theme = this.isThemeDark() ? "dark" : "material";
-
+    this.initLogs();
   }
 
   toggleMenu(){
@@ -38,7 +55,7 @@ updateFilter(event) {
   const val = event.target.value.toLowerCase();
   // filter our data
   const temp = this.temp.filter(function (d) {
-    return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val) || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
+    return (d.description.toLowerCase().indexOf(val) !== -1 || !val) || (d.type.toLowerCase().indexOf(val) !== -1 || !val) || (d.created_at.toLowerCase().indexOf(val) !== -1 || !val);
   });
 
   // update the rows

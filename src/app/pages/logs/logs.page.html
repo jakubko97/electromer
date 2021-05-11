@@ -18,6 +18,11 @@
         <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="apiResult.error">
+      <ion-col>
+        <ion-label color="danger">{{apiResult.error}} </ion-label>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 
   <div class="ion-padding">
@@ -25,17 +30,17 @@
   <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="logs" [rowHeight]="50" [columnMode]="'force'"
     [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
-    <ngx-datatable-column name="Name" prop="name" width="80">
+    <ngx-datatable-column name="Id" prop="id" width="30">
     </ngx-datatable-column>
-    <ngx-datatable-column name="Db_table" prop="db_table" width="80">
+    <ngx-datatable-column name="Type" prop="type" width="60">
     </ngx-datatable-column>
-    <ngx-datatable-column name="Delta" prop="delta" width="80">
+    <ngx-datatable-column name="User id" prop="user_id" width="30">
     </ngx-datatable-column>
-    <ngx-datatable-column name="Type" prop="type" width="80">
+    <ngx-datatable-column name="Description" prop="description" width="140">
     </ngx-datatable-column>
-    <ngx-datatable-column name="Akcie" prop="akcie">
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-      </ng-template>
+    <ngx-datatable-column name="created_at" prop="created_at" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column name="updated_at" prop="updated_at" width="80">
     </ngx-datatable-column>
   </ngx-datatable>
   </div>

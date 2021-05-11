@@ -251,7 +251,7 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.get(this.env.API_URL + 'api/electromer/week/data', { headers: headers })
+    return this.http.get(this.env.API_URL + 'api/logs', { headers: headers })
   }
   getElectromerColumnData(id, fromDate, toDate, dataType) {
     const payload = {
