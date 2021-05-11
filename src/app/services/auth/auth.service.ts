@@ -247,4 +247,22 @@ export class AuthService {
     });
     return this.http.post(this.env.API_URL + 'api/electromer/week/data', payload, { headers: headers })
   }
+  getLogs() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.get(this.env.API_URL + 'api/electromer/week/data', { headers: headers })
+  }
+  getElectromerColumnData(id, fromDate, toDate, dataType) {
+    const payload = {
+      electromer_id: id,
+      from_date: fromDate,
+      to_date: toDate,
+      type: dataType
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/column/data', payload, { headers: headers })
+  }
 }

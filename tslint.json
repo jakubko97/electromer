@@ -143,6 +143,9 @@
     "use-pipe-transform-interface": true,
     "object-literal-sort-keys": false
   },
+  "tslint": {
+    "autoFixOnSave": true
+  },
   "rulesDirectory": [
     "codelyzer"
   ]
