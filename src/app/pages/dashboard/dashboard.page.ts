@@ -594,7 +594,6 @@ export class DashboardPage implements OnInit {
         }
       }
     });
-    this.graphLoading = true
     this.getElectromers()
     // $.getJSON("https://canvasjs.com/data/docs/ethusd2018.json", function (data) {
     //   for (var i = 0; i < data.length; i++) {
@@ -620,32 +619,37 @@ export class DashboardPage implements OnInit {
     return this.authService.getAllElectromers()
       .subscribe(
         electromers => {
-          this.electromers = JSON.parse(JSON.stringify(electromers))
-          this.electromers = this.cleanElectromersData()
-          var el_id = null
-          if (this.electromer == null) { //init data default na posledne 7 dni
-            el_id = this.electromers[0].id
-            var ourDate = new Date();
-            var pastDate = ourDate.getDate() - 1; //default po nacitani
+          this.electromers = JSON.parse(JSON.stringify(electromers));
+          this.electromers = this.cleanElectromersData();
+          let el_id = null;
+          if (this.electromer == null && this.electromers.length !== 0) { //init data default na posledne 7 dni
+            el_id = this.electromers[0].id;
+            const ourDate = new Date();
+            const pastDate = ourDate.getDate() - 1; //default po nacitani
             ourDate.setDate(pastDate);
             this.from_date = ourDate.toISOString();
             this.to_date = new Date().toISOString();
-          } else {
+          } else if(this.electromer != null) {
             el_id = this.electromer.id;
+          } else {
+            el_id = null;
           }
-          this.getDailyAverageLastWeek(el_id);
 
-          this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
-            async data => {
-              this.selectedDataInRange = JSON.parse(JSON.stringify(data));
-              this.parseDataInChart();
-              await loading.dismiss();
-            },
-            async error => {
-              this.apiResult.error = error;
-              await loading.dismiss();
-            }
-          )
+          if(el_id != null){
+            this.getDailyAverageLastWeek(el_id);
+
+            this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
+              async data => {
+                this.selectedDataInRange = JSON.parse(JSON.stringify(data));
+                this.parseDataInChart();
+                await loading.dismiss();
+              },
+              async error => {
+                this.apiResult.error = error;
+                await loading.dismiss();
+              }
+            )
+          }
         },
         async error => {
           this.apiResult.error = error;
@@ -698,6 +702,7 @@ export class DashboardPage implements OnInit {
   }
 
   parseDataInChart() {
+    this.graphLoading = true;
     let sumDelta = 0;
     const length = Object.entries(this.selectedDataInRange).length;
     for (const data of Object.entries(this.selectedDataInRange)) { //data -> mapa 0 key, 1 value
@@ -712,11 +717,10 @@ export class DashboardPage implements OnInit {
 
   }
 
-
     for(let i = 0; i < length; i++){
       this.mainChartData2.push(sumDelta / length);
     }
-    this.chart.render()
+    this.chart.render();
     this.graphLoading = false;
 }
 
@@ -810,7 +814,7 @@ syncMonthlyData (data, start, end){
     const dates = this.createLast7Days();
     for (const d of dates){
       for (const c of data){
-        const time = new Date('2021-' + c[0]);
+        const time = new Date(c[0]);
         if (this.sameDay(d.time, time)){
           d.delta = c[1].delta;
         }
