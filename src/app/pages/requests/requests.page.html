@@ -84,14 +84,22 @@
   <ion-card-content>
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-justify-content-start" size="4">
+        <ion-col class="ion-justify-content-start" size="12">
           <ion-searchbar value="{{searchValue}}" (keyup)="updateFilter($event)"></ion-searchbar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="ion-justify-content-start" size-md="1">
           <ion-chip (click)="searchByKey('In Progress')" color="primary">
             <ion-label>In Progress</ion-label>
           </ion-chip>
+        </ion-col>
+        <ion-col class="ion-justify-content-start" size-md="1">
           <ion-chip (click)="searchByKey('Accepted')" color="primary">
             <ion-label>Accepted</ion-label>
           </ion-chip>
+        </ion-col>
+        <ion-col class="ion-justify-content-start" size-md="1">
           <ion-chip (click)="searchByKey('Rejected')" color="primary">
             <ion-label>Rejected</ion-label>
           </ion-chip>
@@ -104,6 +112,13 @@
       <ngx-datatable-column name="User" prop="user_id" width="80">
       </ngx-datatable-column>
       <ngx-datatable-column name="Subject" prop="subject" width="80">
+        <!-- <ng-template let-row="row" let-value="value" ngx-datatable-header-template>
+          {{value}}
+        <input type="text" class="managetextfilter" placeholder="Type to filter"(keyup)="updateFilter($event, 'name')"/>
+       </ng-template>
+        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="rows">
+         <span title="Double click to edit"  (dblclick)="editing[rowIndex + '-task'] = true" *ngIf="!editing[rowIndex + '-task']">{{value}}</span>
+        </ng-template> -->
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" prop="type" width="80">
       </ngx-datatable-column>
