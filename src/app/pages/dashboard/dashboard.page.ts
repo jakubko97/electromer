@@ -9,6 +9,8 @@ import { getStyle } from '@coreui/coreui/dist/js/coreui-utilities';
 import { CustomTooltips } from '@coreui/coreui-plugin-chartjs-custom-tooltips';
 import { LoadingController } from '@ionic/angular';
 import { BaseChartDirective } from 'ng2-charts';
+import { AlertController } from '@ionic/angular';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.page.html',
@@ -20,7 +22,8 @@ export class DashboardPage implements OnInit {
     private menu: MenuController,
     private authService: AuthService,
     private app: AppComponent,
-    public loadingController: LoadingController
+    public loadingController: LoadingController,
+    private alertController: AlertController
   ) {
     this.menu.enable(true);
   }
@@ -34,7 +37,7 @@ export class DashboardPage implements OnInit {
   electromer: any;
   from_date: any;
   to_date: any;
-  electromers: any;
+  electromers = [];
   selectedDataInRange: any = {}
   dataPoints1 = [];
   dataPoints2 = [];
@@ -526,40 +529,7 @@ export class DashboardPage implements OnInit {
         text: "Subtitle"
       }],
       charts: [{
-        toolTip: {
-          shared: true
-        },
-        axisX: {
-          lineThickness: 5,
-          tickLength: 0,
-          labelFormatter: function (e) {
-            return "";
-          },
-          crosshair: {
-            enabled: true,
-            snapToDataPoint: true,
-            labelFormatter: function (e) {
-              return "";
-            }
-          }
-        },
-        axisY: {
-          prefix: "$",
-          tickLength: 0,
-          title: "Delta",
-        },
-        legend: {
-          verticalAlign: "top"
-        },
-        data: [{
-          name: "Delta",
-          yValueFormatString: "$#,###.##",
-          xValueFormatString: "YYYY-MM-DD",
-          type: "candlestick",
-          dataPoints: this.dataPoints1
-        }]
-      }, {
-        height: 100,
+        height: 300,
         toolTip: {
           shared: true
         },
@@ -571,16 +541,16 @@ export class DashboardPage implements OnInit {
           }
         },
         axisY: {
-          prefix: "kW",
+          prefix: "",
           tickLength: 0,
-          title: "Volume",
+          title: "kW/h",
           labelFormatter: this.addSymbols
         },
         legend: {
           verticalAlign: "top"
         },
         data: [{
-          name: "Volume",
+          name: "kW/h",
           yValueFormatString: "$#,###.##",
           xValueFormatString: "YYYY-MM-DD",
           dataPoints: this.dataPoints2
@@ -591,11 +561,10 @@ export class DashboardPage implements OnInit {
           dataPoints: this.dataPoints3
         }],
         slider: {
-
         }
       }
     });
-    this.getElectromers()
+    this.getElectromers();
     // $.getJSON("https://canvasjs.com/data/docs/ethusd2018.json", function (data) {
     //   for (var i = 0; i < data.length; i++) {
     //     dataPoints1.push({ x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)] });;
@@ -606,7 +575,11 @@ export class DashboardPage implements OnInit {
     // });
   }
   getData() {
-    this.initGraph()
+    this.initGraph();
+  }
+
+  atLeastOneElectromer(){
+    return this.electromers.length !== 0;
   }
 
   async getElectromers() {
@@ -623,36 +596,40 @@ export class DashboardPage implements OnInit {
           this.electromers = JSON.parse(JSON.stringify(electromers));
           this.electromers = this.cleanElectromersData();
           this.blur = this.electromers.length === 0 ? 'background-blur' : '';
-          console.log(this.blur);
-          let el_id = null;
-          if (this.electromer == null && this.electromers.length !== 0) { //init data default na posledne 7 dni
-            el_id = this.electromers[0].id;
-            const ourDate = new Date();
-            const pastDate = ourDate.getDate() - 1; //default po nacitani
-            ourDate.setDate(pastDate);
-            this.from_date = ourDate.toISOString();
-            this.to_date = new Date().toISOString();
-          } else if(this.electromer != null) {
-            el_id = this.electromer.id;
-          } else {
-            el_id = null;
+          if (this.electromers.length === 0){
+            this.noElectromersAvailableAlert();
+          }else{
+            let el_id = null;
+            if (this.electromer == null && this.electromers.length !== 0) { //init data default na posledne 7 dni
+              el_id = this.electromers[0].id;
+              const ourDate = new Date();
+              const pastDate = ourDate.getDate() - 1; //default po nacitani
+              ourDate.setDate(pastDate);
+              this.from_date = ourDate.toISOString();
+              this.to_date = new Date().toISOString();
+            } else if(this.electromer != null) {
+              el_id = this.electromer.id;
+            } else {
+              el_id = null;
+            }
+
+            if(el_id != null){
+              this.getDailyAverageLastWeek(el_id);
+              this.graphLoading = true;
+              this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
+                async data => {
+                  this.selectedDataInRange = JSON.parse(JSON.stringify(data));
+                  this.parseDataInChart();
+                  await loading.dismiss();
+                },
+                async error => {
+                  this.apiResult.error = error;
+                  await loading.dismiss();
+                }
+              )
+            }
           }
 
-          if(el_id != null){
-            this.getDailyAverageLastWeek(el_id);
-
-            this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
-              async data => {
-                this.selectedDataInRange = JSON.parse(JSON.stringify(data));
-                this.parseDataInChart();
-                await loading.dismiss();
-              },
-              async error => {
-                this.apiResult.error = error;
-                await loading.dismiss();
-              }
-            )
-          }
         },
         async error => {
           this.apiResult.error = error;
@@ -705,7 +682,6 @@ export class DashboardPage implements OnInit {
   }
 
   parseDataInChart() {
-    this.graphLoading = true;
     let sumDelta = 0;
     const length = Object.entries(this.selectedDataInRange).length;
     for (const data of Object.entries(this.selectedDataInRange)) { //data -> mapa 0 key, 1 value
@@ -912,7 +888,19 @@ monthsRangeFunction(start, end) {
     months.push({ time: end.getMonth() - p, delta : 0});
     p += 1;
   }
-  console.log(months);
   return months;
+}
+
+async noElectromersAvailableAlert() {
+  const alert = await this.alertController.create({
+    cssClass: 'my-custom-class',
+    header: 'Message',
+    message: 'Zero electromers means zero fun. Please send a request for an electromer to get started!',
+    buttons: ['OK']
+  });
+
+  await alert.present();
+
+  const { role } = await alert.onDidDismiss();
 }
 }
