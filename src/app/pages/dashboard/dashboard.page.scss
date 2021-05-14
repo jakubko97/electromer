@@ -7,6 +7,18 @@ ion-card, ion-searchbar {
 	--ion-background-color: #ffffff;
 }
 
+.background-blur {
+  background-image: url('../../../assets/drawer.jpg');
+  width: 100vw;
+  height: 100vh;
+
+  -webkit-filter: blur(10px);
+  -moz-filter: blur(10px);
+  -o-filter: blur(10px);
+  -ms-filter: blur(10px);
+  filter: blur(10px);
+}
+
 .smallBanners{
   height: 200px;
 }

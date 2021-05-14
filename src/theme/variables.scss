@@ -6,6 +6,8 @@
    /* These examples use the same color: lightsteelblue. */
     // --ion-background-color: #fdfdfd;
   /** primary **/
+  $split-pane-side-max-width: 12%;
+
   --ion-color-primary: #3880ff;
   --ion-color-primary-rgb: 56, 128, 255;
   --ion-color-primary-contrast: #ffffff;

@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
     this.initializeApp()
 
     router.events.subscribe((event: RouterEvent) => {
-      this.navigationInterceptor(event)
+      this.navigationInterceptor(event);
     })
   }
 
@@ -53,15 +53,18 @@ export class AppComponent implements OnInit {
   navigationInterceptor(event: RouterEvent): void {
     if (event instanceof NavigationStart) {
       this.showOverlay = true;
-      if(event.url === '/dashboard'){
+      if (event.url === '/dashboard'){
+        this.authService.getToken().then(
+          data => {
             this.authService.getUser().subscribe(
               user => {
                 this.user = user;
-                this.setPages()
+                this.setPages();
               },
               error => {
               });
-          }
+            })
+        }
     }
     if (event instanceof NavigationEnd) {
       this.showOverlay = false;

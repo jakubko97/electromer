@@ -180,8 +180,8 @@ export class AuthService {
         })
       )
   }
-  assignElectromerToUser(userId: number, electromerId: number) {
-    var payload = {
+  assignElectromerToUser(electromerId: number, userId: number) {
+    const payload = {
       user_id: userId,
       electromer_id: electromerId
     };

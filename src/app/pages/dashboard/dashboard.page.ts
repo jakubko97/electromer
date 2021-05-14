@@ -27,6 +27,7 @@ export class DashboardPage implements OnInit {
 
   @ViewChild('mainChart') mainChart: BaseChartDirective;
 
+  blur: any;
   user: User;
   val: any;
   mySelect: any;
@@ -621,6 +622,8 @@ export class DashboardPage implements OnInit {
         electromers => {
           this.electromers = JSON.parse(JSON.stringify(electromers));
           this.electromers = this.cleanElectromersData();
+          this.blur = this.electromers.length === 0 ? 'background-blur' : '';
+          console.log(this.blur);
           let el_id = null;
           if (this.electromer == null && this.electromers.length !== 0) { //init data default na posledne 7 dni
             el_id = this.electromers[0].id;
@@ -877,8 +880,8 @@ syncMonthlyData (data, start, end){
   async ngOnInit() {
     await this.initGraph();
     this.user = this.authService.user;
-    var ourDate = new Date();
-    var pastDate = ourDate.getMonth() - 12; //default po nacitani
+    const ourDate = new Date();
+    const pastDate = ourDate.getMonth() - 12; //default po nacitani
     ourDate.setDate(pastDate);
     this.mainBarChartFromDate = ourDate.toISOString();
     this.mainBarChartToDate = new Date().toISOString();
