@@ -1,0 +1,108 @@
+{
+  "common": {
+    "add": "Add",
+    "cancel": "Cancel",
+    "error": "Error",
+    "no": "No",
+    "ok": "OK",
+    "or": "or",
+    "proceed": "Proceed",
+    "success": "Success",
+    "yes": "Yes",
+    "save": "Save",
+    "admin": "Admin",
+    "user": "User",
+    "name": "name",
+    "email": "email",
+    "users": "Users",
+    "admins": "Admins",
+    "close": "Close",
+    "logs": "Logs",
+    "type": "Type",
+    "accepted": "Accepted",
+    "accept": "Accept",
+    "rejected": "Rejected",
+    "reject": "Reject",
+    "attachment": "Attachment",
+    "request-preview": "Request-preview",
+    "subjet": "Subject"
+  },
+  "electromers": {
+    "add-electromer": "Add new electromer",
+    "edit-electromer": "Edit electromer",
+    "name": "name",
+    "db-table": "db_table",
+    "delta": "delta",
+    "type": "type"
+  },
+  "modal": {
+    "assign-electromers": "Assigning electromers to",
+    "assign-users": "Assigning users to",
+    "message": "*Disabled toggler secures avoiding admin to be assigned to another admin."
+  },
+  "user-form": {
+    "title": "Edit user"
+  },
+  "auth": {
+    "login-title": "Login",
+    "register-title": "Register",
+    "email": "Email",
+    "pass": "Password",
+    "full-name": "Full Name",
+    "pass-verify": "Password confirmation",
+    "name-req": "Name is required",
+    "email-req": "Email is required",
+    "pass-req": "Password is required",
+    "pass-verify-req": "Password confirmation is required",
+    "pass-not-match": "Passwords do not match.",
+    "forgot-pass": "Forgot Password?"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Welcome",
+    "data-from": "Data from",
+    "last-day": "last day",
+    "last-week": "last week",
+    "last-month": "last month",
+    "last-day-hours": "Last 24h",
+    "usage-label": "Usage of electromer",
+    "weekly-trend": "Weekly trend",
+    "trend-label": "Trend defines if usage is higher or lower over the last seven days.",
+    "members-online": "Members online",
+    "weekly-highlights": "Weekly Highlights",
+    "highlights-label-start": "Daily average usage was",
+    "highlights-label-end": "kW over the last seven days.",
+    "yearly": "yearly",
+    "monthly": "monthly",
+    "visits": "visits",
+    "unique": "Unique",
+    "page-views": "Pageviews",
+    "new-users": "New Users",
+    "rendering": "Rendering graph..."
+  },
+  "landing": {
+    "title": "Electromer",
+    "already-user": "Already a user?"
+  },
+  "requests": {
+    "title": "Requests",
+    "create": "Create a new request",
+    "brown": "Brown",
+    "blonde": "Blonde",
+    "black": "Black",
+    "red": "Red",
+    "body": "Body",
+    "submit": "Submit",
+    "history": "Requests history",
+    "progress": "In Progress",
+    "details": "Details"
+  },
+  "settings": {
+    "system-default": "System",
+    "title": "Settings",
+    "electromers": "Electromers",
+    "language": "Language",
+    "theme": "Dark/Light mode"
+  }
+
+}

@@ -1,0 +1,96 @@
+{
+  "common": {
+    "add": "common.add",
+    "cancel": "common.cancel",
+    "error": "common.error",
+    "no": "common.no",
+    "ok": "common.ok",
+    "proceed": "common.proceed",
+    "success": "common.success",
+    "yes": "common.yes",
+    "save": "common.save",
+    "admin": "common.admin",
+    "user": "common.user",
+    "name": "common.name",
+    "email": "common.email",
+    "users": "common.users",
+    "close": "common.close"
+  },
+  "electromers": {
+    "add-electromer": "electromers.add-electromer",
+    "edit-electromer": "electromers.edit-electromer",
+    "name": "electromers.name",
+    "db-table": "electromers.db-table",
+    "delta": "electromers.delta",
+    "type": "electromers.type"
+  },
+  "modal": {
+    "assign-electromers": "modal.assign-electromers",
+    "assign-users": "modal.users",
+    "message": "modal.message"
+  },
+  "user-form": {
+    "title": "user-form.title"
+  },
+  "auth": {
+    "login-title": "auth.login-title",
+    "register-title": "auth.register-title",
+    "email": "auth.email",
+    "pass": "auth.pass",
+    "full-name": "auth.full-name",
+    "pass-verify": "auth.pass-verify",
+    "name-req": "auth.name-req",
+    "email-req": "auth.email-req",
+    "pass-req": "auth.pass-req",
+    "pass-verify-req": "auth.pass-verify-req",
+    "pass-not-match": "auth.pass-not-match",
+    "forgot-pass": "auth.forgot-pass"
+  },
+  "dashboard": {
+    "title": "dashboard.title",
+    "welcome": "dashboard.welcome",
+    "data-from": "dashboard.data-from",
+    "last-day": "dashboard.last-day",
+    "last-week": "dashboard.last-week",
+    "last-month": "dashboard.last-month",
+    "last-day-hours": "dashboard.last-day-hours",
+    "usage-label": "dashboard.usage.label",
+    "weekly-trend": "dashboard.weekly-trend",
+    "trend-label": "dashboard.trend-label",
+    "members-online": "dashboard.members-online",
+    "weekly-highlights": "dashboard.weekly-highlights",
+    "highlights-label-start": "highlights-label-start",
+    "highlights-label-end": "highlights-label-end",
+    "yearly": "dashboard.yearly",
+    "monthly": "dashboard.monthly",
+    "visits": "dashboard.visits",
+    "unique": "dashboard.Unique",
+    "page-views": "dashboard.page-views",
+    "new-users": "dashboard.new-users",
+    "rendering": "dashboard.rendering"
+  },
+  "landing": {
+    "title": "landing.title",
+    "already-user": "landing.already.user"
+  },
+  "requests": {
+    "title": "requests.title",
+    "create": "requests.create",
+    "brown": "requests.brown",
+    "blonde": "requests.blonde",
+    "black": "requests.black",
+    "red": "requests.red",
+    "body": "requests.body",
+    "submit": "requests.submit",
+    "history": "requests.history",
+    "progress": "requests.progress",
+    "details": "requests.details"
+  },
+  "settings": {
+    "system-default": "settings.system-default",
+    "title": "settings.title",
+    "electromers": "settings.electromers",
+    "language": "settings.language",
+    "theme": "settings.theme"
+  }
+}

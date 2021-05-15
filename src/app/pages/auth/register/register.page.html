@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button color="light" (click)="dismissRegister()">Close</ion-button>
-    <ion-title>Register</ion-title>
+    <ion-button color="light" (click)="dismissRegister()">{{ 'common.close' | translate }}</ion-button>
+    <ion-title>{{ 'auth.register-title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -9,58 +9,55 @@
 
   <form #form="ngForm" (ngSubmit)="register(form)" method="post">
     <ion-item>
-      <ion-label position="floating">Full Name</ion-label>
+      <ion-label position="floating">{{ 'auth.full-name' | translate }}</ion-label>
       <ion-input #name="ngModel" id="name" required ngModel name="name"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Email</ion-label>
+      <ion-label position="floating">{{ 'auth.email' | translate }}</ion-label>
       <ion-input #email="ngModel" id="email" required type="email" [email]="true" ngModel name="email"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating">{{ 'auth.pass' | translate }}</ion-label>
       <ion-input #password="ngModel" id="password" required type="password" ngModel name="password"></ion-input>
     </ion-item>
 
 
     <ion-item>
-      <ion-label position="floating">Password confirmation</ion-label>
-      <ion-input #password_confirmation="ngModel" id="password_confirmation" required type="password" ngModel
-        name="password_confirmation"></ion-input>
+      <ion-label position="floating">{{ 'auth.pass-verify' | translate }}</ion-label>
+      <ion-input #password_confirmation="ngModel" id="password_confirmation" required type="password" ngModel name="password_confirmation"></ion-input>
     </ion-item>
 
     <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
       <p class="error" *ngIf="name.errors.required">
-        Name is required.
+        {{ 'auth.name-req' | translate }}
       </p>
     </div>
     <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
       <p class="error" *ngIf="email.errors.required">
-        Email is required.
+        {{ 'auth.email-req' | translate }}
       </p>
     </div>
     <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
       <p class="error" *ngIf="password.errors.required">
-        Password is required.
+        {{ 'auth.pass-req' | translate }}
       </p>
     </div>
-    <div *ngIf="password_confirmation.invalid && (password_confirmation.dirty || password_confirmation.touched)"
-      class="alert alert-danger">
+    <div *ngIf="password_confirmation.invalid && (password_confirmation.dirty || password_confirmation.touched)" class="alert alert-danger">
       <p class="error" *ngIf="password_confirmation.errors.required">
-        Password confirmation is required.
+        {{ 'auth.pass-verify-req' | translate }}
       </p>
     </div>
-    <div *ngIf="!matchPassword(form)"
-    class="alert alert-danger">
-    <p class="error">
-      Passwords do not match.
-    </p>
-  </div>
+    <div *ngIf="!matchPassword(form)" class="alert alert-danger">
+      <p class="error">
+        {{ 'auth.pass-not-match' | translate }}
+      </p>
+    </div>
     <ion-button type="submit" expand="full" color="danger">
       <ion-spinner *ngIf="apiResult.loading">
       </ion-spinner>
-      <ion-label *ngIf="!apiResult.loading">Register</ion-label>
+      <ion-label *ngIf="!apiResult.loading">{{ 'auth.register-title' | translate }}</ion-label>
     </ion-button>
   </form>
 

@@ -4,10 +4,10 @@
       <ion-row class="ion-text-center">
         <ion-col>
           <ion-label *ngIf="isAddMode">
-            Add new electromer
+            {{ 'electromers.add-electromer' | translate }}
           </ion-label>
           <ion-label *ngIf="!isAddMode">
-            Edit electromer
+            {{ 'electromers.edit-electromer' | translate }}
           </ion-label>
         </ion-col>
       </ion-row>
@@ -20,15 +20,15 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label position="floating">name</ion-label>
-            <ion-input formControlName="name"  id="name" required name="name"></ion-input>
+            <ion-label position="floating">{{ 'electromers.name' | translate }}</ion-label>
+            <ion-input formControlName="name" id="name" required name="name"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col>
           <ion-item>
-            <ion-label position="floating">db_table</ion-label>
-            <ion-input formControlName="db_table"  id="db_table" required name="db_table"></ion-input>
+            <ion-label position="floating">{{ 'electromers.db-table' | translate }}</ion-label>
+            <ion-input formControlName="db_table" id="db_table" required name="db_table"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -36,14 +36,14 @@
       <ion-row>
         <ion-col>
           <ion-item>
-            <ion-label position="floating">delta</ion-label>
+            <ion-label position="floating">{{ 'electromers.delta' | translate }}</ion-label>
             <ion-input formControlName="delta" id="delta" required name="delta"></ion-input>
           </ion-item>
         </ion-col>
 
         <ion-col>
           <ion-item>
-            <ion-label position="floating">type</ion-label>
+            <ion-label position="floating">{{ 'electromers.type' | translate }}</ion-label>
             <ion-input formControlName="type" id="type" required name="type"></ion-input>
           </ion-item>
         </ion-col>
@@ -61,13 +61,13 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button color="light" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
+        <ion-button color="light" style='float: left;' (click)='dismiss()'>{{ 'common.cancel' | translate }}</ion-button>
       </ion-col>
       <ion-col>
         <ion-button color="primary" style='float: right;' (click)='addElectromer()'>
           <ion-spinner *ngIf="apiResult.loading">
           </ion-spinner>
-          <ion-label *ngIf="!apiResult.loading">Save</ion-label>
+          <ion-label *ngIf="!apiResult.loading">{{ 'common.save' | translate }}</ion-label>
         </ion-button>
       </ion-col>
     </ion-row>

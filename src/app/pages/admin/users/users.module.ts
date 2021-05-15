@@ -6,6 +6,7 @@ import { UsersPageRoutingModule } from './users-routing.module';
 import { UsersPage } from './users.page';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { UserFormPage } from '../user-form/user-form.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { UserFormPage } from '../user-form/user-form.page';
     IonicModule,
     ReactiveFormsModule,
     UsersPageRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    TranslateModule.forChild()
     ],
   declarations: [UsersPage, UserFormPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

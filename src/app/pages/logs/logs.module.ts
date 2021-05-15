@@ -8,6 +8,7 @@ import { LogsPageRoutingModule } from './logs-routing.module';
 
 import { LogsPage } from './logs.page';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
     FormsModule,
     IonicModule,
     LogsPageRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    TranslateModule.forChild()
   ],
   declarations: [LogsPage]
 })

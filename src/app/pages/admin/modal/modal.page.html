@@ -3,8 +3,8 @@
     <ion-grid>
       <ion-row class="ion-text-center">
         <ion-col>
-          <ion-title *ngIf="mode == 0" >Assigning electromers to {{ user.name }}</ion-title>
-          <ion-title *ngIf="mode == 1">Assigning users to {{ user.name }}</ion-title>
+          <ion-title *ngIf="mode == 0">{{ 'modal.assign-eletromers' | translate }} {{ user.name }}</ion-title>
+          <ion-title *ngIf="mode == 1">{{ 'modal.assign-users' | translate }} {{ user.name }}</ion-title>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -12,47 +12,46 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
-    <!-- Theme classes dark, material, bootstrap -->
-    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'"
-      [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
-      <ngx-datatable-column *ngIf="mode == 0" name="Id" prop="id" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 0" name="Name" prop="name" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 0" name="db_table" prop="db_table" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 0" name="delta" prop="delta" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 0" name="type" prop="type" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-toggle (click)="assigningElectromerAlert(row)" disabled="false"></ion-toggle>
-        </ng-template>
-      </ngx-datatable-column>
+  <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
+  <!-- Theme classes dark, material, bootstrap -->
+  <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+    <ngx-datatable-column *ngIf="mode == 0" name="Id" prop="id" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 0" name="Name" prop="name" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 0" name="db_table" prop="db_table" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 0" name="delta" prop="delta" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 0" name="type" prop="type" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-toggle (click)="assigningElectromerAlert(row)" disabled="false"></ion-toggle>
+      </ng-template>
+    </ngx-datatable-column>
 
-      <ngx-datatable-column *ngIf="mode == 1" name="Name" prop="name" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 1" name="Email" prop="email" width="80">
-      </ngx-datatable-column>
-       <ngx-datatable-column *ngIf="mode == 1" name="Role" prop="is_admin" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-label *ngIf="value == 1">
-            Admin
-          </ion-label>
-          <ion-label *ngIf="value == 0">
-            User
-          </ion-label>
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <ion-toggle (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}"></ion-toggle>
-        </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
-     <ion-card-subtitle *ngIf="!apiResult.loading && mode === 1" class="disabledTogglerCaption">*Disabled toggler secures avoiding admin to be assigned to another admin.</ion-card-subtitle>
+    <ngx-datatable-column *ngIf="mode == 1" name="Name" prop="name" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 1" name="Email" prop="email" width="80">
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 1" name="Role" prop="is_admin" width="80">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-label *ngIf="value == 1">
+          {{ 'common.admin' | translate }}
+        </ion-label>
+        <ion-label *ngIf="value == 0">
+          {{ 'common.user' | translate }}
+        </ion-label>
+      </ng-template>
+    </ngx-datatable-column>
+    <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
+      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+        <ion-toggle (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}"></ion-toggle>
+      </ng-template>
+    </ngx-datatable-column>
+  </ngx-datatable>
+  <ion-card-subtitle *ngIf="!apiResult.loading && mode === 1" class="disabledTogglerCaption">{{ 'modal.message' | translate }}</ion-card-subtitle>
 </ion-content>
 
 <ion-footer>

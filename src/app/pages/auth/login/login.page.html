@@ -1,41 +1,41 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button color="light" (click)="dismissLogin()">Close</ion-button>
-    <ion-title>Login</ion-title>
+    <ion-button color="light" (click)="dismissLogin()">{{ 'common.close' | translate }}</ion-button>
+    <ion-title>{{ 'auth.login-title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
   <form #form="ngForm" (ngSubmit)="login(form)" method="post">
     <ion-item>
-      <ion-label position="floating">Email</ion-label>
+      <ion-label position="floating">{{ 'auth.email' | translate }}</ion-label>
       <ion-input (keyup.enter)="login(form)" #email="ngModel" id="email" required ngModel type="email" name="email"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Password</ion-label>
+      <ion-label position="floating">{{ 'auth.pass' | translate }}</ion-label>
       <ion-input (keyup.enter)="login(form)" #password="ngModel" id="password" required ngModel type="password" name="password">
       </ion-input>
 
     </ion-item>
     <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
       <p class="error" *ngIf="email.errors.required">
-        Email is required.
+        {{ 'auth.email-req' | translate }}
       </p>
     </div>
     <div *ngIf="password.invalid && (password.dirty || password.touched)" class="alert alert-danger">
       <p class="error" *ngIf="password.errors.required">
-        Password is required.
+        {{ 'auth.pass-req' | translate }}
       </p>
     </div>
 
 
-    <p text-right>Forgot Password?</p>
+    <p text-right>{{ 'auth.forgot-pass' | translate }}</p>
 
     <ion-button type="submit" expand="full" color="primary">
-       <ion-spinner *ngIf="apiResult.loading">
-       </ion-spinner>
-       <ion-label *ngIf="!apiResult.loading">Login</ion-label>
-        </ion-button>
+      <ion-spinner *ngIf="apiResult.loading">
+      </ion-spinner>
+      <ion-label *ngIf="!apiResult.loading">{{ 'auth.login-title' | translate }}</ion-label>
+    </ion-button>
   </form>
   <!-- <p text-center>Don't have a account?</p> -->
   <!-- <ion-button expand="full" color="danger" (click)="registerModal()">Register</ion-button> -->

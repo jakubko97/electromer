@@ -2,8 +2,8 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
-</ion-buttons>
-    <ion-title>Logs</ion-title>
+    </ion-buttons>
+    <ion-title>{{ 'common.logs' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -22,22 +22,21 @@
   </ion-grid>
 
   <div class="ion-padding">
-  <!-- Theme classes dark, material, bootstrap -->
-  <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="logs" [rowHeight]="50" [columnMode]="'force'"
-    [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+    <!-- Theme classes dark, material, bootstrap -->
+    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="logs" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
-    <ngx-datatable-column name="Id" prop="id" width="30">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Type" prop="type" width="60">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="User id" prop="user_id" width="30">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="Description" prop="description" width="140">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="created_at" prop="created_at" width="80">
-    </ngx-datatable-column>
-    <ngx-datatable-column name="updated_at" prop="updated_at" width="80">
-    </ngx-datatable-column>
-  </ngx-datatable>
+      <ngx-datatable-column name="Id" prop="id" width="30">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Type" prop="type" width="60">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="User id" prop="user_id" width="30">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Description" prop="description" width="140">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="created_at" prop="created_at" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="updated_at" prop="updated_at" width="80">
+      </ngx-datatable-column>
+    </ngx-datatable>
   </div>
 </ion-content>

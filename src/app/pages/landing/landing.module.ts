@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { LandingPage } from './landing.page';
 import { LoginPage } from '../auth/login/login.page';
 import { RegisterPage } from '../auth/register/register.page';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpLoaderFactory } from 'src/app/app.module';
+import { HttpClient } from '@angular/common/http';
 
 const routes: Routes = [
   {
@@ -21,6 +24,13 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
+    TranslateModule.forChild({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     RouterModule.forChild(routes)
   ],
   declarations: [LandingPage, LoginPage, RegisterPage],

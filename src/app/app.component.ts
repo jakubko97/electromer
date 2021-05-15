@@ -15,6 +15,7 @@ import {
   NavigationError
 } from '@angular/router'
 import { Error } from '@material-ui/icons';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -40,10 +41,13 @@ export class AppComponent implements OnInit {
     private alertService: AlertService,
     private router: Router,
     private authService: AuthService,
+    private translate: TranslateService
 
   ) {
     this.initializeApp()
+    translate.setDefaultLang('en');
 
+    translate.onLangChange.subscribe(change => console.log('lang changed to', change.lang));
     router.events.subscribe((event: RouterEvent) => {
       this.navigationInterceptor(event);
     })
@@ -193,8 +197,15 @@ export class AppComponent implements OnInit {
       ];
     }
   }
-  ngOnInit() {
+  async ngOnInit() {
+    let language = 'en';
+    if (!language) {
+      language = navigator.language.split('-')[0];
+    }
+
+    this.translate.use(language);
   }
+
 
   ionViewWillEnter() {
   }

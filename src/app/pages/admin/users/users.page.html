@@ -2,8 +2,8 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
-</ion-buttons>
-    <ion-title>Users</ion-title>
+    </ion-buttons>
+    <ion-title>{{ 'common.users' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
@@ -17,33 +17,30 @@
   </ion-grid>
 
   <div class="ion-padding">
-        <!-- Theme classes dark, material, bootstrap -->
-        <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'"
-          [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50"
-          style="elevation: 0;"
-          >
-          <ngx-datatable-column name="Name" prop="name" width="80">
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Email" prop="email" width="80">
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Role" prop="is_admin" width="80">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <ion-label *ngIf="value == 1">
-                Admin
-              </ion-label>
-              <ion-label *ngIf="value == 0">
-                User
-              </ion-label>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="Akcie" [frozenRight] = "true" slot="end">
-            <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-              <ion-fab vertical="center" slot="fixed">
-              <ion-fab-button (click)="presentActionSheet(row)" size="small">
-                <ion-icon name="open-outline"></ion-icon>
-              </ion-fab-button>
-            </ion-fab>
-              <!-- <ion-fab-list side="end">
+    <!-- Theme classes dark, material, bootstrap -->
+    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50" style="elevation: 0;">
+      <ngx-datatable-column name="Name" prop="name" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Email" prop="email" width="80">
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Role" prop="is_admin" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-label *ngIf="value == 1">
+            {{ 'common.admin' | translate }}
+          </ion-label>
+          <ion-label *ngIf="value == 0">
+            {{ 'common.user' | translate }}
+          </ion-label>
+        </ng-template>
+      </ngx-datatable-column>
+      <ngx-datatable-column name="Akcie" [frozenRight]="true" slot="end">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <ion-fab vertical="center" slot="fixed">
+            <ion-fab-button (click)="presentActionSheet(row)" size="small">
+              <ion-icon name="open-outline"></ion-icon>
+            </ion-fab-button>
+          </ion-fab>
+          <!-- <ion-fab-list side="end">
                 <ion-fab-button *ngIf="row.is_admin == 1" size="small" color="light" (click)="viewElectromers(row)">
                   <ion-icon name="color-wand-outline"></ion-icon>
                 </ion-fab-button>
@@ -57,8 +54,8 @@
                   <ion-icon name="person-add-outline"></ion-icon>
                 </ion-fab-button>
               </ion-fab-list> -->
-            </ng-template>
-          </ngx-datatable-column>
-        </ngx-datatable>
-        </div>
+        </ng-template>
+      </ngx-datatable-column>
+    </ngx-datatable>
+  </div>
 </ion-content>

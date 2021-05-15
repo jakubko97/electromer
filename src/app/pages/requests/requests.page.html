@@ -2,8 +2,8 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
-</ion-buttons>
-    <ion-title>Requests</ion-title>
+    </ion-buttons>
+    <ion-title>{{ 'requests.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -12,165 +12,163 @@
     <ion-card>
       <ion-card-header>
         <ion-card-title>
-          Create a new request
+          {{ 'requests.create' | translate }}
         </ion-card-title>
-        </ion-card-header>
+      </ion-card-header>
       <ion-card-content>
-  <form [formGroup]="requestForm">
-    <ion-grid>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label position="floating">Subject</ion-label>
-            <ion-input formControlName="subject"  id="name" required name="name"></ion-input>
-          </ion-item>
-        </ion-col>
-        <ion-col>
-          <ion-item>
-            <ion-label>Type</ion-label>
-            <ion-select formControlName="type">
-              <ion-select-option value="brown">Brown</ion-select-option>
-              <ion-select-option value="blonde">Blonde</ion-select-option>
-              <ion-select-option value="black">Black</ion-select-option>
-              <ion-select-option value="red">Red</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-item>
-            <ion-label position="floating">Body</ion-label>
-            <ion-textarea autoGrow="true" placeholder="Enter more information here..." formControlName="body" id="delta" required name="delta"></ion-textarea>
-          </ion-item>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col>
-          <ion-button expand="full">
-            <ion-icon lazy="true" slot="start" name="file"></ion-icon>
-            <!-- <ion-label slot="end">Upload File</ion-label> -->
-            <input type="file" (change)="handleFileInput($event.target.files)" id="file-input"
-              accept="pdf">
-          </ion-button>
-        </ion-col>
-      </ion-row>
-      <ion-row *ngIf="apiResult.error">
-        <ion-col>
-          <ion-label position="floating" color="danger">{{ apiResult.error }}</ion-label>
-        </ion-col>
-      </ion-row>
+        <form [formGroup]="requestForm">
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">{{ 'requests.Subject' | translate }}</ion-label>
+                  <ion-input formControlName="subject" id="name" required name="name"></ion-input>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label>{{ 'common.type' | translate }}</ion-label>
+                  <ion-select formControlName="type">
+                    <ion-select-option value="brown">{{ 'requests.brown' | translate }}</ion-select-option>
+                    <ion-select-option value="blonde">{{ 'requests.blonde' | translate }}</ion-select-option>
+                    <ion-select-option value="black">{{ 'requests.black' | translate }}</ion-select-option>
+                    <ion-select-option value="red">{{ 'requests.red' | translate }}</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label position="floating">{{ 'requests.body' | translate }}</ion-label>
+                  <ion-textarea autoGrow="true" placeholder="Enter more information here..." formControlName="body" id="delta" required name="delta"></ion-textarea>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="full">
+                  <ion-icon lazy="true" slot="start" name="file"></ion-icon>
+                  <!-- <ion-label slot="end">Upload File</ion-label> -->
+                  <input type="file" (change)="handleFileInput($event.target.files)" id="file-input" accept="pdf">
+                </ion-button>
+              </ion-col>
+            </ion-row>
+            <ion-row *ngIf="apiResult.error">
+              <ion-col>
+                <ion-label position="floating" color="danger">{{ apiResult.error }}</ion-label>
+              </ion-col>
+            </ion-row>
 
-      <ion-row>
-        <ion-col>
-          <ion-button expand="block" color="primary" style='float: left;' (click)='submit()'>
-            <ion-label *ngIf="!apiResult.loading">Submit</ion-label>
-            <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
-          </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </form>
-</ion-card-content>
-</ion-card>
-</div>
+            <ion-row>
+              <ion-col>
+                <ion-button expand="block" color="primary" style='float: left;' (click)='submit()'>
+                  <ion-label *ngIf="!apiResult.loading">{{ 'requests.submit' | translate }}</ion-label>
+                  <ion-spinner *ngIf="apiResult.loading"></ion-spinner>
+                </ion-button>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
 
-<ion-card>
-  <ion-card-header>
-    <ion-card-title>
-      Requests history
-    </ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <ion-grid>
-      <ion-row>
-        <ion-col class="ion-justify-content-start" size="12">
-          <ion-searchbar value="{{searchValue}}" (keyup)="updateFilter($event)"></ion-searchbar>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="ion-justify-content-start" size-md="1">
-          <ion-chip (click)="searchByKey('In Progress')" color="primary">
-            <ion-label>In Progress</ion-label>
-          </ion-chip>
-        </ion-col>
-        <ion-col class="ion-justify-content-start" size-md="1">
-          <ion-chip (click)="searchByKey('Accepted')" color="primary">
-            <ion-label>Accepted</ion-label>
-          </ion-chip>
-        </ion-col>
-        <ion-col class="ion-justify-content-start" size-md="1">
-          <ion-chip (click)="searchByKey('Rejected')" color="primary">
-            <ion-label>Rejected</ion-label>
-          </ion-chip>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-      <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'"
-      [sortType]="'multi'" [loadingIndicator]="requestsLoading" [headerHeight]="50" [footerHeight]="50">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>
+        {{ 'requests.history' | translate }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col class="ion-justify-content-start" size="12">
+            <ion-searchbar value="{{searchValue}}" (keyup)="updateFilter($event)"></ion-searchbar>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col class="ion-justify-content-start" size-md="1">
+            <ion-chip (click)="searchByKey('In Progress')" color="primary">
+              <ion-label>{{ 'requests.progress' | translate }}</ion-label>
+            </ion-chip>
+          </ion-col>
+          <ion-col class="ion-justify-content-start" size-md="1">
+            <ion-chip (click)="searchByKey('Accepted')" color="primary">
+              <ion-label>{{ 'common.accepted' | translate }}</ion-label>
+            </ion-chip>
+          </ion-col>
+          <ion-col class="ion-justify-content-start" size-md="1">
+            <ion-chip (click)="searchByKey('Rejected')" color="primary">
+              <ion-label>{{ 'commons.rejected' | translate }}</ion-label>
+            </ion-chip>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="requests" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="requestsLoading" [headerHeight]="50" [footerHeight]="50">
 
-      <ngx-datatable-column name="User" prop="user_id" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Subject" prop="subject" width="80">
-        <!-- <ng-template let-row="row" let-value="value" ngx-datatable-header-template>
+        <ngx-datatable-column name="User" prop="user_id" width="80">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Subject" prop="subject" width="80">
+          <!-- <ng-template let-row="row" let-value="value" ngx-datatable-header-template>
           {{value}}
         <input type="text" class="managetextfilter" placeholder="Type to filter"(keyup)="updateFilter($event, 'name')"/>
        </ng-template>
         <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="rows">
          <span title="Double click to edit"  (dblclick)="editing[rowIndex + '-task'] = true" *ngIf="!editing[rowIndex + '-task']">{{value}}</span>
         </ng-template> -->
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Type" prop="type" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Body" prop="body" width="80">
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Created" prop="created_at" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <div>
-            <ion-label>
-              {{ formateDate(value) | date: 'dd/MM/yyyy HH:mm:ss' }}
-            </ion-label>
-          </div>
-             </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Last modified" prop="updated_at" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <div>
-            <ion-label>
-              {{ formateDate(value) | date: 'dd/MM/yyyy HH:mm:ss' }}
-            </ion-label>
-          </div>
-             </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="Status" prop="status" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-          <div>
-            <ion-label color="{{row.color}}">
-              {{ row.name }}
-            </ion-label>
-          </div>
-             </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column [frozenRight] = "true" slot="end" name="Actions" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-fab vertical="center" slot="fixed" *ngIf="user.is_admin == 1">
-          <ion-button fill="outline" color="primary" (click)="presentModalRequest(row)">
-            Details
-          </ion-button>
-        </ion-fab>
-        </ng-template>
-      </ngx-datatable-column>
-      <ngx-datatable-column name="File" prop="status" width="80">
-        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <div *ngIf="row.file_id != null">
-            <ion-icon (click)="doDownload(row.file_id)" color="primary" size="large" name="cloud-download-outline"></ion-icon>
-            <!-- <ion-spinner *ngIf="isDownloading"></ion-spinner> -->
-          </div>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Type" prop="type" width="80">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Body" prop="body" width="80">
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Created" prop="created_at" width="80">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              <ion-label>
+                {{ formateDate(value) | date: 'dd/MM/yyyy HH:mm:ss' }}
+              </ion-label>
+            </div>
           </ng-template>
-      </ngx-datatable-column>
-    </ngx-datatable>
-  </ion-card-content>
-</ion-card>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Last modified" prop="updated_at" width="80">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              <ion-label>
+                {{ formateDate(value) | date: 'dd/MM/yyyy HH:mm:ss' }}
+              </ion-label>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="Status" prop="status" width="80">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div>
+              <ion-label color="{{row.color}}">
+                {{ row.name }}
+              </ion-label>
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column [frozenRight]="true" slot="end" name="Actions" width="80">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <ion-fab vertical="center" slot="fixed" *ngIf="user.is_admin == 1">
+              <ion-button fill="outline" color="primary" (click)="presentModalRequest(row)">
+                {{ 'requests.details' | translate }}
+              </ion-button>
+            </ion-fab>
+          </ng-template>
+        </ngx-datatable-column>
+        <ngx-datatable-column name="File" prop="status" width="80">
+          <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+            <div *ngIf="row.file_id != null">
+              <ion-icon (click)="doDownload(row.file_id)" color="primary" size="large" name="cloud-download-outline"></ion-icon>
+              <!-- <ion-spinner *ngIf="isDownloading"></ion-spinner> -->
+            </div>
+          </ng-template>
+        </ngx-datatable-column>
+      </ngx-datatable>
+    </ion-card-content>
+  </ion-card>
 
 
 </ion-content>

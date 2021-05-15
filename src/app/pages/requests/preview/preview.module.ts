@@ -5,13 +5,15 @@ import { IonicModule } from '@ionic/angular';
 import { PreviewPageRoutingModule } from './preview-routing.module';
 import { PreviewPage } from './preview.page';
 import { BrowserModule } from '@angular/platform-browser';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
     FormsModule,
     IonicModule,
-    PreviewPageRoutingModule
+    PreviewPageRoutingModule,
+    TranslateModule.forChild()
   ],
   declarations: [PreviewPage]
 })
