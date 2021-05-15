@@ -265,4 +265,25 @@ export class AuthService {
     });
     return this.http.post(this.env.API_URL + 'api/electromer/column/data', payload, { headers: headers })
   }
+  getDailyTrend(id) {
+    const payload = {
+      electromer_id: id
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/daily/trend', payload, { headers: headers })
+  }
+
+  downloadCSV(id, from, to) {
+    const payload = {
+      electromer_id: id,
+      from_date: from,
+      to_date: to
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/download/csv', payload, { headers: headers })
+  }
 }

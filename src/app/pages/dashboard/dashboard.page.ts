@@ -30,6 +30,8 @@ export class DashboardPage implements OnInit {
 
   @ViewChild('mainChart') mainChart: BaseChartDirective;
 
+  reportDateFrom = new Date().toISOString();
+  reportDateTo= new Date().toISOString();
   blur: any;
   user: User;
   val: any;
@@ -57,7 +59,8 @@ export class DashboardPage implements OnInit {
   mainBarChartFromDate: any;
   mainBarChartToDate: any;
   mainChartDataType = 'monthly';
-
+  dailyTrend: any;
+  dailyDataLoading = false;
   customPopoverOptions: any = {
     header: 'Electromers',
     subHeader: 'Select data from electromer',
@@ -70,7 +73,7 @@ export class DashboardPage implements OnInit {
   // lineChart1
   public lineChart1Data: Array<any> = [
     {
-      data: [65, 59, 84, 84, 51, 55, 40],
+      data: [10, 20, 30, 40, 50, 60, 70],
       label: 'Series A'
     }
   ];
@@ -125,17 +128,16 @@ export class DashboardPage implements OnInit {
   public lineChart1Legend = false;
   public lineChart1Type = 'line';
 
-  // lineChart2
-  public lineChart2Data: Array<any> = [
-    {
-      data: [1, 18, 9, 17, 34, 22, 11],
-      label: 'Series A'
-    }
+  // trendChart
+  public trendChartData: Array<any> = [
+    // {
+    //   data: [54, 35, 46, 28, 15, 22, 10]
+    // }
   ];
-  public lineChart2Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  public lineChart2Options: any = {
+  public trendChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  public trendChartOptions: any = {
     tooltips: {
-      enabled: true,
+      enabled: false,
       custom: CustomTooltips
     },
     maintainAspectRatio: false,
@@ -156,7 +158,7 @@ export class DashboardPage implements OnInit {
         ticks: {
           display: false,
           min: 1 - 5,
-          max: 34 + 5,
+          max: 70,
         }
       }],
     },
@@ -175,14 +177,10 @@ export class DashboardPage implements OnInit {
       display: false
     }
   };
-  public lineChart2Colours: Array<any> = [
-    { // grey
-      backgroundColor: getStyle('--ion-color-primary'),
-      borderColor: 'rgba(255,255,255,.55)'
-    }
+  public trendChartColours: Array<any> = [
   ];
-  public lineChart2Legend = false;
-  public lineChart2Type = 'line';
+  public trendChartLegend = false;
+  public trendChartType = 'line';
 
 
   // lineChart3
@@ -191,8 +189,7 @@ export class DashboardPage implements OnInit {
       data: [78, 81, 80, 45, 34, 12, 40],
       label: 'Series A'
     }
-  ];
-  public lineChart3Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+  ];  public lineChart3Labels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   public lineChart3Options: any = {
     tooltips: {
       enabled: true,
@@ -287,19 +284,19 @@ export class DashboardPage implements OnInit {
   public mainChartData: Array<any> = [
     {
       data: this.mainChartData1,
-      label: 'Current',
+      label: 'kW/h',
       type: 'bar'
-    },
-    {
-      data: this.mainChartData2,
-      type: 'line',
-      label: 'bar'
-    },
-    {
-      data: this.mainChartData3,
-      type: 'line',
-      label: 'bar'
     }
+    //, {
+    //   data: this.mainChartData2,
+    //   type: 'line',
+    //   label: 'bar'
+    // },
+    // {
+    //   data: this.mainChartData3,
+    //   type: 'line',
+    //   label: 'bar'
+    // }
   ];
   /* tslint:disable:max-line-length */
   // public mainChartLabels: Array<any> = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Thursday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -480,6 +477,52 @@ export class DashboardPage implements OnInit {
   }
 
 
+  setTrendDataChart(){ //simulate
+    if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50){
+      this.trendChartData.push(
+        {
+          data: [54, 35, 46, 28, 15, 22, 10]
+        }
+        );
+      this.trendChartColours.push(
+        {
+          backgroundColor: 'transparent',
+          borderColor: getStyle('--ion-color-success'),
+          borderWidth: 1,
+        }
+      );
+    }
+    else if(this.dailyTrend.trend.toFixed(2) >= 100) {
+      this.trendChartData.push(
+        {
+          data: [10, 22, 15, 28, 35, 42, 62]
+        }
+        );
+      this.trendChartColours.push(
+        {
+          backgroundColor: 'transparent',
+          borderColor: getStyle('--ion-color-danger'),
+          borderWidth: 1,
+        }
+      );
+    }
+    else if (this.dailyTrend.trend.toFixed(2) < 50) {
+      this.trendChartData.push(
+        {
+          data: [69, 52, 34, 40, 20, 13, 10]
+        }
+        );
+      this.trendChartColours.push(
+        {
+          backgroundColor: 'transparent',
+          borderColor: getStyle('--ion-color-success'),
+          borderWidth: 2,
+        }
+      );
+    }
+
+  }
+
   getMainBarChartData(){
     this.authService.getElectromerColumnData(this.electromer.id, this.mainBarChartFromDate, this.mainBarChartToDate, this.mainChartDataType).subscribe(
       data => {
@@ -582,6 +625,20 @@ export class DashboardPage implements OnInit {
     return this.electromers.length !== 0;
   }
 
+  getDailyTrendData(id){
+    this.dailyDataLoading = true;
+    this.authService.getDailyTrend(id).subscribe(
+      data =>{
+        this.dailyTrend = data;
+        this.dailyDataLoading = false;
+        this.setTrendDataChart();
+      },
+      error => {
+        this.dailyDataLoading = false;
+      }
+    )
+  }
+
   async getElectromers() {
     //Get today's date using the JavaScript Date object.
 
@@ -597,7 +654,7 @@ export class DashboardPage implements OnInit {
           this.electromers = this.cleanElectromersData();
           this.blur = this.electromers.length === 0 ? 'background-blur' : '';
           if (this.electromers.length === 0){
-            this.noElectromersAvailableAlert();
+            this.noElectromersAvailableThrowAlert();
           }else{
             let el_id = null;
             if (this.electromer == null && this.electromers.length !== 0) { //init data default na posledne 7 dni
@@ -615,6 +672,7 @@ export class DashboardPage implements OnInit {
 
             if(el_id != null){
               this.getDailyAverageLastWeek(el_id);
+              this.getDailyTrendData(el_id);
               this.graphLoading = true;
               this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
                 async data => {
@@ -696,9 +754,9 @@ export class DashboardPage implements OnInit {
 
   }
 
-    for(let i = 0; i < length; i++){
-      this.mainChartData2.push(sumDelta / length);
-    }
+    // for(let i = 0; i < length; i++){
+    //   this.mainChartData2.push(sumDelta / length);
+    // }
     this.chart.render();
     this.graphLoading = false;
 }
@@ -891,7 +949,15 @@ monthsRangeFunction(start, end) {
   return months;
 }
 
-async noElectromersAvailableAlert() {
+downloadReportData(){
+  this.authService.downloadCSV(this.electromers[0].id, this.reportDateFrom, this.reportDateTo).subscribe(
+    data =>{
+      console.log(data);
+    }
+  )
+}
+
+async noElectromersAvailableThrowAlert() {
   const alert = await this.alertController.create({
     cssClass: 'my-custom-class',
     header: 'Message',
