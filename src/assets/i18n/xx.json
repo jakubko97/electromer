@@ -55,7 +55,7 @@
     "last-month": "dashboard.last-month",
     "last-day-hours": "dashboard.last-day-hours",
     "usage-label": "dashboard.usage.label",
-    "weekly-trend": "dashboard.weekly-trend",
+    "daily-trend": "dashboard.daily-trend",
     "trend-label": "dashboard.trend-label",
     "members-online": "dashboard.members-online",
     "weekly-highlights": "dashboard.weekly-highlights",
