@@ -14,3 +14,14 @@ ion-content {
 ion-card, ion-searchbar {
 	--ion-background-color: #ffffff;
 }
+
+@media (min-width: 768px) {
+    .ion-hide-sm-up {
+      display: none !important;
+    }
+  }
+  @media (max-width: 768px) {
+    .ion-hide-sm-down {
+      display: none !important;
+    }
+  }

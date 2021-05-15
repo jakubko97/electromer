@@ -9,10 +9,10 @@
 <ion-content padding>
     <ion-grid>
       <ion-row>
-        <ion-col class="ion-justify-content-start" size="11">
+        <ion-col class="ion-justify-content-start" size-md="11" size="10">
           <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
         </ion-col>
-        <ion-col class="ion-justify-content-end" size="1">
+        <ion-col class="ion-justify-content-end" size-md="1">
           <ion-fab>
             <ion-fab-button matTooltip="dgsdgsdg" disabled="{{user.is_superadmin !== 1}}" size="small" (click)="showModal()">
               <ion-icon name="add"></ion-icon>
