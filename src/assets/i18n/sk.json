@@ -105,7 +105,8 @@
     "title": "Nastavenia",
     "electromers": "Elektromery",
     "language": "Jazyk",
-    "theme": "Tmavý/svetlý režim"
+    "theme": "Tmavý/svetlý režim",
+    "priceOfElectricity": "Cena elektriny na kW/h v EUR"
   }
 
 }

@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
 import { TranslateService } from '@ngx-translate/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
+import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { Utils } from 'src/app/services/plugins/utils';
 
 @Component({
   selector: 'app-settings',
@@ -12,18 +14,23 @@ import { NativeStorage } from '@ionic-native/native-storage/ngx';
 })
 export class SettingsPage implements OnInit {
 
+  userForm: FormGroup;
+
   constructor(
     public authService: AuthService,
     private translate: TranslateService,
-    private storage: NativeStorage
+    private storage: NativeStorage,
+    public formBuilder: FormBuilder,
+    public utils: Utils
   ) { }
 
-  user: User
-  admins: any
-  electromers: any
-  isUserAdmin: Boolean
-  users: any
-  language: string
+
+  user: any;
+  admins: any;
+  electromers: any;
+  isUserAdmin: boolean;
+  users: any;
+  language: string;
 
   apiResult = {
     loading: false,
@@ -41,18 +48,29 @@ export class SettingsPage implements OnInit {
       language => {
         if (!language) {
           language = navigator.language.split('-')[0];
-        }    
+        }
         this.language = language;
         console.log('OnInit', this.language);
         this.translate.getLangs()
       }
-    );   
-    
-    this.user = this.authService.user
+    );
+
+    this.user = this.authService.user;
     this.isUserAdmin = this.user.is_admin == 1 ? true :  false
     this.getElectromers()
     this.getUsers()
     this.getAdmins()
+
+    if (this.user.electricity_price != null){
+      this.userForm = this.formBuilder.group({
+        price: [this.user.electricity_price, Validators.required],
+      });
+    }else{
+      this.userForm = this.formBuilder.group({
+        price: [Validators.required],
+      });
+    }
+
   }
   toggleMenu(){
     const splitPane = document.querySelector('ion-split-pane')
@@ -95,11 +113,29 @@ export class SettingsPage implements OnInit {
       document.body.setAttribute('color-theme', 'light');
     }
   }
+
+  save(){
+    this.apiResult.loading = true;
+    if (this.userForm.valid){
+      this.user.electricity_price = this.userForm.value.price;
+      this.authService.editUser(this.user).subscribe(
+        data => {
+          this.apiResult.loading = false;
+        },
+        error => {
+          this.apiResult.loading = false;
+          this.apiResult.error = error;
+        }
+      );
+    }else{
+      console.log('invalid settings form');
+    }
+  }
   cleanElectromersData(){
     var clean_array = []
     for (let data of Object.entries(this.electromers)) { //data -> mapa 0 key, 1 value
       if(data[1] != null){
-        clean_array.push(data[1])
+        clean_array.push(data[1]);
       }
     }
     return clean_array

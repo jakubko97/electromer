@@ -106,7 +106,8 @@
     "title": "Settings",
     "electromers": "Electromers",
     "language": "Language",
-    "theme": "Dark/Light mode"
+    "theme": "Dark/Light mode",
+    "priceOfElectricity": "Price of electricity per kW/h in EUR"
   }
 
 }
