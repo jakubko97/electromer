@@ -14,7 +14,18 @@
     "name": "common.name",
     "email": "common.email",
     "users": "common.users",
-    "close": "common.close"
+    "admins": "common.admins",
+    "electromers": "common.electromers",
+    "close": "common.close",
+    "logs": "common.logs",
+    "type": "common.type",
+    "accepted": "common.accepted",
+    "accept": "common.accept",
+    "rejected": "common.rejected",
+    "reject": "common.reject",
+    "attachment": "common.attachment",
+    "request-preview": "common.request-preview",
+    "subjet": "common.subject"
   },
   "electromers": {
     "add-electromer": "electromers.add-electromer",
