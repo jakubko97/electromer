@@ -23,6 +23,7 @@ export class SettingsPage implements OnInit {
   electromers: any
   isUserAdmin: Boolean
   users: any
+  language: string
 
   apiResult = {
     loading: false,
@@ -58,6 +59,7 @@ export class SettingsPage implements OnInit {
       console.log(navigator.language);
       language = navigator.language.split('-')[0];
       console.log(language);
+      this.language = language;
     }
     this.storage.setItem('lang', language);
 
