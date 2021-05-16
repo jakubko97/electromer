@@ -13,8 +13,7 @@ import { AlertService } from '../../../services/alert/alert.service';
 })
 export class ModalPage implements OnInit {
 
-  data: any;
-  // electromers: any;
+  data: any; //electromers or users
   temp: any;
   user: User;
   mode: any;
@@ -22,7 +21,9 @@ export class ModalPage implements OnInit {
     loading: false,
     error: '',
     info: ''
-  }
+  };
+
+  userElectromers: any;
   togglerState = [];
   value = [];
   theme: any;
@@ -42,19 +43,38 @@ export class ModalPage implements OnInit {
     this.user = this.navParams.get('user');
     this.mode = this.navParams.get('mode');
 
-    if(this.mode === 0){
+    if (this.mode === 0){
       this.getElectromers();
+      this.authService.getUserElectromersById(this.user.id).subscribe(
+        (data) => {
+          this.userElectromers = data;
+          this.setInitUserElectromerState();
+        },
+        error =>{
+        }
+      )
     }
-    if(this.mode === 1){
+    if (this.mode === 1){
       this.getUsers();
     }
   }
+
   dismiss() {
     this.modalCtrl.dismiss();
   }
 
   save() {
     this.modalCtrl.dismiss();
+  }
+
+  setInitUserElectromerState(){
+    for (let d = 0; d < this.data.length; d++ ){
+      for (const e of this.userElectromers){
+        if (this.data[d].id === e.electromer_id){
+          this.togglerState[d] = 'ACTIVATED';
+        }
+      }
+    }
   }
 
   assignUserToAdmin(user) {
