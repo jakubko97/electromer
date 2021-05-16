@@ -36,6 +36,18 @@ export class SettingsPage implements OnInit {
   adminsLoading = false;
 
   ngOnInit() {
+    this.storage.getItem('lang')
+    .then(
+      language => {
+        if (!language) {
+          language = navigator.language.split('-')[0];
+        }    
+        this.language = language;
+        console.log('OnInit', this.language);
+        this.translate.getLangs()
+      }
+    );   
+    
     this.user = this.authService.user
     this.isUserAdmin = this.user.is_admin == 1 ? true :  false
     this.getElectromers()
@@ -59,7 +71,6 @@ export class SettingsPage implements OnInit {
       console.log(navigator.language);
       language = navigator.language.split('-')[0];
       console.log(language);
-      this.language = language;
     }
     this.storage.setItem('lang', language);
 
