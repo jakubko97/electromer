@@ -278,12 +278,12 @@ export class AuthService {
   downloadCSV(id, from, to) {
     const payload = {
       electromer_id: id,
-      from_date: from,
-      to_date: to
+      date_from: from,
+      date_to: to
     };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/download/csv', payload, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/download/csv', payload, { headers: headers, responseType: 'blob' })
   }
 }

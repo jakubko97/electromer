@@ -122,7 +122,10 @@
             To
             <ion-datetime disabled={{!atLeastOneElectromer()}} pickerFormat="D/M/YYYY" [(ngModel)]="reportDateTo"></ion-datetime>
           </ion-list-header>
-          <ion-button style="margin-inline: 5px;" (click)="downloadReportData()">Download</ion-button>
+          <ion-button class="downloadCSV" (click)="downloadReportData()">
+            <ion-label *ngIf="!exportDownloadLoading">Download</ion-label>
+            <ion-spinner *ngIf="exportDownloadLoading"></ion-spinner>
+          </ion-button>
         </ion-card>
       </ion-col>
     </ion-row>

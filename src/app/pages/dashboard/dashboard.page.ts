@@ -53,6 +53,7 @@ export class DashboardPage implements OnInit {
     error: '',
     info: ''
   };
+  exportDownloadLoading = false;
 
   dailyAverageUsage: any;
   graphLoading = false;
@@ -952,11 +953,24 @@ monthsRangeFunction(start, end) {
 }
 
 downloadReportData(){
+  this.exportDownloadLoading = true;
   this.authService.downloadCSV(this.electromers[0].id, this.reportDateFrom, this.reportDateTo).subscribe(
-    data =>{
-      console.log(data);
+    (data : any) =>{
+      const blob = data.slice(0, data.size, 'text/csv');
+      const link = document.createElement('a');
+      // create a blobURI pointing to our Blob
+      link.href = URL.createObjectURL(blob);
+      link.download = this.electromer.name + '_export_' + new Date().getTime() + '.csv';
+      // some browser needs the anchor to be in the doc
+      document.body.append(link);
+      link.click();
+      link.remove();
+      this.exportDownloadLoading = false;
+    },
+    error =>{
+      this.exportDownloadLoading = false;
     }
-  )
+  );
 }
 
 async noElectromersAvailableThrowAlert() {
