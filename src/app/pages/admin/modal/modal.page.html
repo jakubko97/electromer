@@ -26,8 +26,10 @@
     <ngx-datatable-column *ngIf="mode == 0" name="type" prop="type" width="80">
     </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-toggle (click)="assigningElectromerAlert(row)" disabled="false"></ion-toggle>
+      <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+        <ion-toggle *ngIf="togglerState[rowIndex] === 'ACTIVATED'" (click)="assigningElectromerAlert(row, rowIndex)" (ionChange)="myChange(rowIndex)" disabled="false" checked></ion-toggle>
+        <ion-toggle *ngIf="togglerState[rowIndex] === 'DEACTIVATED'" (click)="assigningElectromerAlert(row, rowIndex)" [ngModel]="value[rowIndex]" (ionChange)="myChange(rowIndex)" checked="false"></ion-toggle>
+        <ion-spinner *ngIf="togglerState[rowIndex] === 'PENDING'" color="primary"></ion-spinner>
       </ng-template>
     </ngx-datatable-column>
 

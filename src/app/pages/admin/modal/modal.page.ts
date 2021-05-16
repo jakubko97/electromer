@@ -23,6 +23,8 @@ export class ModalPage implements OnInit {
     error: '',
     info: ''
   }
+  togglerState = [];
+  value = [];
   theme: any;
   constructor(
     public modalCtrl: ModalController,
@@ -89,9 +91,12 @@ export class ModalPage implements OnInit {
     await alert.present();
   }
 
+  myChange(rowIndex) {
+    this.togglerState[rowIndex] = 'PENDING';
+}
 
+  async assigningElectromerAlert(electromer, rowIndex) {
 
-  async assigningElectromerAlert(electromer) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Please, confirm assiging ' + electromer.name + ' to ' + this.user.name + '.',
@@ -101,11 +106,13 @@ export class ModalPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
+            this.togglerState[rowIndex] = 'DEACTIVATED';
           }
         }, {
           text: 'Confirm',
           handler: () => {
-            this.update(electromer);
+            this.update(electromer, rowIndex);
+            this.togglerState[rowIndex] = 'ACTIVATED';
           }
         }
       ]
@@ -114,7 +121,7 @@ export class ModalPage implements OnInit {
     await alert.present();
   }
 
-  update(electromer){
+  update(electromer, rowIndex){
     this.apiResult.error = null;
     this.apiResult.loading = true;
     this.authService.assignElectromerToUser(electromer.id, this.user.id).subscribe(
@@ -124,8 +131,9 @@ export class ModalPage implements OnInit {
       error => {
         this.apiResult.error = error;
         this.apiResult.loading = false;
+        this.togglerState[rowIndex] = 'DEACTIVATED';
       }
-    )
+    );
   }
 
   updateFilter(event) {
@@ -150,13 +158,14 @@ export class ModalPage implements OnInit {
   }
 
   public getElectromers() {
-    this.apiResult.loading = true
+    this.apiResult.loading = true;
     return this.authService.getAllElectromers()
       .subscribe(
         electromers => {
           this.data = electromers as Electromer;
           this.temp = this.data;
           this.apiResult.loading = false;
+          this.setTogglePendingValues();
           return electromers;
         },
         error => {
@@ -167,6 +176,13 @@ export class ModalPage implements OnInit {
           this.apiResult.loading = false;
         }
         )
+  }
+
+  setTogglePendingValues(){
+    for (let i = 0; i < this.data.length; i++){
+      this.value[i] = false;
+      this.togglerState[i] = 'DEACTIVATED';
+    }
   }
   getUsers() {
     this.apiResult.loading = true;
