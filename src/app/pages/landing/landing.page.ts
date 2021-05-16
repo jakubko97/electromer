@@ -4,6 +4,7 @@ import { RegisterPage } from '../auth/register/register.page';
 import { LoginPage } from '../auth/login/login.page';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 @Component({
   selector: 'app-landing',
   templateUrl: './landing.page.html',
@@ -16,7 +17,8 @@ export class LandingPage implements OnInit {
     private menu: MenuController,
     private authService: AuthService,
     private navCtrl: NavController,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storage: NativeStorage
   ) {
     this.menu.enable(false);
   }
@@ -28,9 +30,19 @@ export class LandingPage implements OnInit {
     });
   }
   async ngOnInit() {
-    this.language = "en";
-    console.log('OnInit', this.language);
-    console.log(this.translate.getLangs());
+    this.storage.getItem('lang')
+    .then(
+      language => {
+        if (!language) {
+          language = navigator.language.split('-')[0];
+        }    
+        this.language = language;
+        console.log('OnInit', this.language);
+        this.translate.getLangs()
+      }
+    );   
+    
+  
   }
   async register() {
     const registerModal = await this.modalController.create({
@@ -53,7 +65,7 @@ export class LandingPage implements OnInit {
       language = navigator.language.split('-')[0];
       console.log(language);
     }
-    //this.storage.set('language', language);
+    this.storage.setItem('lang', language);
 
     this.translate.use(language).subscribe();
   }

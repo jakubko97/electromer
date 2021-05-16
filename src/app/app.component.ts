@@ -16,6 +16,7 @@ import {
 } from '@angular/router'
 import { Error } from '@material-ui/icons';
 import { TranslateService } from '@ngx-translate/core';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,8 @@ export class AppComponent implements OnInit {
     private alertService: AlertService,
     private router: Router,
     private authService: AuthService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private storage: NativeStorage
 
   ) {
     this.initializeApp()
@@ -102,12 +104,12 @@ export class AppComponent implements OnInit {
           icon: 'home'
         },
         {
-          title: 'Users',
+          title: this.translate.instant('common.users'),
           url: '/users',
           icon: 'people'
         },
         {
-          title: 'Electromers',
+          title: this.translate.instant('common.electromers'),
           url: '/list',
           icon: 'list'
         },
@@ -136,17 +138,17 @@ export class AppComponent implements OnInit {
           icon: 'home'
         },
         {
-          title: 'Users',
+          title: this.translate.instant('common.users'),
           url: '/users',
           icon: 'people'
         },
         {
-          title: 'Electromers',
+          title:  this.translate.instant('common.electromers'),
           url: '/list',
           icon: 'list'
         },
         {
-          title: 'Logs',
+          title:  this.translate.instant('common.logs'),
           url: '/logs',
           icon: 'notifications-outline'
         },
@@ -175,7 +177,7 @@ export class AppComponent implements OnInit {
           icon: 'home'
         },
         {
-          title: 'Electromers',
+          title:  this.translate.instant('common.electromers'),
           url: '/list',
           icon: 'list'
         },
@@ -183,12 +185,12 @@ export class AppComponent implements OnInit {
           title: this.user.email,
           children: [
             {
-              title: 'Settings',
+              title:  this.translate.instant('settings.title'),
               url: '/settings',
               icon: 'settings',
             },
             {
-              title: 'Requests',
+              title: this.translate.instant('requests.title'),
               url: '/requests',
               icon: 'document-text-outline',
             }
@@ -198,12 +200,16 @@ export class AppComponent implements OnInit {
     }
   }
   async ngOnInit() {
-    let language = 'en';
-    if (!language) {
-      language = navigator.language.split('-')[0];
-    }
-
-    this.translate.use(language);
+    this.storage.getItem('lang')
+    .then(
+      language => {
+        if (!language) {
+          language = navigator.language.split('-')[0];
+        }    
+        this.translate.use(language);
+      },
+      () => this.translate.use('en')
+    );   
   }
 
 

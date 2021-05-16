@@ -2,6 +2,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 import { User } from './../../models/user';
 import { Component, OnInit } from '@angular/core';
 import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
+import { TranslateService } from '@ngx-translate/core';
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
 
 @Component({
   selector: 'app-settings',
@@ -11,7 +13,9 @@ import { SIZE_TO_MEDIA } from '@ionic/core/dist/collection/utils/media'
 export class SettingsPage implements OnInit {
 
   constructor(
-    public authService: AuthService
+    public authService: AuthService,
+    private translate: TranslateService,
+    private storage: NativeStorage
   ) { }
 
   user: User
@@ -43,9 +47,23 @@ export class SettingsPage implements OnInit {
         splitPane.classList.toggle('split-pane-visible')
 }
 
-isThemeDark(){
-  return document.body.getAttribute('color-theme') === 'dark'
-}
+  isThemeDark(){
+    return document.body.getAttribute('color-theme') === 'dark'
+  }
+
+  async languageChanged(event: CustomEvent<{ value: string }>) {
+    let language = event.detail.value;
+
+    if (!language) {
+      console.log(navigator.language);
+      language = navigator.language.split('-')[0];
+      console.log(language);
+    }
+    this.storage.setItem('lang', language);
+
+    this.translate.use(language).subscribe();
+  }
+
   onClick(event){
     let systemDark = window.matchMedia('(prefers-color-scheme: dark)');
     systemDark.addListener(this.colorTest);
