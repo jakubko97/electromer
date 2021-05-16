@@ -68,6 +68,7 @@ export class UsersPage implements OnInit {
 async editUser(user: any) {
   const modal = await this.modalCtrl.create({
     component: UserFormPage,
+    cssClass: 'my-custom-modal',
     componentProps: {
       user: user
     },

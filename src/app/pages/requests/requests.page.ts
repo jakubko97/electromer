@@ -27,7 +27,12 @@ export class RequestsPage implements OnInit {
   isDownloading = false;
   temp: any;
   searchValue: any;
+  requestTypeOption: any;
+  requestTypes = ['electromer', 'permission', 'bug', 'other'];
 
+  customPopoverOptions: any = {
+    header: 'Type'
+  };
   constructor(
     public formBuilder: FormBuilder,
     public authService: AuthService,
@@ -75,6 +80,7 @@ isThemeDark(){
         splitPane.classList.toggle('split-pane-visible')
 }
   submit() {
+    this.apiResult.error = null;
     //form NgForm
     if (this.requestForm.valid) {
       this.apiResult.loading = true;

@@ -75,6 +75,7 @@ export class ModalPage implements OnInit {
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
+            return false;
           }
         }, {
           text: 'Confirm',
@@ -87,6 +88,8 @@ export class ModalPage implements OnInit {
 
     await alert.present();
   }
+
+
 
   async assigningElectromerAlert(electromer) {
     const alert = await this.alertController.create({

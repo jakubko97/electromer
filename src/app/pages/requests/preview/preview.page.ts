@@ -86,6 +86,11 @@ export class PreviewPage implements OnInit {
     this.processRequest(this.request);
     this.modalCtrl.dismiss();
   }
+
+  formateDate(date){
+    return new Date(date);
+  }
+
   doDownload(fileId){
     this.apiResult.loading = true;
     let url = null;

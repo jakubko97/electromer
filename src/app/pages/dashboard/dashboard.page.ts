@@ -478,6 +478,8 @@ export class DashboardPage implements OnInit {
 
 
   setTrendDataChart(){ //simulate
+    this.trendChartData = [];
+    this.trendChartColours = [];
     if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50){
       this.trendChartData.push(
         {

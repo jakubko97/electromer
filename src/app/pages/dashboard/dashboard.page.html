@@ -51,7 +51,7 @@
           </ion-segment>
         </ion-col>
         <ion-col size-lg="1" size-md="1" size-sm="1" size="12">
-          <ion-select disabled={{!atLeastOneElectromer()}} [(ngModel)]="electromer" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Select">
+          <ion-select disabled={{!atLeastOneElectromer()}} [(ngModel)]="electromer" [interfaceOptions]="customPopoverOptions" interface="popover" [value]='electromers[0]' placeholder="Select">
             <ion-select-option [value]="e" *ngFor="let e of electromers">{{e.name}}</ion-select-option>
           </ion-select>
         </ion-col>

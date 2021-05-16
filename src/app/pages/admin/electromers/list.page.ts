@@ -44,7 +44,8 @@ export class ListPage implements OnInit {
 
   async showModal() {
     const modal = await this.modalCtrl.create({
-      component: AddElectromerPage
+      component: AddElectromerPage,
+      cssClass: 'my-custom-modal'
     });
     return await modal.present();
   }
@@ -88,6 +89,7 @@ export class ListPage implements OnInit {
   async editElectromer(electromer: Electromer) {
       const modal = await this.modalCtrl.create({
         component: AddElectromerPage,
+        cssClass: 'my-custom-modal',
         componentProps: {
           electromer: electromer
         },

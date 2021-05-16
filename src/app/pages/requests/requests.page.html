@@ -28,11 +28,8 @@
               <ion-col>
                 <ion-item>
                   <ion-label>{{ 'common.type' | translate }}</ion-label>
-                  <ion-select formControlName="type">
-                    <ion-select-option value="brown">{{ 'requests.brown' | translate }}</ion-select-option>
-                    <ion-select-option value="blonde">{{ 'requests.blonde' | translate }}</ion-select-option>
-                    <ion-select-option value="black">{{ 'requests.black' | translate }}</ion-select-option>
-                    <ion-select-option value="red">{{ 'requests.red' | translate }}</ion-select-option>
+                  <ion-select formControlName="type" [(ngModel)]="requestTypeOption" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Select">
+                    <ion-select-option [value]="type" *ngFor="let type of requestTypes">{{type}}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
