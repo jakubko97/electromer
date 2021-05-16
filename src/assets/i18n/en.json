@@ -13,6 +13,7 @@
     "admin": "Admin",
     "user": "User",
     "name": "name",
+    "edit": "Edit",
     "email": "email",
     "users": "Users",
     "admins": "Admins",

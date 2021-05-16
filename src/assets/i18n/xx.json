@@ -12,6 +12,7 @@
     "admin": "common.admin",
     "user": "common.user",
     "name": "common.name",
+    "edit": "common.edit",
     "email": "common.email",
     "users": "common.users",
     "admins": "common.admins",

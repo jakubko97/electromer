@@ -2,30 +2,29 @@
   <ion-toolbar color="primary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
-</ion-buttons>
-    <ion-title>Electromers</ion-title>
+    </ion-buttons>
+    <ion-title>{{ 'common.electromers' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-grid>
-      <ion-row>
-        <ion-col class="ion-justify-content-start" size-md="11" size="10">
-          <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
-        </ion-col>
-        <ion-col class="ion-justify-content-end" size-md="1">
-          <ion-fab>
-            <ion-fab-button matTooltip="dgsdgsdg" disabled="{{user.is_superadmin !== 1}}" size="small" (click)="showModal()">
-              <ion-icon name="add"></ion-icon>
-            </ion-fab-button>
-          </ion-fab>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-justify-content-start" size-md="11" size="10">
+        <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
+      </ion-col>
+      <ion-col class="ion-justify-content-end" size-md="1">
+        <ion-fab>
+          <ion-fab-button matTooltip="dgsdgsdg" disabled="{{user.is_superadmin !== 1}}" size="small" (click)="showModal()">
+            <ion-icon name="add"></ion-icon>
+          </ion-fab-button>
+        </ion-fab>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-    <div class="ion-padding">
+  <div class="ion-padding">
     <!-- Theme classes dark, material, bootstrap -->
-    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'"
-      [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
+    <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
       <ngx-datatable-column name="Name" prop="name" width="80">
       </ngx-datatable-column>
@@ -35,16 +34,16 @@
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" prop="type" width="80">
       </ngx-datatable-column>
-      <ngx-datatable-column *ngIf="user.is_superadmin == 1"  name="Akcie" prop="akcie">
+      <ngx-datatable-column *ngIf="user.is_superadmin == 1" name="Akcie" prop="akcie">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
 
-        <ion-fab vertical="center" slot="fixed">
-          <ion-button fill="outline" color="primary" (click)="editElectromer(row)">
-            Edit
-          </ion-button>
-      </ion-fab>
+          <ion-fab vertical="center" slot="fixed">
+            <ion-button fill="outline" color="primary" (click)="editElectromer(row)">
+              {{ 'common.edit' | translate }}
+            </ion-button>
+          </ion-fab>
         </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
-    </div>
+  </div>
 </ion-content>
