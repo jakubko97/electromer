@@ -146,7 +146,8 @@
        <ion-item>
         <ion-label> {{ 'settings.priceOfElectricity' | translate }}</ion-label>
         <ion-input placeholder="Price" color="primary" type="number" formControlName="price" id="price" required name="price"></ion-input>
-        <ion-label> {{ utils.formatCurrency(userForm.value.price) }}</ion-label>
+        <ion-label *ngIf="userForm.value.price != null"> {{ utils.formatCurrency(userForm.value.price) }}</ion-label>
+        <ion-label *ngIf="userForm.value.price == null">€</ion-label>
         </ion-item>
       </ion-col>
     </ion-row>

@@ -27,9 +27,9 @@
     </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
       <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
-        <ion-toggle *ngIf="togglerState[rowIndex] === 'ACTIVATED'" (click)="assigningElectromerAlert(row, rowIndex)" (ionChange)="myChange(rowIndex)" disabled="false" checked></ion-toggle>
-        <ion-toggle *ngIf="togglerState[rowIndex] === 'DEACTIVATED'" (click)="assigningElectromerAlert(row, rowIndex)" [ngModel]="value[rowIndex]" (ionChange)="myChange(rowIndex)" checked="false"></ion-toggle>
-        <ion-spinner *ngIf="togglerState[rowIndex] === 'PENDING'" color="primary"></ion-spinner>
+        <ion-button *ngIf="row.toggler === 'ACTIVATED'" (click)="assigningElectromerAlert(row)" (ionChange)="myChange(row)" color="danger">Deassign</ion-button>
+        <ion-button *ngIf="row.toggler === 'DEACTIVATED'" (click)="assigningElectromerAlert(row)" (ionChange)="myChange(row)">Assign</ion-button>
+        <ion-spinner *ngIf="row.toggler === 'PENDING'" color="primary"></ion-spinner>
       </ng-template>
     </ngx-datatable-column>
 
@@ -49,7 +49,8 @@
     </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-toggle (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}"></ion-toggle>
+        <ion-button *ngIf="row.toggler === 'ACTIVATED'" (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}" (ionChange)="myChange(row)" color="danger">Deassign</ion-button>
+        <ion-button *ngIf="row.toggler === 'DEACTIVATED'" (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}" (ionChange)="myChange(row)">Assign</ion-button>
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>
@@ -60,10 +61,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button color="danger" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button color="primary" style='float: right;' (click)='save()'>Save</ion-button>
+        <ion-button color="light" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

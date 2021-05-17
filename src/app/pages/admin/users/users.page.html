@@ -33,7 +33,7 @@
           </ion-label>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Akcie" [frozenRight]="true" slot="end">
+      <ngx-datatable-column style='text-align: right; background: #1483ff;' name="Akcie" slot="end">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <ion-fab vertical="center" slot="fixed">
             <ion-fab-button (click)="presentActionSheet(row)" size="small">

@@ -293,4 +293,14 @@ export class AuthService {
     });
     return this.http.get(this.env.API_URL + 'api/user/electromers/' + id, { headers: headers })
   }
+  deassignElectromerFromUser(electromerId: number, userId: number) {
+    const payload = {
+      user_id: userId,
+      electromer_id: electromerId
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/user/delete', payload, { headers: headers })
+  }
 }

@@ -45,14 +45,6 @@ export class ModalPage implements OnInit {
 
     if (this.mode === 0){
       this.getElectromers();
-      this.authService.getUserElectromersById(this.user.id).subscribe(
-        (data) => {
-          this.userElectromers = data;
-          this.setInitUserElectromerState();
-        },
-        error =>{
-        }
-      )
     }
     if (this.mode === 1){
       this.getUsers();
@@ -69,9 +61,10 @@ export class ModalPage implements OnInit {
 
   setInitUserElectromerState(){
     for (let d = 0; d < this.data.length; d++ ){
+      this.data[d].toggler = 'DEACTIVATED';
       for (const e of this.userElectromers){
         if (this.data[d].id === e.electromer_id){
-          this.togglerState[d] = 'ACTIVATED';
+          this.data[d].toggler = 'ACTIVATED';
         }
       }
     }
@@ -111,28 +104,38 @@ export class ModalPage implements OnInit {
     await alert.present();
   }
 
-  myChange(rowIndex) {
-    this.togglerState[rowIndex] = 'PENDING';
+  myChange(data) {
+    // data.toggler = 'PENDING';
 }
 
-  async assigningElectromerAlert(electromer, rowIndex) {
+
+  deassignElectromerTitle(electromer){
+    return 'Do you want deassign ' + electromer.name + ' from ' + this.user.name + '?';
+  }
+
+  assignElectromerTitle(electromer){
+    return 'Please, confirm assiging ' + electromer.name + ' to ' + this.user.name + '.';
+  }
+  async assigningElectromerAlert(electromer) {
 
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Please, confirm assiging ' + electromer.name + ' to ' + this.user.name + '.',
+      header: electromer.toggler === 'ACTIVATED' ? this.deassignElectromerTitle(electromer) : this.assignElectromerTitle(electromer),
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            this.togglerState[rowIndex] = 'DEACTIVATED';
+            if (electromer.toggler === 'ACTIVATED'){
+            }else{
+              electromer.toggler = 'DEACTIVATED';
+            }
           }
         }, {
           text: 'Confirm',
           handler: () => {
-            this.update(electromer, rowIndex);
-            this.togglerState[rowIndex] = 'ACTIVATED';
+            this.update(electromer);
           }
         }
       ]
@@ -141,17 +144,31 @@ export class ModalPage implements OnInit {
     await alert.present();
   }
 
-  update(electromer, rowIndex){
+  update(electromer){
     this.apiResult.error = null;
     this.apiResult.loading = true;
+    if (electromer.toggler === 'ACTIVATED'){
+      this.authService.deassignElectromerFromUser(electromer.id, this.user.id).subscribe(
+        data => {
+          this.apiResult.loading = false;
+          electromer.toggler = 'DEACTIVATED';
+        },
+        error => {
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
+          electromer.toggler = 'ACTIVATED';
+        }
+      );
+    }
     this.authService.assignElectromerToUser(electromer.id, this.user.id).subscribe(
       data => {
         this.apiResult.loading = false;
+        electromer.toggler = 'ACTIVATED';
       },
       error => {
         this.apiResult.error = error;
         this.apiResult.loading = false;
-        this.togglerState[rowIndex] = 'DEACTIVATED';
+        electromer.toggler = 'DEACTIVATED';
       }
     );
   }
@@ -184,8 +201,16 @@ export class ModalPage implements OnInit {
         electromers => {
           this.data = electromers as Electromer;
           this.temp = this.data;
-          this.apiResult.loading = false;
-          this.setTogglePendingValues();
+          this.authService.getUserElectromersById(this.user.id).subscribe(
+            (data) => {
+              this.userElectromers = data;
+              this.setTogglePendingValues();
+              this.setInitUserElectromerState();
+              this.apiResult.loading = false;
+            },
+            error =>{
+            }
+          )
           return electromers;
         },
         error => {
@@ -202,6 +227,7 @@ export class ModalPage implements OnInit {
     for (let i = 0; i < this.data.length; i++){
       this.value[i] = false;
       this.togglerState[i] = 'DEACTIVATED';
+      this.data[i].toggler = 'DEACTIVATED';
     }
   }
   getUsers() {

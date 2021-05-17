@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth/auth.service';
-import { Request } from 'src/app/models/request';
 import { AlertController } from '@ionic/angular';
 
 @Component({
