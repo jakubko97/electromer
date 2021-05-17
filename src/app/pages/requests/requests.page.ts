@@ -24,7 +24,7 @@ export class RequestsPage implements OnInit {
   requests: any;
   requestForm: FormGroup;
   requestsLoading = false;
-  isDownloading = false;
+  isDownloadingFile = false;
   temp: any;
   searchValue: any;
   requestTypeOption: any;
@@ -155,7 +155,7 @@ updateFilter(event) {
   // this.table.offset = 0;
 }
 doDownload(fileId){
-  this.isDownloading = true;
+  this.isDownloadingFile = true;
   let url = null;
   return this.authService.downloadFile(fileId).subscribe(
     (data: any) => {
@@ -164,11 +164,11 @@ doDownload(fileId){
       const blob = data.slice(0, data.size, "application/pdf")
       url = window.URL.createObjectURL(blob);
       window.open(url);
-      this.isDownloading = false;
+      this.isDownloadingFile = false;
     },
     (error) => {
       this.apiResult.error = 'Error occured during sending to server';
-      this.isDownloading = false;
+      this.isDownloadingFile = false;
     },
     () => {
     }

@@ -18,6 +18,7 @@ export class PreviewPage implements OnInit {
     error: '',
     info: '',
   };
+  isDownloadingFile = false;
 
   constructor(
     public modalCtrl: ModalController,
@@ -61,12 +62,11 @@ export class PreviewPage implements OnInit {
     this.apiResult.loading = true;
     return this.authService.postRequest(request).subscribe(
       (response) => {
+        this.apiResult.loading = false;
+        this.modalCtrl.dismiss();
       },
       (error) => {
         this.apiResult.error = 'Error occured while fetching data from server.';
-        this.apiResult.loading = false;
-      },
-      () => {
         this.apiResult.loading = false;
       }
     );
@@ -78,13 +78,12 @@ export class PreviewPage implements OnInit {
   decline() {
     this.request.status_id = 3;
     this.processRequest(this.request);
-    this.modalCtrl.dismiss();
+
   }
 
   accept() {
     this.request.status_id = 2;
     this.processRequest(this.request);
-    this.modalCtrl.dismiss();
   }
 
   formateDate(date){
@@ -92,7 +91,7 @@ export class PreviewPage implements OnInit {
   }
 
   doDownload(fileId){
-    this.apiResult.loading = true;
+    this.isDownloadingFile = true;
     let url = null;
     return this.authService.downloadFile(fileId).subscribe(
       (data: any) => {
@@ -101,14 +100,14 @@ export class PreviewPage implements OnInit {
         const blob = data.slice(0, data.size, "application/pdf")
         url = window.URL.createObjectURL(blob);
         window.open(url);
+        this.isDownloadingFile = false;
       },
       (error) => {
         this.apiResult.error = 'Error occured during sending to server';
-        this.apiResult.loading = false;
+        this.isDownloadingFile = false;
         console.log(error);
       },
       () => {
-        this.apiResult.loading = false;
       }
     );
   }
