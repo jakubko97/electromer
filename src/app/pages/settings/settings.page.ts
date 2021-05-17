@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { NativeStorage } from '@ionic-native/native-storage/ngx';
 import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { Utils } from 'src/app/services/plugins/utils';
+import { AlertService } from '../../services/alert/alert.service';
 
 @Component({
   selector: 'app-settings',
@@ -21,7 +22,8 @@ export class SettingsPage implements OnInit {
     private translate: TranslateService,
     private storage: NativeStorage,
     public formBuilder: FormBuilder,
-    public utils: Utils
+    public utils: Utils,
+    public alertService: AlertService
   ) { }
 
 
@@ -115,12 +117,13 @@ export class SettingsPage implements OnInit {
   }
 
   save(){
-    this.apiResult.loading = true;
     if (this.userForm.valid){
+      this.apiResult.loading = true;
       this.user.electricity_price = this.userForm.value.price;
       this.authService.editUser(this.user).subscribe(
         data => {
           this.apiResult.loading = false;
+          this.alertService.presentToast('Saved successfully.');
         },
         error => {
           this.apiResult.loading = false;
@@ -128,7 +131,7 @@ export class SettingsPage implements OnInit {
         }
       );
     }else{
-      console.log('invalid settings form');
+      this.alertService.presentToast('Electricity input is required');
     }
   }
   cleanElectromersData(){

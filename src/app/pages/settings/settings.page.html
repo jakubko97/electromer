@@ -125,24 +125,29 @@
   <ion-grid class="ion-justify-content-start">
     <ion-row>
       <ion-col>
-        <ion-label> {{ 'settings.theme' | translate }}</ion-label>
-        <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}"></ion-toggle>
+       <ion-item>
+       <ion-label> {{ 'settings.theme' | translate }}</ion-label>
+        <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}"></ion-toggle></ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
+      <ion-item>
         <ion-label>{{'settings.language' | translate}}</ion-label>
         <ion-select [value]="language" (ionChange)="languageChanged($event)" okText="{{'common.ok' | translate}}" cancelText="{{'common.cancel' | translate}}">
           <ion-select-option value="en">English</ion-select-option>
           <ion-select-option value="sk">Slovenčina</ion-select-option>
         </ion-select>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
+       <ion-item>
         <ion-label> {{ 'settings.priceOfElectricity' | translate }}</ion-label>
         <ion-input placeholder="Price" color="primary" type="number" formControlName="price" id="price" required name="price"></ion-input>
         <ion-label> {{ utils.formatCurrency(userForm.value.price) }}</ion-label>
+        </ion-item>
       </ion-col>
     </ion-row>
     <ion-row>
