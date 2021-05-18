@@ -63,6 +63,8 @@
     <ion-row>
       <ion-col size-lg="3" size-md="6" size-sm="6" size="12">
         <ion-card class="smallBanners">
+          <div *ngIf="dailyTrend != null">
+          <div *ngIf="dailyTrend.yesterday !== 0 && dailyTrend.today !== 0">
           <div class="cardTitle">
             <ion-card-title>
               <div style="display: inline-flex;" *ngIf="!dailyDataLoading && dailyTrend != null">
@@ -76,10 +78,28 @@
           </div>
 
           <ion-card-content>
-            <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <div class="chart-wrapper mt-3 mx-3 pa-3" style="height:90px;">
               <canvas baseChart class="chart" [datasets]="trendChartData" [labels]="trendChartLabels" [options]="trendChartOptions" [colors]="trendChartColours" [legend]="trendChartLegend" [chartType]="trendChartType"></canvas>
             </div>
           </ion-card-content>
+        </div>
+        <div *ngIf="dailyTrend.yesterday === 0 || dailyTrend.today === 0">
+          <div class="cardTitle" *ngIf="!dailyDataLoading && dailyTrend != null">
+          <ion-card-title>
+            <div style="display: inline-flex;">
+              NO DATA
+            </div>
+            <ion-spinner *ngIf="dailyDataLoading"></ion-spinner>
+          </ion-card-title>
+          <ion-card-subtitle>{{ 'dashboard.daily-trend' | translate }}</ion-card-subtitle>
+        </div>
+        <ion-card-content>
+          <div class="chart-wrapper mt-3 mx-3 pa-3" style="height:90px;">
+            <canvas baseChart class="chart" [datasets]="trendChartData" [labels]="trendChartLabels" [options]="trendChartOptions" [colors]="trendChartColours" [legend]="trendChartLegend" [chartType]="trendChartType"></canvas>
+          </div>
+        </ion-card-content>
+        </div>
+      </div>
         </ion-card>
       </ion-col>
       <ion-col size-lg="3" size-md="6" size-sm="6" size="12">
@@ -90,7 +110,7 @@
           </div>
 
           <ion-card-content>
-            <div class="chart-wrapper mt-3" style="height:70px;">
+            <div class="chart-wrapper mt-3" style="height:90px;">
               <canvas baseChart class="chart" [datasets]="lineChart3Data" [labels]="lineChart3Labels" [options]="lineChart3Options" [colors]="lineChart3Colours" [legend]="lineChart3Legend" [chartType]="lineChart3Type"></canvas>
             </div>
           </ion-card-content>
@@ -104,7 +124,7 @@
           </div>
 
           <ion-card-content>
-            <div class="chart-wrapper mt-3 mx-3" style="height:70px;">
+            <div class="chart-wrapper mt-3 mx-3" style="height:90px;">
               <canvas baseChart class="chart" [datasets]="barChart1Data" [labels]="barChart1Labels" [options]="barChart1Options" [colors]="barChart1Colours" [legend]="barChart1Legend" [chartType]="barChart1Type"></canvas>
             </div>
           </ion-card-content>

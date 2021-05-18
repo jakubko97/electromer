@@ -254,7 +254,10 @@ export class DashboardPage implements OnInit {
         display: true,
       }],
       yAxes: [{
-        display: false
+        scaleLabel: {
+          display: true,
+          labelString: 'kW/h'
+        }
       }]
     },
     legend: {
@@ -336,6 +339,10 @@ export class DashboardPage implements OnInit {
                  }
       }],
       yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'kW/h'
+        },
         ticks: {
           beginAtZero: true,
           maxTicksLimit: 5,
@@ -481,7 +488,9 @@ export class DashboardPage implements OnInit {
   setTrendDataChart(){ //simulate
     this.trendChartData = [];
     this.trendChartColours = [];
-    if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50){
+    if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50 &&
+     (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0))
+     {
       this.trendChartData.push(
         {
           data: [54, 35, 46, 28, 15, 22, 10]
@@ -495,7 +504,8 @@ export class DashboardPage implements OnInit {
         }
       );
     }
-    else if(this.dailyTrend.trend.toFixed(2) >= 100) {
+    else if(this.dailyTrend.trend.toFixed(2) >= 100 &&
+    (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0)) {
       this.trendChartData.push(
         {
           data: [10, 22, 15, 28, 35, 42, 62]
@@ -509,7 +519,8 @@ export class DashboardPage implements OnInit {
         }
       );
     }
-    else if (this.dailyTrend.trend.toFixed(2) < 50) {
+    else if (this.dailyTrend.trend.toFixed(2) < 50 &&
+    (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0)) {
       this.trendChartData.push(
         {
           data: [69, 52, 34, 40, 20, 13, 10]
@@ -519,6 +530,19 @@ export class DashboardPage implements OnInit {
         {
           backgroundColor: 'transparent',
           borderColor: getStyle('--ion-color-success'),
+          borderWidth: 2,
+        }
+      );
+    }else if (this.dailyTrend.today === 0 || this.dailyTrend.yesterday === 0){
+      this.trendChartData.push(
+        {
+          data: [0, 0, 0, 0, 0, 0, 0]
+        }
+        );
+      this.trendChartColours.push(
+        {
+          backgroundColor: 'transparent',
+          borderColor: getStyle('--ion-color-primary'),
           borderWidth: 2,
         }
       );
