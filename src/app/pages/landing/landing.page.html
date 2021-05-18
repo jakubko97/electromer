@@ -5,7 +5,6 @@
 
     </ion-title>
     <ion-select slot="end" [value]="language" (ionChange)="languageChanged($event)" okText="{{'common.ok' | translate}}" cancelText="{{'common.cancel' | translate}}">
-      <ion-select-option [value]="null">{{'settings.system-default' | translate}}</ion-select-option>
       <ion-select-option value="en">English</ion-select-option>
       <ion-select-option value="sk">Slovenčina</ion-select-option>
     </ion-select>

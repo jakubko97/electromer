@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
   <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
   <!-- Theme classes dark, material, bootstrap -->
   <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="data" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
@@ -26,8 +26,12 @@
     <ngx-datatable-column *ngIf="mode == 0" name="type" prop="type" width="80">
     </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 0" name="Akcie" prop="id">
-      <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-toggle (click)="assigningElectromerAlert(row)" disabled="false"></ion-toggle>
+      <ng-template let-row="row" let-rowIndex="rowIndex" let-value="value" ngx-datatable-cell-template>
+        <ion-fab vertical="center" slot="fixed" style="text-align: justify;">
+        <ion-button *ngIf="row.toggler === 'ACTIVATED'" (click)="assigningElectromerAlert(row)" (ionChange)="myChange(row)" color="danger">Deassign</ion-button>
+        <ion-button *ngIf="row.toggler === 'DEACTIVATED'" (click)="assigningElectromerAlert(row)" (ionChange)="myChange(row)">Assign</ion-button>
+      </ion-fab>
+        <ion-spinner *ngIf="row.toggler === 'PENDING'" color="primary"></ion-spinner>
       </ng-template>
     </ngx-datatable-column>
 
@@ -47,21 +51,20 @@
     </ngx-datatable-column>
     <ngx-datatable-column *ngIf="mode == 1" name="Akcie">
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-        <ion-toggle (click)="assignUserToAdminAlert(row)" disabled="{{user.id === row.id || row.is_admin == 1}}"></ion-toggle>
+        <ion-fab vertical="center" slot="fixed">
+        <ion-button *ngIf="row.toggler === 'ACTIVATED'" (click)="assignUserToAdminAlert(row)" (ionChange)="myChange(row)" color="danger">Deassign</ion-button>
+        <ion-button *ngIf="row.toggler === 'DEACTIVATED'" (click)="assignUserToAdminAlert(row)" (ionChange)="myChange(row)">Assign</ion-button>
+        </ion-fab>
       </ng-template>
     </ngx-datatable-column>
   </ngx-datatable>
-  <ion-card-subtitle *ngIf="!apiResult.loading && mode === 1" class="disabledTogglerCaption">{{ 'modal.message' | translate }}</ion-card-subtitle>
 </ion-content>
 
 <ion-footer>
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button color="danger" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
-      </ion-col>
-      <ion-col>
-        <ion-button color="primary" style='float: right;' (click)='save()'>Save</ion-button>
+        <ion-button color="light" style='float: left;' (click)='dismiss()'>Cancel</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

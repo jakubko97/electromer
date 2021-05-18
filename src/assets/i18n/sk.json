@@ -13,11 +13,13 @@
     "admin": "Admin",
     "user": "Používateľ",
     "name": "Meno",
+    "edit": "Upraviť",
     "email": "email",
     "users": "Používatelia",
     "admins": "Admins",
+    "electromers": "Elektromery",
     "close": "Zatvoriť",
-    "logs": "logy",
+    "logs": "Záznam logov",
     "type": "Typ",
     "accepted": "Schválene",
     "accept": "Schváliť",
@@ -69,9 +71,11 @@
     "daily-trend": "Denný trend",
     "trend-label": "Trend definuje, či je využitie za posledných sedem dní vyššie alebo nižšie.",
     "members-online": "Použivatelia online",
-    "weekly-highlights": "Týždenné zvýraznenie",
+    "weekly-highlights": "Týždenný prehľad",
     "highlights-label-start": "Priemerné denne použitie bolo",
     "highlights-label-end": "kW za posledných sedem dní.",
+    "want-report": "Chcete report?",
+    "want-report-text": "Úžasné! Podrobnejšie informácie môžete zobraziť a stiahnuť pomocou tejto možnosti.",
     "yearly": "ročne",
     "monthly": "mesačne",
     "visits": "návštevy",
@@ -98,11 +102,11 @@
     "details": "Detaily"
   },
   "settings": {
-    "system-default": "Systém",
     "title": "Nastavenia",
     "electromers": "Elektromery",
     "language": "Jazyk",
-    "theme": "Tmavý/svetlý režim"
+    "theme": "Tmavý/svetlý režim",
+    "priceOfElectricity": "Cena elektriny na kW/h v EUR"
   }
 
 }

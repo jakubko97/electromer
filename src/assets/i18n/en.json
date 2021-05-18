@@ -13,9 +13,11 @@
     "admin": "Admin",
     "user": "User",
     "name": "name",
+    "edit": "Edit",
     "email": "email",
     "users": "Users",
     "admins": "Admins",
+    "electromers": "Electromers",
     "close": "Close",
     "logs": "Logs",
     "type": "Type",
@@ -72,6 +74,8 @@
     "weekly-highlights": "Weekly Highlights",
     "highlights-label-start": "Daily average usage was",
     "highlights-label-end": "kW over the last seven days.",
+    "want-report": "Want report?",
+    "want-report-text": "Awesome! You can see more detailed information and download it using this option.",
     "yearly": "yearly",
     "monthly": "monthly",
     "visits": "visits",
@@ -102,7 +106,8 @@
     "title": "Settings",
     "electromers": "Electromers",
     "language": "Language",
-    "theme": "Dark/Light mode"
+    "theme": "Dark/Light mode",
+    "priceOfElectricity": "Price of electricity per kW/h in EUR"
   }
 
 }

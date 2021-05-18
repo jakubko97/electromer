@@ -110,6 +110,17 @@ export class AuthService {
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
+    return this.http.get(this.env.API_URL + 'api/users/all', { headers: headers })
+      .pipe(
+        tap(users => {
+          return users;
+        })
+      )
+  }
+  getUsersOnly() {
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
     return this.http.get(this.env.API_URL + 'api/users', { headers: headers })
       .pipe(
         tap(users => {
@@ -128,10 +139,10 @@ export class AuthService {
         })
       )
   }
-  assignUserToAdmin(userId, adminIdd) {
+  assignUserToAdmin(userId, adminId) {
     const payload = {
       id: userId,
-      admin_id: adminIdd
+      admin_id: adminId
     }
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
@@ -143,6 +154,7 @@ export class AuthService {
         })
       )
   }
+
   assignAdminRights(user_id) {
     const payload = {
       id: user_id,
@@ -278,12 +290,38 @@ export class AuthService {
   downloadCSV(id, from, to) {
     const payload = {
       electromer_id: id,
-      from_date: from,
-      to_date: to
+      date_from: from,
+      date_to: to
     };
     const headers = new HttpHeaders({
       'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
     });
-    return this.http.post(this.env.API_URL + 'api/download/csv', payload, { headers: headers })
+    return this.http.post(this.env.API_URL + 'api/download/csv', payload, { headers: headers, responseType: 'blob' })
+  }
+
+  getUserElectromersById(id) {
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.get(this.env.API_URL + 'api/user/electromers/' + id, { headers: headers })
+  }
+   getAdminUsersById(id) {
+    const payload = {
+      admin_id: id
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/admin/users', payload, { headers: headers })
+  }
+  deassignElectromerFromUser(electromerId: number, userId: number) {
+    const payload = {
+      user_id: userId,
+      electromer_id: electromerId
+    };
+    const headers = new HttpHeaders({
+      'Authorization': this.token['token_type'] + ' ' + this.token['access_token']
+    });
+    return this.http.post(this.env.API_URL + 'api/electromer/user/delete', payload, { headers: headers })
   }
 }

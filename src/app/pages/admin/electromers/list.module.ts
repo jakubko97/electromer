@@ -6,6 +6,7 @@ import { ListPageRoutingModule } from './list-routing.module';
 import { ListPage } from './list.page';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { AddElectromerPage } from './add-electromer.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { AddElectromerPage } from './add-electromer.page';
     ReactiveFormsModule,
     IonicModule,
     ListPageRoutingModule,
-    NgxDatatableModule
+    NgxDatatableModule,
+    TranslateModule.forChild()
   ],
   declarations: [ListPage, AddElectromerPage],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

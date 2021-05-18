@@ -1,6 +1,6 @@
 ion-menu {
   --background: url("../assets/drawer.jpg");
-  width: 140px;
+  width: 100px;
 }
 
 ion-menu.md {
@@ -168,7 +168,17 @@ ion-header ion-toolbar {
   background: transparent;
 }
 
-.bg-image{
-  background-repeat: no-repeat;
 
+
+@media only screen and (min-height: 601px) and (min-width: 769px) {
+  .bg-image{
+    background-repeat: no-repeat;
+    --width: 215px;
+  }
+}
+
+@media only screen and (max-height: 600px) and (max-width: 768px) {
+  .bg-image{
+    width: 100%;
+  }
 }

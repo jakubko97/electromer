@@ -53,6 +53,7 @@ export class DashboardPage implements OnInit {
     error: '',
     info: ''
   };
+  exportDownloadLoading = false;
 
   dailyAverageUsage: any;
   graphLoading = false;
@@ -253,7 +254,10 @@ export class DashboardPage implements OnInit {
         display: true,
       }],
       yAxes: [{
-        display: false
+        scaleLabel: {
+          display: true,
+          labelString: 'kW/h'
+        }
       }]
     },
     legend: {
@@ -335,6 +339,10 @@ export class DashboardPage implements OnInit {
                  }
       }],
       yAxes: [{
+        scaleLabel: {
+          display: true,
+          labelString: 'kW/h'
+        },
         ticks: {
           beginAtZero: true,
           maxTicksLimit: 5,
@@ -455,7 +463,7 @@ export class DashboardPage implements OnInit {
   }
 
   toggleMenu(){
-      const splitPane = document.querySelector('ion-split-pane')
+      const splitPane = document.querySelector('ion-split-pane');
       if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
           splitPane.classList.toggle('split-pane-visible')
   }
@@ -478,7 +486,11 @@ export class DashboardPage implements OnInit {
 
 
   setTrendDataChart(){ //simulate
-    if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50){
+    this.trendChartData = [];
+    this.trendChartColours = [];
+    if (this.dailyTrend.trend.toFixed(2) < 100 && this.dailyTrend.trend.toFixed(2) >= 50 &&
+     (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0))
+     {
       this.trendChartData.push(
         {
           data: [54, 35, 46, 28, 15, 22, 10]
@@ -492,7 +504,8 @@ export class DashboardPage implements OnInit {
         }
       );
     }
-    else if(this.dailyTrend.trend.toFixed(2) >= 100) {
+    else if(this.dailyTrend.trend.toFixed(2) >= 100 &&
+    (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0)) {
       this.trendChartData.push(
         {
           data: [10, 22, 15, 28, 35, 42, 62]
@@ -506,7 +519,8 @@ export class DashboardPage implements OnInit {
         }
       );
     }
-    else if (this.dailyTrend.trend.toFixed(2) < 50) {
+    else if (this.dailyTrend.trend.toFixed(2) < 50 &&
+    (this.dailyTrend.today !== 0 && this.dailyTrend.yesterday !== 0)) {
       this.trendChartData.push(
         {
           data: [69, 52, 34, 40, 20, 13, 10]
@@ -519,14 +533,33 @@ export class DashboardPage implements OnInit {
           borderWidth: 2,
         }
       );
+    }else if (this.dailyTrend.today === 0 || this.dailyTrend.yesterday === 0){
+      this.trendChartData.push(
+        {
+          data: [0, 0, 0, 0, 0, 0, 0]
+        }
+        );
+      this.trendChartColours.push(
+        {
+          backgroundColor: 'transparent',
+          borderColor: getStyle('--ion-color-primary'),
+          borderWidth: 2,
+        }
+      );
     }
 
   }
 
-  getMainBarChartData(){
+  async getMainBarChartData(){
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await loading.present();
+
     this.authService.getElectromerColumnData(this.electromer.id, this.mainBarChartFromDate, this.mainBarChartToDate, this.mainChartDataType).subscribe(
       data => {
-
+        loading.dismiss();
         let sortedData = null;
         if (this.mainChartDataType === 'yearly'){
           const startYear = new Date(this.mainBarChartFromDate).getFullYear();
@@ -607,15 +640,6 @@ export class DashboardPage implements OnInit {
         }
       }
     });
-    this.getElectromers();
-    // $.getJSON("https://canvasjs.com/data/docs/ethusd2018.json", function (data) {
-    //   for (var i = 0; i < data.length; i++) {
-    //     dataPoints1.push({ x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)] });;
-    //     dataPoints2.push({ x: new Date(data[i].date), y: Number(data[i].volume_usd) });
-    //     dataPoints3.push({ x: new Date(data[i].date), y: Number(data[i].close) });
-    //   }
-    //   chart.render();
-    // });
   }
   getData() {
     this.initGraph();
@@ -647,9 +671,9 @@ export class DashboardPage implements OnInit {
       message: 'Please wait...'
     });
     await loading.present();
-    return this.authService.getAllElectromers()
-      .subscribe(
+    return this.authService.getAllElectromers().subscribe(
         electromers => {
+          this.initGraph();
           this.electromers = JSON.parse(JSON.stringify(electromers));
           this.electromers = this.cleanElectromersData();
           this.blur = this.electromers.length === 0 ? 'background-blur' : '';
@@ -673,18 +697,9 @@ export class DashboardPage implements OnInit {
             if(el_id != null){
               this.getDailyAverageLastWeek(el_id);
               this.getDailyTrendData(el_id);
-              this.graphLoading = true;
-              this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
-                async data => {
-                  this.selectedDataInRange = JSON.parse(JSON.stringify(data));
-                  this.parseDataInChart();
-                  await loading.dismiss();
-                },
-                async error => {
-                  this.apiResult.error = error;
-                  await loading.dismiss();
-                }
-              )
+              this.getDataInRange(el_id, loading);
+              this.mainChartDataType = 'yearly';
+              this.getMainBarChartData();
             }
           }
 
@@ -699,6 +714,21 @@ export class DashboardPage implements OnInit {
       )
   }
 
+
+  async getDataInRange(electromerId, loading){
+    this.graphLoading = true;
+    this.initGraph();
+    this.authService.getDataInRange(electromerId, this.from_date, this.to_date).subscribe(
+      async data => {
+        this.selectedDataInRange = JSON.parse(JSON.stringify(data));
+        this.parseDataInChart();
+        loading.dismiss();
+      },
+      async error => {
+        this.apiResult.error = error;
+      }
+    )
+  }
   quickSelect(value) {
     switch (value.detail.value) {
       case "last_day": this.selectRecentDays(1)
@@ -716,7 +746,13 @@ export class DashboardPage implements OnInit {
     return new Date(date).toISOString();
   }
 
-  selectRecentDays(lastDays) {
+  async selectRecentDays(lastDays) {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await loading.present();
+
     const ourDate = new Date();
     const pastDate = ourDate.getDate() - lastDays;
     ourDate.setDate(pastDate);
@@ -726,7 +762,7 @@ export class DashboardPage implements OnInit {
     this.dataPoints2 = [];
     this.dataPoints3 = [];
     this.mainChartLabels = [];
-    this.initGraph();
+    this.getDataInRange(this.electromer.id, loading);
   }
 
   cleanElectromersData() {
@@ -748,15 +784,8 @@ export class DashboardPage implements OnInit {
       Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta'])] });
       this.dataPoints2.push({ x: new Date(time), y: data[1]['delta'] })
       this.dataPoints3.push({ x: new Date(time), y: data[1]['delta'] })
-
       sumDelta += data[1]['delta'];
-      // this.mainChartData3.push(this.getRandomArbitrary(0.0010, 0.0042));
-
   }
-
-    // for(let i = 0; i < length; i++){
-    //   this.mainChartData2.push(sumDelta / length);
-    // }
     this.chart.render();
     this.graphLoading = false;
 }
@@ -912,7 +941,8 @@ syncMonthlyData (data, start, end){
     )
   }
   async ngOnInit() {
-    await this.initGraph();
+    this.getElectromers();
+
     this.user = this.authService.user;
     const ourDate = new Date();
     const pastDate = ourDate.getMonth() - 12; //default po nacitani
@@ -950,11 +980,24 @@ monthsRangeFunction(start, end) {
 }
 
 downloadReportData(){
+  this.exportDownloadLoading = true;
   this.authService.downloadCSV(this.electromers[0].id, this.reportDateFrom, this.reportDateTo).subscribe(
-    data =>{
-      console.log(data);
+    (data : any) =>{
+      const blob = data.slice(0, data.size, 'text/csv');
+      const link = document.createElement('a');
+      // create a blobURI pointing to our Blob
+      link.href = URL.createObjectURL(blob);
+      link.download = this.electromer.name + '_export_' + new Date().getTime() + '.csv';
+      // some browser needs the anchor to be in the doc
+      document.body.append(link);
+      link.click();
+      link.remove();
+      this.exportDownloadLoading = false;
+    },
+    error =>{
+      this.exportDownloadLoading = false;
     }
-  )
+  );
 }
 
 async noElectromersAvailableThrowAlert() {

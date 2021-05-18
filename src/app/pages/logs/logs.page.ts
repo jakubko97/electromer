@@ -26,7 +26,9 @@ export class LogsPage implements OnInit {
     return document.body.getAttribute('color-theme') === 'dark';
   }
 
-
+  formateDate(date){
+    return new Date(date);
+  }
   initLogs(){
     this.apiResult.loading = true;
     this.authService.getLogs().subscribe(

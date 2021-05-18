@@ -20,7 +20,7 @@ ion-card, ion-searchbar {
 }
 
 .smallBanners{
-  height: 200px;
+  height: 220px;
 }
 .cardTitle{
   margin: 13px;
@@ -74,11 +74,16 @@ ion-select::part(placeholder) {
 
 /* Set the text color */
 ion-select::part(text) {
-  color: #212b82;
+  color: #2836b1;
+  size: 16px;
 }
 
 /* Set the icon color and opacity */
 ion-select::part(icon) {
   color: #0514e2;
   opacity: 1;
+}
+
+.downloadCSV{
+  width: 85%;
 }

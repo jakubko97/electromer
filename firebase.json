@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "platforms/browser/wwww",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}

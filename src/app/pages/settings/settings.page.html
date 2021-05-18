@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>{{ 'settings.title' | translate }</ion-title>
+    <ion-title>{{ 'settings.title' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -26,17 +26,17 @@
           <ion-row>
             <ion-col text-right class="ion-align-items-end">
               <h5 class="count-title">
-                {{ 'settings.electromers' | translate }
+                {{ 'settings.electromers' | translate }}
               </h5>
             </ion-col>
             <ion-col *ngIf="isUserAdmin || user.is_superadmin" class="ion-justify-content-start">
               <h5 class="count-title">
-                {{ 'common.users' | translate }
+                {{ 'common.users' | translate }}
               </h5>
             </ion-col>
             <ion-col *ngIf="user.is_superadmin" class="ion-justify-content-start">
               <h5 class="count-title">
-                {{ 'common.admins' | translate }
+                {{ 'common.admins' | translate }}
               </h5>
             </ion-col>
           </ion-row>
@@ -121,14 +121,45 @@
       </div>
     </ion-card-content>
   </ion-card>
-  <ion-grid class="ion-justify-content-center">
+  <form [formGroup]="userForm">
+  <ion-grid class="ion-justify-content-start">
     <ion-row>
-      <ion-col class="ion-text-center">
-        <ion-item color="none" lines="none">
-          <ion-label> {{ 'settings.theme' | translate }</ion-label>
-          <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}"></ion-toggle>
+      <ion-col>
+       <ion-item>
+       <ion-label> {{ 'settings.theme' | translate }}</ion-label>
+        <ion-toggle (ionChange)="onClick($event)" checked="{{isThemeDark()}}"></ion-toggle></ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+      <ion-item>
+        <ion-label>{{'settings.language' | translate}}</ion-label>
+        <ion-select [value]="language" (ionChange)="languageChanged($event)" okText="{{'common.ok' | translate}}" cancelText="{{'common.cancel' | translate}}">
+          <ion-select-option value="en">English</ion-select-option>
+          <ion-select-option value="sk">Slovenčina</ion-select-option>
+        </ion-select>
         </ion-item>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+       <ion-item>
+        <ion-label> {{ 'settings.priceOfElectricity' | translate }}</ion-label>
+        <ion-input placeholder="Price" color="primary" type="number" formControlName="price" id="price" required name="price"></ion-input>
+        <ion-label *ngIf="userForm.value.price != null"> {{ utils.formatCurrency(userForm.value.price) }}</ion-label>
+        <ion-label *ngIf="userForm.value.price == null">€</ion-label>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button color="primary" style='float: left;' (click)='save()'>
+          <ion-spinner *ngIf="apiResult.loading">
+          </ion-spinner>
+          <ion-label *ngIf="!apiResult.loading">{{ 'common.save' | translate }}</ion-label>
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
+</form>
 </ion-content>

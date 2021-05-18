@@ -21,21 +21,35 @@
     </ion-row>
   </ion-grid>
 
-  <div class="ion-padding">
+  <div>
     <!-- Theme classes dark, material, bootstrap -->
     <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="logs" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
-      <ngx-datatable-column name="Id" prop="id" width="30">
+      <ngx-datatable-column style="display: none" name="Id" prop="id" width="30">
       </ngx-datatable-column>
       <ngx-datatable-column name="Type" prop="type" width="60">
       </ngx-datatable-column>
       <ngx-datatable-column name="User id" prop="user_id" width="30">
       </ngx-datatable-column>
-      <ngx-datatable-column name="Description" prop="description" width="140">
+      <ngx-datatable-column class="column" name="Description" prop="description" width="140">
       </ngx-datatable-column>
       <ngx-datatable-column name="created_at" prop="created_at" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div>
+            <ion-label>
+              {{ formateDate(value) | date: 'yyyy-MM-dd HH:mm:ss' }}
+            </ion-label>
+          </div>
+        </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="updated_at" prop="updated_at" width="80">
+      <ngx-datatable-column class="column" name="updated_at" prop="updated_at" width="80">
+        <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+          <div>
+            <ion-label>
+              {{ formateDate(value) | date: 'yyyy-MM-dd HH:mm:ss' }}
+            </ion-label>
+          </div>
+        </ng-template>
       </ngx-datatable-column>
     </ngx-datatable>
   </div>

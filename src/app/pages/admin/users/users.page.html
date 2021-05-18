@@ -16,7 +16,7 @@
     </ion-row>
   </ion-grid>
 
-  <div class="ion-padding">
+  <div>
     <!-- Theme classes dark, material, bootstrap -->
     <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="users" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50" style="elevation: 0;">
       <ngx-datatable-column name="Name" prop="name" width="80">
@@ -33,7 +33,7 @@
           </ion-label>
         </ng-template>
       </ngx-datatable-column>
-      <ngx-datatable-column name="Akcie" [frozenRight]="true" slot="end">
+      <ngx-datatable-column style='text-align: right; background: #1483ff;' name="Akcie" slot="end">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
           <ion-fab vertical="center" slot="fixed">
             <ion-fab-button (click)="presentActionSheet(row)" size="small">

@@ -24,10 +24,15 @@ export class RequestsPage implements OnInit {
   requests: any;
   requestForm: FormGroup;
   requestsLoading = false;
-  isDownloading = false;
+  isDownloadingFile = false;
   temp: any;
   searchValue: any;
+  requestTypeOption: any;
+  requestTypes = ['electromer', 'permission', 'bug', 'other'];
 
+  customPopoverOptions: any = {
+    header: 'Type'
+  };
   constructor(
     public formBuilder: FormBuilder,
     public authService: AuthService,
@@ -75,6 +80,7 @@ isThemeDark(){
         splitPane.classList.toggle('split-pane-visible')
 }
   submit() {
+    this.apiResult.error = null;
     //form NgForm
     if (this.requestForm.valid) {
       this.apiResult.loading = true;
@@ -82,7 +88,9 @@ isThemeDark(){
       // this.request.type = this.requestForm.value.type;
       // this.request.body = this.requestForm.value.body;
       const formData: FormData = new FormData();
-      formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      if (this.fileToUpload != null){
+        formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      }
       formData.append('subject', this.requestForm.value.subject);
       formData.append('type', this.requestForm.value.type);
       formData.append('body', this.requestForm.value.body);
@@ -149,7 +157,7 @@ updateFilter(event) {
   // this.table.offset = 0;
 }
 doDownload(fileId){
-  this.isDownloading = true;
+  this.isDownloadingFile = true;
   let url = null;
   return this.authService.downloadFile(fileId).subscribe(
     (data: any) => {
@@ -158,11 +166,11 @@ doDownload(fileId){
       const blob = data.slice(0, data.size, "application/pdf")
       url = window.URL.createObjectURL(blob);
       window.open(url);
-      this.isDownloading = false;
+      this.isDownloadingFile = false;
     },
     (error) => {
       this.apiResult.error = 'Error occured during sending to server';
-      this.isDownloading = false;
+      this.isDownloadingFile = false;
     },
     () => {
     }

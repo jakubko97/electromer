@@ -28,11 +28,8 @@
               <ion-col>
                 <ion-item>
                   <ion-label>{{ 'common.type' | translate }}</ion-label>
-                  <ion-select formControlName="type">
-                    <ion-select-option value="brown">{{ 'requests.brown' | translate }}</ion-select-option>
-                    <ion-select-option value="blonde">{{ 'requests.blonde' | translate }}</ion-select-option>
-                    <ion-select-option value="black">{{ 'requests.black' | translate }}</ion-select-option>
-                    <ion-select-option value="red">{{ 'requests.red' | translate }}</ion-select-option>
+                  <ion-select formControlName="type" [(ngModel)]="requestTypeOption" [interfaceOptions]="customPopoverOptions" interface="popover" placeholder="Select">
+                    <ion-select-option [value]="type" *ngFor="let type of requestTypes">{{type}}</ion-select-option>
                   </ion-select>
                 </ion-item>
               </ion-col>
@@ -74,7 +71,7 @@
     </ion-card>
   </div>
 
-  <ion-card>
+  <ion-card style="background: rgba(255,255,255,0.5);">
     <ion-card-header>
       <ion-card-title>
         {{ 'requests.history' | translate }}
@@ -100,7 +97,7 @@
           </ion-col>
           <ion-col class="ion-justify-content-start" size-md="1">
             <ion-chip (click)="searchByKey('Rejected')" color="primary">
-              <ion-label>{{ 'commons.rejected' | translate }}</ion-label>
+              <ion-label>{{ 'common.rejected' | translate }}</ion-label>
             </ion-chip>
           </ion-col>
         </ion-row>
@@ -149,9 +146,9 @@
             </div>
           </ng-template>
         </ngx-datatable-column>
-        <ngx-datatable-column [frozenRight]="true" slot="end" name="Actions" width="80">
+        <ngx-datatable-column *ngIf="user.is_admin == 1" [frozenRight]="true" slot="end" name="Actions" width="80">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-            <ion-fab vertical="center" slot="fixed" *ngIf="user.is_admin == 1">
+            <ion-fab vertical="center" slot="fixed">
               <ion-button fill="outline" color="primary" (click)="presentModalRequest(row)">
                 {{ 'requests.details' | translate }}
               </ion-button>
@@ -161,8 +158,9 @@
         <ngx-datatable-column name="File" prop="status" width="80">
           <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
             <div *ngIf="row.file_id != null">
-              <ion-icon (click)="doDownload(row.file_id)" color="primary" size="large" name="cloud-download-outline"></ion-icon>
-              <!-- <ion-spinner *ngIf="isDownloading"></ion-spinner> -->
+              <ion-icon href="http://www.google.com" *ngIf="!isDownloadingFile" (click)="doDownload(row.file_id)" color="primary" size="large" name="cloud-download-outline">
+              </ion-icon>
+               <ion-spinner *ngIf="isDownloadingFile"></ion-spinner>
             </div>
           </ng-template>
         </ngx-datatable-column>
