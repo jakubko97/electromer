@@ -22,7 +22,7 @@
     </ion-row>
   </ion-grid>
 
-  <div class="ion-padding">
+  <div>
     <!-- Theme classes dark, material, bootstrap -->
     <ngx-datatable #table class="{{theme}}" [limit]="10" [rows]="electromers" [rowHeight]="50" [columnMode]="'force'" [sortType]="'multi'" [loadingIndicator]="apiResult.loading" [headerHeight]="50" [footerHeight]="50">
 
@@ -36,7 +36,6 @@
       </ngx-datatable-column>
       <ngx-datatable-column *ngIf="user.is_superadmin == 1" name="Akcie" prop="akcie">
         <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-
           <ion-fab vertical="center" slot="fixed">
             <ion-button fill="outline" color="primary" (click)="editElectromer(row)">
               {{ 'common.edit' | translate }}

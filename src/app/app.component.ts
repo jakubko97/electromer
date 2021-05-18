@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
 
   setPages() {
     this.user = this.authService.user;
-    if (this.user.is_admin === 1) {
+    if (this.user.is_admin === 1 || this.user.is_superadmin) {
       this.appPages = [
         {
           title: 'Dashboard',
@@ -110,40 +110,6 @@ export class AppComponent implements OnInit {
         },
         {
           title: this.translate.instant('common.electromers'),
-          url: '/list',
-          icon: 'list'
-        },
-        {
-          title: this.user.email,
-          children: [
-            {
-              title: 'Settings',
-              url: '/settings',
-              icon: 'settings',
-            },
-            {
-              title: 'Requests',
-              url: '/requests',
-              icon: 'document-text-outline',
-            }
-          ]
-        },
-      ];
-    }
-    else if(this.user.is_superadmin){
-      this.appPages = [
-        {
-          title: 'Dashboard',
-          url: '/dashboard',
-          icon: 'home'
-        },
-        {
-          title: this.translate.instant('common.users'),
-          url: '/users',
-          icon: 'people'
-        },
-        {
-          title:  this.translate.instant('common.electromers'),
           url: '/list',
           icon: 'list'
         },
@@ -205,11 +171,11 @@ export class AppComponent implements OnInit {
       language => {
         if (!language) {
           language = navigator.language.split('-')[0];
-        }    
+        }
         this.translate.use(language);
       },
       () => this.translate.use('en')
-    );   
+    );
   }
 
 
@@ -230,6 +196,7 @@ export class AppComponent implements OnInit {
       },
       () => {
         this.navCtrl.navigateRoot('/landing');
+        this.appPages = [];
       }
     );
   }

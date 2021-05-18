@@ -88,7 +88,9 @@ isThemeDark(){
       // this.request.type = this.requestForm.value.type;
       // this.request.body = this.requestForm.value.body;
       const formData: FormData = new FormData();
-      formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      if (this.fileToUpload != null){
+        formData.append('file', this.fileToUpload, this.fileToUpload.name);
+      }
       formData.append('subject', this.requestForm.value.subject);
       formData.append('type', this.requestForm.value.type);
       formData.append('body', this.requestForm.value.body);

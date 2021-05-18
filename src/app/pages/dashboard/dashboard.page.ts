@@ -456,7 +456,7 @@ export class DashboardPage implements OnInit {
   }
 
   toggleMenu(){
-      const splitPane = document.querySelector('ion-split-pane')
+      const splitPane = document.querySelector('ion-split-pane');
       if (window.matchMedia(SIZE_TO_MEDIA[splitPane.when] || splitPane.when).matches)
           splitPane.classList.toggle('split-pane-visible')
   }
@@ -526,10 +526,16 @@ export class DashboardPage implements OnInit {
 
   }
 
-  getMainBarChartData(){
+  async getMainBarChartData(){
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await loading.present();
+
     this.authService.getElectromerColumnData(this.electromer.id, this.mainBarChartFromDate, this.mainBarChartToDate, this.mainChartDataType).subscribe(
       data => {
-
+        loading.dismiss();
         let sortedData = null;
         if (this.mainChartDataType === 'yearly'){
           const startYear = new Date(this.mainBarChartFromDate).getFullYear();
@@ -610,15 +616,6 @@ export class DashboardPage implements OnInit {
         }
       }
     });
-    this.getElectromers();
-    // $.getJSON("https://canvasjs.com/data/docs/ethusd2018.json", function (data) {
-    //   for (var i = 0; i < data.length; i++) {
-    //     dataPoints1.push({ x: new Date(data[i].date), y: [Number(data[i].open), Number(data[i].high), Number(data[i].low), Number(data[i].close)] });;
-    //     dataPoints2.push({ x: new Date(data[i].date), y: Number(data[i].volume_usd) });
-    //     dataPoints3.push({ x: new Date(data[i].date), y: Number(data[i].close) });
-    //   }
-    //   chart.render();
-    // });
   }
   getData() {
     this.initGraph();
@@ -650,9 +647,9 @@ export class DashboardPage implements OnInit {
       message: 'Please wait...'
     });
     await loading.present();
-    return this.authService.getAllElectromers()
-      .subscribe(
+    return this.authService.getAllElectromers().subscribe(
         electromers => {
+          this.initGraph();
           this.electromers = JSON.parse(JSON.stringify(electromers));
           this.electromers = this.cleanElectromersData();
           this.blur = this.electromers.length === 0 ? 'background-blur' : '';
@@ -676,18 +673,7 @@ export class DashboardPage implements OnInit {
             if(el_id != null){
               this.getDailyAverageLastWeek(el_id);
               this.getDailyTrendData(el_id);
-              this.graphLoading = true;
-              this.authService.getDataInRange(el_id, this.from_date, this.to_date).subscribe(
-                async data => {
-                  this.selectedDataInRange = JSON.parse(JSON.stringify(data));
-                  this.parseDataInChart();
-                  await loading.dismiss();
-                },
-                async error => {
-                  this.apiResult.error = error;
-                  await loading.dismiss();
-                }
-              )
+              this.getDataInRange(el_id, loading);
             }
           }
 
@@ -702,6 +688,21 @@ export class DashboardPage implements OnInit {
       )
   }
 
+
+  async getDataInRange(electromerId, loading){
+    this.graphLoading = true;
+    this.initGraph();
+    this.authService.getDataInRange(electromerId, this.from_date, this.to_date).subscribe(
+      async data => {
+        this.selectedDataInRange = JSON.parse(JSON.stringify(data));
+        this.parseDataInChart();
+        loading.dismiss();
+      },
+      async error => {
+        this.apiResult.error = error;
+      }
+    )
+  }
   quickSelect(value) {
     switch (value.detail.value) {
       case "last_day": this.selectRecentDays(1)
@@ -719,7 +720,13 @@ export class DashboardPage implements OnInit {
     return new Date(date).toISOString();
   }
 
-  selectRecentDays(lastDays) {
+  async selectRecentDays(lastDays) {
+    const loading = await this.loadingController.create({
+      cssClass: 'my-custom-class',
+      message: 'Please wait...'
+    });
+    await loading.present();
+
     const ourDate = new Date();
     const pastDate = ourDate.getDate() - lastDays;
     ourDate.setDate(pastDate);
@@ -729,7 +736,7 @@ export class DashboardPage implements OnInit {
     this.dataPoints2 = [];
     this.dataPoints3 = [];
     this.mainChartLabels = [];
-    this.initGraph();
+    this.getDataInRange(this.electromer.id, loading);
   }
 
   cleanElectromersData() {
@@ -751,15 +758,8 @@ export class DashboardPage implements OnInit {
       Number(data[1]['delta']), Number(data[1]['delta']), Number(data[1]['delta'])] });
       this.dataPoints2.push({ x: new Date(time), y: data[1]['delta'] })
       this.dataPoints3.push({ x: new Date(time), y: data[1]['delta'] })
-
       sumDelta += data[1]['delta'];
-      // this.mainChartData3.push(this.getRandomArbitrary(0.0010, 0.0042));
-
   }
-
-    // for(let i = 0; i < length; i++){
-    //   this.mainChartData2.push(sumDelta / length);
-    // }
     this.chart.render();
     this.graphLoading = false;
 }
@@ -915,7 +915,8 @@ syncMonthlyData (data, start, end){
     )
   }
   async ngOnInit() {
-    await this.initGraph();
+    this.getElectromers();
+
     this.user = this.authService.user;
     const ourDate = new Date();
     const pastDate = ourDate.getMonth() - 12; //default po nacitani

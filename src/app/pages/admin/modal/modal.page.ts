@@ -24,6 +24,7 @@ export class ModalPage implements OnInit {
   };
 
   userElectromers: any;
+  adminUsers: any;
   togglerState = [];
   value = [];
   theme: any;
@@ -59,38 +60,67 @@ export class ModalPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  setInitUserElectromerState(){
+  setInitUserElectromerState(assignData){
     for (let d = 0; d < this.data.length; d++ ){
       this.data[d].toggler = 'DEACTIVATED';
-      for (const e of this.userElectromers){
-        if (this.data[d].id === e.electromer_id){
-          this.data[d].toggler = 'ACTIVATED';
+      for (const e of assignData){
+        if (this.mode === 0){
+          if (this.data[d].id === e.electromer_id){
+            this.data[d].toggler = 'ACTIVATED';
+          }
         }
+        if (this.mode === 1){
+          if (this.data[d].id === e.id){
+            this.data[d].toggler = 'ACTIVATED';
+          }
+        }
+
       }
     }
   }
 
   assignUserToAdmin(user) {
-    this.authService.assignUserToAdmin(user.id, this.user.id).subscribe(
-      data => {
-        this.alertService.presentToast('User ' + user.name + ' was succesfully assigned to ' + this.user.name);
-      },
-      error => {
-        console.log(error);
+    this.apiResult.error = null;
+    this.apiResult.loading = true;
+    if (user.toggler === 'ACTIVATED'){
+      this.authService.assignUserToAdmin(user.id, null).subscribe(
+        data => {
+          this.alertService.presentToast('Succesfully deassigned');
+          user.toggler = 'DEACTIVATED';
+          this.apiResult.loading = false;
+        },
+        error => {
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
       })
+    }else{
+      this.authService.assignUserToAdmin(user.id, this.user.id).subscribe(
+        data => {
+          this.alertService.presentToast('Succesfully assigned');
+          user.toggler = 'ACTIVATED';
+          this.apiResult.loading = false;
+        },
+        error => {
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
+      })
+    }
   }
 
   async assignUserToAdminAlert(user) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: 'Please, confirm assiging ' + user.name + 'to' + this.user.name,
+      header: user.toggler === 'ACTIVATED' ? this.deassignTitle(user) : this.assignTitle(user),
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
-            return false;
+            if (user.toggler === 'ACTIVATED'){
+            }else{
+              user.toggler = 'DEACTIVATED';
+            }
           }
         }, {
           text: 'Confirm',
@@ -109,18 +139,17 @@ export class ModalPage implements OnInit {
 }
 
 
-  deassignElectromerTitle(electromer){
-    return 'Do you want deassign ' + electromer.name + ' from ' + this.user.name + '?';
+  deassignTitle(data){
+    return 'Do you want deassign ' + data.name + ' from ' + this.user.name + '?';
   }
 
-  assignElectromerTitle(electromer){
-    return 'Please, confirm assiging ' + electromer.name + ' to ' + this.user.name + '.';
+  assignTitle(data){
+    return 'Please, confirm assiging ' + data.name + ' to ' + this.user.name + '.';
   }
   async assigningElectromerAlert(electromer) {
-
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
-      header: electromer.toggler === 'ACTIVATED' ? this.deassignElectromerTitle(electromer) : this.assignElectromerTitle(electromer),
+      header: electromer.toggler === 'ACTIVATED' ? this.deassignTitle(electromer) : this.assignTitle(electromer),
       buttons: [
         {
           text: 'Cancel',
@@ -152,6 +181,8 @@ export class ModalPage implements OnInit {
         data => {
           this.apiResult.loading = false;
           electromer.toggler = 'DEACTIVATED';
+          // this.alertService.presentToast('Electromer ' + electromer.name + ' was succesfully deassigned from ' + this.user.name);
+          this.alertService.presentToast('Succesfully deassigned');
         },
         error => {
           this.apiResult.error = error;
@@ -159,18 +190,21 @@ export class ModalPage implements OnInit {
           electromer.toggler = 'ACTIVATED';
         }
       );
+    } else {
+      this.authService.assignElectromerToUser(electromer.id, this.user.id).subscribe(
+        data => {
+          this.apiResult.loading = false;
+          electromer.toggler = 'ACTIVATED';
+          // this.alertService.presentToast('Electromer ' + electromer.name + ' was succesfully assigned to ' + this.user.name);
+          this.alertService.presentToast('Succesfully assigned');
+        },
+        error => {
+          this.apiResult.error = error;
+          this.apiResult.loading = false;
+          electromer.toggler = 'DEACTIVATED';
+        }
+      );
     }
-    this.authService.assignElectromerToUser(electromer.id, this.user.id).subscribe(
-      data => {
-        this.apiResult.loading = false;
-        electromer.toggler = 'ACTIVATED';
-      },
-      error => {
-        this.apiResult.error = error;
-        this.apiResult.loading = false;
-        electromer.toggler = 'DEACTIVATED';
-      }
-    );
   }
 
   updateFilter(event) {
@@ -205,7 +239,7 @@ export class ModalPage implements OnInit {
             (data) => {
               this.userElectromers = data;
               this.setTogglePendingValues();
-              this.setInitUserElectromerState();
+              this.setInitUserElectromerState(this.userElectromers);
               this.apiResult.loading = false;
             },
             error =>{
@@ -232,11 +266,21 @@ export class ModalPage implements OnInit {
   }
   getUsers() {
     this.apiResult.loading = true;
-    return this.authService.getAll()
+    return this.authService.getUsersOnly()
       .subscribe(users => {
         this.data = users as User;
         this.temp = users;
-        this.apiResult.loading = false;
+        this.authService.getAdminUsersById(this.user.id).subscribe(
+          data => {
+            this.adminUsers = data;
+            this.setTogglePendingValues();
+            this.setInitUserElectromerState(this.adminUsers);
+            this.apiResult.loading = false;
+          },
+          error => {
+
+          }
+        )
       },
         error => {
           this.apiResult.error = error;
