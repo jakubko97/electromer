@@ -674,6 +674,8 @@ export class DashboardPage implements OnInit {
               this.getDailyAverageLastWeek(el_id);
               this.getDailyTrendData(el_id);
               this.getDataInRange(el_id, loading);
+              this.mainChartDataType = 'yearly';
+              this.getMainBarChartData();
             }
           }
 
