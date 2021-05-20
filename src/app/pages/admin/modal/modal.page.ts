@@ -22,7 +22,8 @@ export class ModalPage implements OnInit {
     error: '',
     info: ''
   };
-
+  searchValue = '';
+  filterOption = null;
   userElectromers: any;
   adminUsers: any;
   togglerState = [];
@@ -35,6 +36,24 @@ export class ModalPage implements OnInit {
     public alertController: AlertController,
     public alertService: AlertService
   ) { }
+
+  searchOptions = [
+    {
+      text: '-',
+      value: null
+    },
+    {
+      text: 'available',
+      value: 1
+    },
+    {
+      text: 'activated',
+      value: 2
+    },
+    {
+      text: 'deactivated',
+      value: 3
+    }];
 
   isThemeDark(){
     return document.body.getAttribute('color-theme') === 'dark';
@@ -60,6 +79,11 @@ export class ModalPage implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  searchByKey(key){
+    console.log(key)
+    this.searchValue = key;
+    this.updateFilter(key);
+  }
   setInitUserElectromerState(assignData){
     for (let d = 0; d < this.data.length; d++ ){
       this.data[d].toggler = 'DEACTIVATED';
@@ -74,7 +98,6 @@ export class ModalPage implements OnInit {
             this.data[d].toggler = 'ACTIVATED';
           }
         }
-
       }
     }
   }
@@ -208,18 +231,43 @@ export class ModalPage implements OnInit {
   }
 
   updateFilter(event) {
-    const val = event.target.value.toLowerCase();
+    let val = null;
+    if (event.target){
+      val = event.target.value.toLowerCase();
+    } else{
+      val = event.toLowerCase();
+    }
     // filter our data
     let temp = null;
-    if(this.mode === 0){
+    if (this.mode === 0){
       temp = this.temp.filter(d => {
          return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val)
           || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
       });
     }else{
-      temp = this.temp.filter(d => {
-        return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val);
-      });
+      if (this.filterOption == null){
+        temp = this.temp.filter(d => {
+          return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val);
+        });
+      }else if(this.filterOption === 1){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val))
+          && d.admin_id === null;
+        });
+      }
+      else if(this.filterOption === 2){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val))
+          && d.toggler === 'ACTIVATED';
+        });
+      }
+      else if(this.filterOption === 3){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val))
+          && d.toggler === 'DEACTIVATED';
+        });
+      }
+
     }
 
     // update the rows

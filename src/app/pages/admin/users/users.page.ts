@@ -168,7 +168,7 @@ async editUser(user: any) {
       if(user.is_admin === 1 || this.user.is_admin === 1){
         buttons.push(
           {
-            text: 'Assign electromer',
+            text: 'Assign Electromer to',
             icon: 'color-wand-outline',
             handler: () => {
               this.viewElectromers(user);
@@ -186,14 +186,14 @@ async editUser(user: any) {
         //   }
         // },
         {
-          text: 'Assign user',
+          text: 'Assign User to',
           icon: 'person-add-outline',
           handler: () => {
             this.assignUserToAdminModal(user);
           }
         },
         {
-          text: 'Edit user',
+          text: 'Edit User',
           icon: 'pencil',
           handler: () => {
             this.editUser(user);
@@ -204,14 +204,14 @@ async editUser(user: any) {
     if(user.is_admin === 0 && this.user.is_superadmin === 1){
       buttons.push(
         {
-          text: 'Put admin rights',
+          text: 'Grant Admin Rights',
           icon: 'key-outline',
           handler: () => {
             this.putRightsAlert(user);
           }
         },
         {
-          text: 'Edit user',
+          text: 'Edit User',
           icon: 'pencil',
           handler: () => {
             this.editUser(user);

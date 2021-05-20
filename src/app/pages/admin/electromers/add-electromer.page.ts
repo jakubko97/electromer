@@ -73,33 +73,31 @@ export class AddElectromerPage implements OnInit {
   get f() { return this.electromerForm.controls; }
 
   addElectromer() { //form NgForm
-    this.apiResult.loading = true
-    this.electromer.name = this.electromerForm.value.name
-    this.electromer.db_table = this.electromerForm.value.db_table
-    this.electromer.delta = this.electromerForm.value.delta
-    this.electromer.type = this.electromerForm.value.type
+    this.apiResult.loading = true;
+    this.electromer.name = this.electromerForm.value.name;
+    this.electromer.db_table = this.electromerForm.value.db_table;
+    this.electromer.delta = this.electromerForm.value.delta;
+    this.electromer.type = this.electromerForm.value.type;
 
     if (!this.electromerForm.invalid) {
-      if (this.isAddMode) {
         this.createElectromer();
-      }
     } else {
-      this.apiResult.error = 'Saving electromer failed. Please check input data.'
-      this.apiResult.loading = false
+      this.apiResult.error = 'Saving electromer failed. Please check input data.';
+      this.apiResult.loading = false;
     }
   }
 
-  private createElectromer() {
+  createElectromer() {
     this.authService.addElectromer(this.electromer).subscribe(
       data => {
-        this.apiResult.loading = false
+        this.apiResult.loading = false;
         this.modalCtrl.dismiss();
-        this.alertService.presentToast('Electromer '+ this.electromerForm.value.name +' was successfully added.');
+        this.alertService.presentToast('Electromer ' + this.electromerForm.value.name + ' was successfully saved.');
       },
       error => {
         console.log(error)
-        this.apiResult.error = 'An unexpected error occurred.'
-        this.apiResult.loading = false
+        this.apiResult.error = 'An unexpected error occurred.';
+        this.apiResult.loading = false;
       }
     )
   }
