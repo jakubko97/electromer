@@ -14,8 +14,13 @@
         <ion-searchbar (keyup)="updateFilter($event)"></ion-searchbar>
       </ion-col>
     </ion-row>
-    <ion-row *ngIf="apiResult.error">
-      <ion-col>
+    <ion-row>
+      <ion-col class="ion-justify-content-start" size-md="2">
+        <ion-select [(ngModel)]="filterOption" [interfaceOptions]="customPopoverOptions" interface="popover" (ionChange)="updateFilter('')" placeholder="Filter">
+          <ion-select-option [value]="e.value" *ngFor="let e of searchOptions">{{e.text}}</ion-select-option>
+        </ion-select>
+      </ion-col>
+      <ion-col *ngIf="apiResult.error">
         <ion-label color="danger">{{apiResult.error}} </ion-label>
       </ion-col>
     </ion-row>

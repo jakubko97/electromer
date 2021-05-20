@@ -39,7 +39,7 @@ export class ModalPage implements OnInit {
 
   searchOptions = [
     {
-      text: '-',
+      text: 'all',
       value: null
     },
     {
@@ -240,14 +240,35 @@ export class ModalPage implements OnInit {
     // filter our data
     let temp = null;
     if (this.mode === 0){
-      temp = this.temp.filter(d => {
+
+      if (this.filterOption == null){
+        temp = this.temp.filter(d => {
          return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val)
           || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
       });
+      }
+      else if(this.filterOption === 1){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val))
+          || (d.type.toLowerCase().indexOf(val) !== -1 || !val);
+        });
+      }
+      else if(this.filterOption === 2){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val)
+          || (d.type.toLowerCase().indexOf(val) !== -1 || !val)) && d.toggler === 'ACTIVATED';
+        });
+      }
+      else if(this.filterOption === 3){
+        temp = this.temp.filter(d => {
+          return ((d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val)
+          || (d.type.toLowerCase().indexOf(val) !== -1 || !val)) && d.toggler === 'DEACTIVATED';
+        });
+      }
     }else{
       if (this.filterOption == null){
         temp = this.temp.filter(d => {
-          return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.email.toLowerCase().indexOf(val) !== -1 || !val);
+          return (d.name.toLowerCase().indexOf(val) !== -1 || !val) || (d.db_table.toLowerCase().indexOf(val) !== -1 || !val);
         });
       }else if(this.filterOption === 1){
         temp = this.temp.filter(d => {

@@ -285,23 +285,8 @@ export class DashboardPage implements OnInit {
   // public mainChartData2: Array<number> = [];
   public mainChartData3: Array<number> = [];
 
-  public mainChartData: Array<any> = [
-    {
-      data: this.mainChartData1,
-      label: 'kW/h',
-      type: 'bar'
-    }
-    //, {
-    //   data: this.mainChartData2,
-    //   type: 'line',
-    //   label: 'bar'
-    // },
-    // {
-    //   data: this.mainChartData3,
-    //   type: 'line',
-    //   label: 'bar'
-    // }
-  ];
+  public mainChartData: Array<any> = [];
+
   /* tslint:disable:max-line-length */
   // public mainChartLabels: Array<any> = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday', 'Monday', 'Thursday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   /* tslint:enable:max-line-length */
@@ -332,10 +317,7 @@ export class DashboardPage implements OnInit {
         },
         type: 'time',
                  time: {
-                    unit: this.mainChartDataType === 'monthly' ? 'year' : 'year',
-                    displayFormats: {
-                      year: 'YYYY'
-                  }
+                    unit: this.mainChartDataType === 'monthly' ? 'month' : 'year'
                  }
       }],
       yAxes: [{
@@ -344,10 +326,7 @@ export class DashboardPage implements OnInit {
           labelString: 'kW/h'
         },
         ticks: {
-          beginAtZero: true,
-          maxTicksLimit: 5,
-          stepSize: Math.ceil(0.01 / 5),
-          max: 25
+          beginAtZero: true
         }
       }]
     },
@@ -368,18 +347,7 @@ export class DashboardPage implements OnInit {
   };
   public mainChartColours: Array<any> = [
     { // brandInfo
-      // backgroundColor: hexToRgba(getStyle('--info'), 10),
       backgroundColor: getStyle('--ion-color-primary'),
-      borderColor: getStyle('--info'),
-      pointHoverBackgroundColor: '#fff'
-    },
-    { // brandSuccess
-      backgroundColor: 'transparent',
-      borderColor: getStyle('--ion-color-success'),
-      pointHoverBackgroundColor: '#fff'
-    },
-    { // brandDanger
-      backgroundColor: getStyle('--ion-color-danger'),
       borderColor: getStyle('--info'),
       pointHoverBackgroundColor: '#fff'
     }
@@ -551,6 +519,9 @@ export class DashboardPage implements OnInit {
   }
 
   async getMainBarChartData(){
+    this.mainChartData1 = [];
+    this.mainChartLabels = [];
+    this.mainChartData = [];
     const loading = await this.loadingController.create({
       cssClass: 'my-custom-class',
       message: 'Please wait...'
@@ -560,36 +531,32 @@ export class DashboardPage implements OnInit {
     this.authService.getElectromerColumnData(this.electromer.id, this.mainBarChartFromDate, this.mainBarChartToDate, this.mainChartDataType).subscribe(
       data => {
         loading.dismiss();
-        let sortedData = null;
-        if (this.mainChartDataType === 'yearly'){
-          const startYear = new Date(this.mainBarChartFromDate).getFullYear();
-          const endYear = new Date(this.mainBarChartToDate).getFullYear();
-          sortedData = this.syncYearlyData(Object.entries(data), startYear, endYear);
-        }
-        if (this.mainChartDataType === 'monthly'){
-          // const start = new Date(this.mainBarChartFromDate);
-          // const end = new Date(this.mainBarChartToDate);
-          // sortedData = this.syncMonthlyData(Object.entries(data), start, end);
-          sortedData = Object.entries(data);
-        }
 
-        for (const d of sortedData){
-          const time = new Date(d.time.toString());
+        for (const obj of Object.entries(data)){
+          console.log(obj);
+          const time = new Date(obj[0].toString());
+          const delta = obj[1].delta;
           let xAxis = null;
           if (this.mainChartDataType === 'yearly'){
-            xAxis = time.toLocaleString('default', { year: 'numeric' });
+            xAxis = time.toLocaleString('en-US', { year: 'numeric' });
           }
           if (this.mainChartDataType === 'monthly'){
-            xAxis = time.toLocaleString('default', { month: 'short' });
+            xAxis = time.toLocaleString('en-US', { month: 'numeric' });
           }
-          this.mainChartData1.push(d.delta);
+
+          this.mainChartData1.push(delta);
           this.mainChartLabels.push(xAxis);
         }
+        this.mainChartData.push(
+          {
+          data: this.mainChartData1,
+          label: 'kW/h',
+          type: 'bar'
+        })
       },
       error =>{
 
-      }
-    )
+      });
   }
   initGraph() {
     let dpsLength = 0;
