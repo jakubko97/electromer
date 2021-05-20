@@ -21,7 +21,7 @@
             <ion-row>
               <ion-col>
                 <ion-item>
-                  <ion-label position="floating">{{ 'requests.Subject' | translate }}</ion-label>
+                  <ion-label position="floating">{{ 'common.subject' | translate }}</ion-label>
                   <ion-input formControlName="subject" id="name" required name="name"></ion-input>
                 </ion-item>
               </ion-col>
@@ -44,7 +44,7 @@
             </ion-row>
             <ion-row>
               <ion-col>
-                <ion-button expand="full">
+                <ion-button color="light">
                   <ion-icon lazy="true" slot="start" name="file"></ion-icon>
                   <!-- <ion-label slot="end">Upload File</ion-label> -->
                   <input type="file" (change)="handleFileInput($event.target.files)" id="file-input" accept="pdf">
@@ -71,7 +71,7 @@
     </ion-card>
   </div>
 
-  <ion-card style="background: rgba(255,255,255,0.5);">
+  <ion-card style="background: rgba(255,255,255,0.5); border: none;">
     <ion-card-header>
       <ion-card-title>
         {{ 'requests.history' | translate }}

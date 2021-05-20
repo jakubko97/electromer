@@ -3,10 +3,7 @@
     <ion-grid>
       <ion-row class="ion-text-center">
         <ion-col>
-          <ion-label *ngIf="request.status_id == 2">
-            {{ 'common.accepted' | translate }}
-          </ion-label>
-          <ion-title>{{ 'common.request-preview' | translate }</ion-title>
+          <ion-title>{{ 'common.request-preview' | translate }}</ion-title>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -18,7 +15,7 @@
       </ion-progress-bar>
   <ion-card class="ion-no-border">
     <ion-card-header>
-      <ion-card-subtitle>{{ 'common.subject' | translate }</ion-card-subtitle>
+      <ion-card-subtitle>{{ 'common.subject' | translate }}</ion-card-subtitle>
       <ion-card-title>{{ request.subject }}</ion-card-title>
     </ion-card-header>
 
@@ -33,10 +30,12 @@
           <ion-col>
             <ion-button fill="outline" (click)="doDownload(request.file_id)">
               <ion-icon  *ngIf="!isDownloadingFile" lazy="true" slot="start" name="document-attach-outline"></ion-icon>
-              <ion-label  *ngIf="!isDownloadingFile" slot="end">{{ 'common.attachment' | translate }</ion-label>
+              <ion-label  *ngIf="!isDownloadingFile" slot="end">{{ 'common.attachment' | translate }}</ion-label>
               <ion-spinner *ngIf="isDownloadingFile"></ion-spinner>
             </ion-button>
           </ion-col>
+        </ion-row>
+        <ion-row>
           <ion-col>
             <ion-card-subtitle>
               <ion-label>
@@ -52,7 +51,10 @@
     <ion-row>
       <ion-col>
         <ion-label *ngIf="request.status_id == 3">
-          {{ 'common.rejected' | translate }
+          {{ 'common.rejected' | translate }}
+        </ion-label>
+        <ion-label *ngIf="request.status_id == 2">
+          {{ 'common.accepted' | translate }}
         </ion-label>
       </ion-col>
     </ion-row>
@@ -70,11 +72,11 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="primary" (click)='cancel()'>{{ 'common.cancel' | translate }</ion-button>
+        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="primary" (click)='cancel()'>{{ 'common.cancel' | translate }}</ion-button>
       </ion-col>
       <ion-col class="ion-text-end">
-        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="danger" (click)='decline()'>{{ 'common.reject' | translate }</ion-button>
-        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="success" (click)='accept()'>{{ 'common.accept' | translate }</ion-button>
+        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="danger" (click)='decline()'>{{ 'common.reject' | translate }}</ion-button>
+        <ion-button disabled="{{apiResult.loading}}" fill="outline" color="success" (click)='accept()'>{{ 'common.accept' | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </ion-grid>

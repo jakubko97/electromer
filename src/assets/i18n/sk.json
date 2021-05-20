@@ -27,7 +27,7 @@
     "reject": "Zamietnuť",
     "attachment": "Príloha",
     "request-preview": "Vyžiadať náhľad",
-    "subjet": "Predmet"
+    "subject": "Predmet"
   },
   "electromers": {
     "add-electromer": "Pridať nový elektromer",
@@ -91,10 +91,10 @@
   "requests": {
     "title": "Požiadavky",
     "create": "Vytvoriť novú požiadavku",
-    "brown": "Brown",
-    "blonde": "Blonde",
-    "black": "Black",
-    "red": "Red",
+    "electromer": "Elektromer",
+    "permission": "Povolenie",
+    "bug": "Bug",
+    "other": "In0",
     "body": "Body",
     "submit": "Potvrdiť",
     "history": "História požiadaviek",

@@ -175,14 +175,6 @@ async editUser(user: any) {
             }
           })
       }
-      buttons.push(
-        {
-          text: 'Edit user',
-          icon: 'pencil',
-          handler: () => {
-            this.editUser(user);
-          }
-        })
     }
     if(this.user.is_superadmin === 1 && user.is_admin === 1){
       buttons.push(
@@ -199,6 +191,13 @@ async editUser(user: any) {
           handler: () => {
             this.assignUserToAdminModal(user);
           }
+        },
+        {
+          text: 'Edit user',
+          icon: 'pencil',
+          handler: () => {
+            this.editUser(user);
+          }
         }
       )
     }
@@ -209,6 +208,13 @@ async editUser(user: any) {
           icon: 'key-outline',
           handler: () => {
             this.putRightsAlert(user);
+          }
+        },
+        {
+          text: 'Edit user',
+          icon: 'pencil',
+          handler: () => {
+            this.editUser(user);
           }
         }
       )

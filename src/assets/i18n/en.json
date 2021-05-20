@@ -27,7 +27,7 @@
     "reject": "Reject",
     "attachment": "Attachment",
     "request-preview": "Request-preview",
-    "subjet": "Subject"
+    "subject": "Subject"
   },
   "electromers": {
     "add-electromer": "Add new electromer",
@@ -91,10 +91,10 @@
   "requests": {
     "title": "Requests",
     "create": "Create a new request",
-    "brown": "Brown",
-    "blonde": "Blonde",
-    "black": "Black",
-    "red": "Red",
+    "electromer": "Electromer",
+    "permission": "Permission",
+    "bug": "Bug",
+    "other": "Other",
     "body": "Body",
     "submit": "Submit",
     "history": "Requests history",

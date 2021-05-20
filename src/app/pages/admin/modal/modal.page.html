@@ -53,7 +53,7 @@
       <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
         <ion-fab vertical="center" slot="fixed">
         <ion-button *ngIf="row.toggler === 'ACTIVATED'" (click)="assignUserToAdminAlert(row)" (ionChange)="myChange(row)" color="danger">Deassign</ion-button>
-        <ion-button *ngIf="row.toggler === 'DEACTIVATED'" (click)="assignUserToAdminAlert(row)" (ionChange)="myChange(row)">Assign</ion-button>
+        <ion-button disabled="{{row.admin_id != null}}" *ngIf="row.toggler === 'DEACTIVATED'" (click)="assignUserToAdminAlert(row)" (ionChange)="myChange(row)">Assign</ion-button>
         </ion-fab>
       </ng-template>
     </ngx-datatable-column>

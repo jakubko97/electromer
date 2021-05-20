@@ -110,4 +110,5 @@
     <allow-navigation href="http://192.168.1.111:8100" sessionid="e1f86422" />
     <allow-navigation href="http://192.168.0.105:8100" sessionid="8db9f5b3" />
     <allow-navigation href="http://192.168.0.102:8100" sessionid="fcc6b769" />
+    <allow-navigation href="http://192.168.1.111:8101" sessionid="1b99eb36" />
 </widget>

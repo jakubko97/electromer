@@ -11,7 +11,7 @@
   <ion-card>
     <ion-card-header>
       <ion-card-subtitle>
-        <div *ngIf="user != undefined">
+        <div *ngIf="user != null">
           {{ 'dashboard.welcome' | translate }}, {{ user.name }}
         </div>
       </ion-card-subtitle>
@@ -164,7 +164,7 @@
             <!-- <ion-label> {{from_date | date: 'dd/MM/yyyy'}} - {{to_date | date: 'dd/MM/yyyy'}} </ion-label> -->
           </ion-col>
           <ion-col>
-            <ion-segment disabled={{!atLeastOneElectromer()}} (ionChange)="barChartSegment($event)">
+            <ion-segment disabled={{!atLeastOneElectromer()}} value="yearly" (ionChange)="barChartSegment($event)">
               <ion-segment-button value="yearly">
                 <ion-label>{{ 'dashboard.yearly' | translate }}</ion-label>
               </ion-segment-button>

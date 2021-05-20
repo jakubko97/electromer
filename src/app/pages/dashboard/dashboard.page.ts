@@ -567,9 +567,10 @@ export class DashboardPage implements OnInit {
           sortedData = this.syncYearlyData(Object.entries(data), startYear, endYear);
         }
         if (this.mainChartDataType === 'monthly'){
-          const start = new Date(this.mainBarChartFromDate);
-          const end = new Date(this.mainBarChartToDate);
-          sortedData = this.syncMonthlyData(Object.entries(data), start, end);
+          // const start = new Date(this.mainBarChartFromDate);
+          // const end = new Date(this.mainBarChartToDate);
+          // sortedData = this.syncMonthlyData(Object.entries(data), start, end);
+          sortedData = Object.entries(data);
         }
 
         for (const d of sortedData){
